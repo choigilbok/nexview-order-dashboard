@@ -309,6 +309,7 @@
     <div class="save-row">
       <button class="ghost small" id="adminBtn">관리자 모드</button>
       <span class="status-pill admin-only" id="saveStatus">저장 대기</span>
+      <button class="ghost small admin-only" id="githubBtn">GitHub 연동</button>
       <button class="ghost small admin-only" id="exportBtn">JSON 내보내기</button>
       <button class="ghost small admin-only" id="importBtn">JSON 불러오기</button>
       <input type="file" id="importFile" accept="application/json" style="display:none">
@@ -324,6 +325,29 @@
       <div class="modal-actions">
         <button class="ghost" id="adminCancelBtn">취소</button>
         <button class="primary" id="adminSubmitBtn">확인</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="githubModal">
+    <div class="modal-card">
+      <h2>GitHub 연동 설정</h2>
+      <div style="font-size:12px;color:var(--text-dim);text-align:left;margin-bottom:10px;line-height:1.55;">
+        이 저장소(<b>choigilbok/nexview-order-dashboard</b>)에만 쓰기 권한이 있는 GitHub Fine-grained 개인 액세스 토큰을 입력하세요.
+        토큰은 이 파일(페이지 소스)에는 절대 저장되지 않고, 지금 이 브라우저에만 보관됩니다. 저장을 누르면 이 토큰으로 GitHub에 직접 반영됩니다.
+      </div>
+      <input type="password" id="ghTokenInput" placeholder="github_pat_..." autocomplete="off">
+      <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-dim);margin:-4px 0 10px;cursor:pointer;">
+        <input type="checkbox" id="ghRememberChk" checked style="width:auto;"> 이 브라우저에 기억하기 (다음에 재입력 불필요 · 공용 PC에서는 끄세요)
+      </label>
+      <div class="modal-err" id="ghErr"></div>
+      <div class="modal-actions">
+        <button class="ghost" id="ghTestBtn">연결 테스트</button>
+        <button class="primary" id="ghSaveTokenBtn">저장</button>
+      </div>
+      <div class="modal-actions">
+        <button class="ghost" id="ghClearBtn">연결 해제</button>
+        <button class="ghost" id="ghCancelBtn">닫기</button>
       </div>
     </div>
   </div>
@@ -499,7 +523,7 @@
 
   <div class="footer-note">
     ※ 초기 데이터는 「2026년 하반기 전체 수주·납기 현황」 및 「STAGE 부품 입고관리 일정표」 PPT(기준일 2026-08-20) 내용을 기반으로 구성한 디자인 초안입니다.<br>
-    ※ 표의 모든 셀은 직접 클릭하여 수정할 수 있습니다. 우측 상단 「저장」 버튼을 누르면 현재 상태가 이 페이지의 새 버전으로 발행되어, 이후 이 링크로 접속하는 모든 화면에 동일하게 반영됩니다. 저장 전 수정 내용은 이 브라우저 탭에만 임시로 남아 있으니, 중요한 변경은 저장을 완료하거나 「JSON 내보내기」로 별도 백업해 두시기 바랍니다.
+    ※ 표의 모든 셀은 직접 클릭하여 수정할 수 있습니다. 우측 상단 「저장」 버튼을 누르면 현재 상태가 이 페이지의 새 버전으로 발행(클로드 아티팩트 환경) 또는 GitHub 저장소에 직접 반영(GitHub 연동 시)되어, 이후 이 링크로 접속하는 모든 화면에 동일하게 반영됩니다. 저장 전 수정 내용은 이 브라우저 탭에만 임시로 남아 있으니, 중요한 변경은 저장을 완료하거나 「JSON 내보내기」로 별도 백업해 두시기 바랍니다.
   </div>
 
 </div>
@@ -697,6 +721,129 @@ document.getElementById('adminInput').addEventListener('keydown', (e)=>{ if(e.ke
 document.getElementById('adminCancelBtn').addEventListener('click', closeAdminModal);
 updateAdminUI();
 
+/* ---------- GitHub 연동 (클로드 아티팩트가 아닌 환경에서의 대체 저장 경로) ----------
+   window.claude(클로드 아티팩트 전용 기능)가 없는 환경, 즉 GitHub Pages 같은 정적 호스팅에서는
+   "저장"이 이 저장소에만 쓰기 권한이 있는 GitHub 개인 액세스 토큰(Fine-grained PAT)을 이용해
+   GitHub Contents API로 index.html을 직접 갱신하는 방식으로 동작한다.
+   토큰은 세션/로컬 스토리지에만 보관되며, state(JSON)나 저장되는 페이지 소스에는 절대 포함되지 않는다.
+   이 토큰을 아는 사람은 이 저장소에 한해 내용을 임의로 바꿀 수 있으므로, 관리자 비밀번호보다 훨씬
+   민감하게 취급해야 한다(범위를 이 저장소 하나로 좁힌 fine-grained 토큰만 사용, 만료기한 설정 권장). */
+const GH_OWNER = 'choigilbok';
+const GH_REPO = 'nexview-order-dashboard';
+const GH_BRANCH = 'main';
+const GH_PATH = 'index.html';
+const GH_TOKEN_SESSION_KEY = 'order-dashboard-gh-token';
+const GH_TOKEN_LOCAL_KEY = 'order-dashboard-gh-token-remember';
+
+function getGhToken(){
+  try{ return sessionStorage.getItem(GH_TOKEN_SESSION_KEY) || localStorage.getItem(GH_TOKEN_LOCAL_KEY) || ''; }
+  catch(e){ return ''; }
+}
+function setGhToken(token, remember){
+  try{
+    sessionStorage.setItem(GH_TOKEN_SESSION_KEY, token);
+    if(remember) localStorage.setItem(GH_TOKEN_LOCAL_KEY, token);
+    else localStorage.removeItem(GH_TOKEN_LOCAL_KEY);
+  }catch(e){}
+}
+function clearGhToken(){
+  try{
+    sessionStorage.removeItem(GH_TOKEN_SESSION_KEY);
+    localStorage.removeItem(GH_TOKEN_LOCAL_KEY);
+  }catch(e){}
+}
+function b64EncodeUnicode(str){
+  return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (m,p1)=>String.fromCharCode('0x'+p1)));
+}
+function envMode(){
+  if(window.claude && window.claude.use) return 'artifact';
+  if(getGhToken()) return 'github';
+  return 'none';
+}
+function refreshIdleSaveStatus(){
+  const mode = envMode();
+  if(mode==='artifact') setSaveStatus('저장 대기', false, false);
+  else if(mode==='github') setSaveStatus('저장 대기 (GitHub 연동됨)', false, false);
+  else setSaveStatus('GitHub 연동 필요', false, true);
+}
+function openGithubModal(){
+  document.getElementById('ghErr').textContent = '';
+  document.getElementById('ghErr').style.color = '';
+  document.getElementById('ghTokenInput').value = '';
+  document.getElementById('ghRememberChk').checked = true;
+  document.getElementById('githubModal').classList.add('open');
+  document.getElementById('ghTokenInput').focus();
+}
+function closeGithubModal(){
+  document.getElementById('githubModal').classList.remove('open');
+}
+async function ghTestConnection(token){
+  const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}`, {
+    headers: { 'Authorization': `Bearer ${token}`, 'Accept':'application/vnd.github+json' }
+  });
+  if(!res.ok) throw new Error('repo-access-failed');
+  const data = await res.json();
+  if(!data.permissions || !data.permissions.push) throw new Error('no-push-permission');
+  return true;
+}
+document.getElementById('githubBtn').addEventListener('click', openGithubModal);
+document.getElementById('ghCancelBtn').addEventListener('click', closeGithubModal);
+document.getElementById('ghTestBtn').addEventListener('click', async ()=>{
+  const token = document.getElementById('ghTokenInput').value.trim();
+  const err = document.getElementById('ghErr');
+  err.style.color = '';
+  err.textContent = '';
+  if(!token){ err.textContent = '토큰을 입력하세요.'; return; }
+  err.textContent = '연결 확인 중...';
+  try{
+    await ghTestConnection(token);
+    err.style.color = 'var(--green)';
+    err.textContent = '연결 성공 (쓰기 권한 확인됨)';
+  }catch(e){
+    err.textContent = '연결 실패 — 토큰 또는 저장소 권한을 확인하세요.';
+  }
+});
+document.getElementById('ghSaveTokenBtn').addEventListener('click', ()=>{
+  const token = document.getElementById('ghTokenInput').value.trim();
+  const err = document.getElementById('ghErr');
+  if(!token){ err.textContent = '토큰을 입력하세요.'; return; }
+  setGhToken(token, document.getElementById('ghRememberChk').checked);
+  closeGithubModal();
+  refreshIdleSaveStatus();
+});
+document.getElementById('ghClearBtn').addEventListener('click', ()=>{
+  clearGhToken();
+  document.getElementById('ghTokenInput').value = '';
+  refreshIdleSaveStatus();
+  closeGithubModal();
+});
+async function saveToGitHub(html){
+  const token = getGhToken();
+  if(!token) throw new Error('unauthorized');
+  const headers = { 'Authorization': `Bearer ${token}`, 'Accept':'application/vnd.github.object+json' };
+  const getUrl = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_PATH}?ref=${GH_BRANCH}`;
+  const getRes = await fetch(getUrl, { headers });
+  if(getRes.status === 401 || getRes.status === 403) throw new Error('unauthorized');
+  if(!getRes.ok) throw new Error('파일 정보를 가져오지 못했습니다');
+  const fileInfo = await getRes.json();
+  const putRes = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_PATH}`, {
+    method: 'PUT',
+    headers: { 'Authorization': `Bearer ${token}`, 'Accept':'application/vnd.github+json', 'Content-Type':'application/json' },
+    body: JSON.stringify({
+      message: `대시보드 업데이트 (관리자 저장) - ${new Date().toISOString()}`,
+      content: b64EncodeUnicode(html),
+      sha: fileInfo.sha,
+      branch: GH_BRANCH
+    })
+  });
+  if(putRes.status === 401 || putRes.status === 403) throw new Error('unauthorized');
+  if(!putRes.ok){
+    const errBody = await putRes.json().catch(()=>({}));
+    throw new Error(errBody.message || '저장소 갱신 실패');
+  }
+}
+refreshIdleSaveStatus();
+
 let state = JSON.parse(document.getElementById('state-data').textContent);
 
 function uid(){ return 'o'+Math.random().toString(36).slice(2,10); }
@@ -775,39 +922,57 @@ function renderChangeLog(){
     </div>`).join('') : '<div class="empty">변경 이력이 없습니다.</div>';
 }
 
-/* ---------- persistence (Cowork Artifact) ---------- */
+/* ---------- persistence (클로드 아티팩트 또는 GitHub 연동) ---------- */
 async function saveState(){
+  const mode = envMode();
+  if(mode === 'none'){
+    setSaveStatus('저장 불가 — GitHub 연동 필요', false, true);
+    openGithubModal();
+    return;
+  }
+
+  document.getElementById('state-data').textContent = JSON.stringify(state);
+  // 발행/커밋되는 버전은 이 탭의 현재 상태와 무관하게 항상 잠금·비관리자 상태로 시작해야 한다
+  const wasLocked = document.body.classList.contains('locked');
+  const wasAdminClass = document.body.classList.contains('is-admin');
+  const lockScreen = document.getElementById('lockScreen');
+  const prevDisplay = lockScreen.style.display;
+  const lockInput = document.getElementById('lockInput');
+  const prevInputVal = lockInput.value;
+  document.body.classList.add('locked');
+  document.body.classList.remove('is-admin');
+  lockScreen.style.display = '';
+  lockInput.value = '';
+  const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+  if(!wasLocked) document.body.classList.remove('locked');
+  if(wasAdminClass) document.body.classList.add('is-admin');
+  lockScreen.style.display = prevDisplay;
+  lockInput.value = prevInputVal;
+
+  if(mode === 'artifact'){
+    try{
+      const artifact = await window.claude.use('artifact');
+      if(!artifact){ setSaveStatus('저장 불가 (권한 없음)', false, true); return; }
+      await artifact.publish(html);
+      setSaveStatus('저장 완료', true);
+    }catch(e){
+      setSaveStatus('저장 불가 (다운로드본은 메모리에만 유지)', false, true);
+    }
+    return;
+  }
+
+  // mode === 'github'
   try{
-    if(!window.claude || !window.claude.use){
-      setSaveStatus('저장 불가 (미지원 환경 · 다운로드본은 메모리에만 유지)', false, true);
-      return;
-    }
-    const artifact = await window.claude.use('artifact');
-    if(!artifact){
-      setSaveStatus('저장 불가 (권한 없음)', false, true);
-      return;
-    }
-    document.getElementById('state-data').textContent = JSON.stringify(state);
-    // publish must always start locked and non-admin, regardless of this tab's current state
-    const wasLocked = document.body.classList.contains('locked');
-    const wasAdminClass = document.body.classList.contains('is-admin');
-    const lockScreen = document.getElementById('lockScreen');
-    const prevDisplay = lockScreen.style.display;
-    const lockInput = document.getElementById('lockInput');
-    const prevInputVal = lockInput.value;
-    document.body.classList.add('locked');
-    document.body.classList.remove('is-admin');
-    lockScreen.style.display = '';
-    lockInput.value = '';
-    const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-    if(!wasLocked) document.body.classList.remove('locked');
-    if(wasAdminClass) document.body.classList.add('is-admin');
-    lockScreen.style.display = prevDisplay;
-    lockInput.value = prevInputVal;
-    await artifact.publish(html);
-    setSaveStatus('저장 완료', true);
+    setSaveStatus('GitHub에 저장 중...', false, false);
+    await saveToGitHub(html);
+    setSaveStatus('GitHub 저장 완료 (약 1~2분 후 사이트 반영)', true);
   }catch(e){
-    setSaveStatus('저장 불가 (다운로드본은 메모리에만 유지)', false, true);
+    if(e.message === 'unauthorized'){
+      setSaveStatus('저장 실패 (토큰 확인 필요)', false, true);
+      openGithubModal();
+    }else{
+      setSaveStatus('저장 실패 (' + (e.message||'오류') + ')', false, true);
+    }
   }
 }
 function setSaveStatus(text, ok, err){
