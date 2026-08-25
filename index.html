@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
+<html lang="ko"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>제조그룹 수주·납기 현황 관리</title>
@@ -285,13 +284,13 @@
 </head>
 <body class="locked">
 
-<div id="lockScreen">
+<div id="lockScreen" style="">
   <div class="lock-card">
     <div class="lock-eyebrow">제조그룹 · 수주/납기 관리 대시보드</div>
     <h2>비밀번호를 입력하세요</h2>
     <input type="password" id="lockInput" placeholder="비밀번호" autocomplete="off">
     <button class="primary" id="lockBtn">확인</button>
-    <div class="lock-err" id="lockErr"></div>
+    <div class="lock-err" id="lockErr">비밀번호가 올바르지 않습니다.</div>
   </div>
 </div>
 
@@ -300,15 +299,15 @@
   <div class="header">
     <div class="titles">
       <div class="eyebrow">제조그룹 · 수주/납기 관리 대시보드</div>
-      <h1 id="deckTitleDisplay">2026년 하반기 전체 수주·납기 현황</h1>
+      <h1 id="deckTitleDisplay">2026년 전체 수주·납기 현황</h1>
       <div class="meta">
         기준일 <input type="date" id="baseDate">
         · 보고자 <input type="text" id="reporter" value="최길복 수석 (제조그룹장)" size="18">
       </div>
     </div>
     <div class="save-row">
-      <button class="ghost small" id="adminBtn">관리자 모드</button>
-      <span class="status-pill admin-only" id="saveStatus">저장 대기</span>
+      <button class="ghost small" id="adminBtn">관리자 모드 (로그아웃)</button>
+      <span class="status-pill admin-only" id="saveStatus">저장 대기 (GitHub 연동됨)</span>
       <button class="ghost small admin-only" id="githubBtn">GitHub 연동</button>
       <button class="ghost small admin-only" id="exportBtn">JSON 내보내기</button>
       <button class="ghost small admin-only" id="importBtn">JSON 불러오기</button>
@@ -338,7 +337,7 @@
       </div>
       <input type="password" id="ghTokenInput" placeholder="github_pat_..." autocomplete="off">
       <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-dim);margin:-4px 0 10px;cursor:pointer;">
-        <input type="checkbox" id="ghRememberChk" checked style="width:auto;"> 이 브라우저에 기억하기 (다음에 재입력 불필요 · 공용 PC에서는 끄세요)
+        <input type="checkbox" id="ghRememberChk" checked="" style="width:auto;"> 이 브라우저에 기억하기 (다음에 재입력 불필요 · 공용 PC에서는 끄세요)
       </label>
       <div class="modal-err" id="ghErr"></div>
       <div class="modal-actions">
@@ -368,24 +367,24 @@
 
   <div class="summary">
     <div class="card confirmed">
-      <div class="num" id="sumConfirmed">-</div>
+      <div class="num" id="sumConfirmed">81대</div>
       <div class="label">수주 확정 (대)</div>
       <div class="sub">발주 완료 · 제작/출하/납품 진행·완료 건</div>
     </div>
     <div class="card pending">
-      <div class="num" id="sumPending">-</div>
+      <div class="num" id="sumPending">2대</div>
       <div class="label">발주 예정 (대)</div>
-      <div class="sub" id="pendingSub">-</div>
+      <div class="sub" id="pendingSub">KI社 발주 대기</div>
     </div>
     <div class="card target">
       <div class="num">총 <input type="number" id="targetInput" value="83">대</div>
       <div class="label">총 수주 목표</div>
-      <div class="sub" id="targetProgress">-</div>
+      <div class="sub" id="targetProgress">현재 83대 확보 · 목표 대비 100%</div>
     </div>
     <div class="card alert">
-      <div class="num" id="sumAlert">-</div>
+      <div class="num" id="sumAlert">3건</div>
       <div class="label">납기 임박·지연</div>
-      <div class="sub" id="alertSub">-</div>
+      <div class="sub" id="alertSub">지연 1건 · 임박(7일 이내) 2건</div>
     </div>
   </div>
 
@@ -399,32 +398,239 @@
   <!-- DASHBOARD -->
   <div class="tab-panel active" id="tab-dashboard">
     <div class="section-title">월별 출하 대수 <small>납기(예정) 기준 · 카드 클릭 시 해당 월로 필터 이동</small></div>
-    <div class="month-chart" id="monthChart"></div>
+    <div class="month-chart" id="monthChart"><div class="month-col">
+      <div class="m-label">26.08</div>
+      <div class="bar-wrap"><div class="bar" style="height:30.959999999999997px"></div></div>
+      <div class="m-qty">9대</div>
+      <div class="m-sub">3건</div>
+    </div><div class="month-col">
+      <div class="m-label">26.09</div>
+      <div class="bar-wrap"><div class="bar" style="height:34.4px"></div></div>
+      <div class="m-qty">10대</div>
+      <div class="m-sub">2건</div>
+    </div><div class="month-col">
+      <div class="m-label">26.10</div>
+      <div class="bar-wrap"><div class="bar" style="height:24.080000000000002px"></div></div>
+      <div class="m-qty">7대</div>
+      <div class="m-sub">2건</div>
+    </div><div class="month-col">
+      <div class="m-label">26.11</div>
+      <div class="bar-wrap"><div class="bar" style="height:34.4px"></div></div>
+      <div class="m-qty">10대</div>
+      <div class="m-sub">2건</div>
+    </div><div class="month-col">
+      <div class="m-label">26.12</div>
+      <div class="bar-wrap"><div class="bar" style="height:44.72px"></div></div>
+      <div class="m-qty">13대</div>
+      <div class="m-sub">3건</div>
+    </div><div class="month-col">
+      <div class="m-label">27.01</div>
+      <div class="bar-wrap"><div class="bar" style="height:24.080000000000002px"></div></div>
+      <div class="m-qty">7대</div>
+      <div class="m-sub">4건</div>
+    </div><div class="month-col">
+      <div class="m-label">27.02</div>
+      <div class="bar-wrap"><div class="bar" style="height:86px"></div></div>
+      <div class="m-qty">25대</div>
+      <div class="m-sub">11건</div>
+    </div></div>
 
     <div class="grid-2" style="margin-top:22px;">
       <div class="panel">
         <div class="section-title" style="margin-top:0;">고객사별 수주 현황</div>
-        <div id="custBars"></div>
+        <div id="custBars">
+    <div class="bar-row">
+      <div class="rlabel">TS社</div>
+      <div class="rtrack"><div class="rfill" style="width:100%;background:linear-gradient(90deg,#3fa672,#7fd6a8);"></div></div>
+      <div class="rval">56대</div>
+    </div>
+    <div class="bar-row">
+      <div class="rlabel">ME社</div>
+      <div class="rtrack"><div class="rfill" style="width:16.071428571428573%;background:linear-gradient(90deg,#4c8fd6,#8ec0ee);"></div></div>
+      <div class="rval">9대</div>
+    </div>
+    <div class="bar-row">
+      <div class="rlabel">NIDEC社</div>
+      <div class="rtrack"><div class="rfill" style="width:10.714285714285714%;background:linear-gradient(90deg,#9b7fe0,#c3b3f2);"></div></div>
+      <div class="rval">6대</div>
+    </div>
+    <div class="bar-row">
+      <div class="rlabel">PM社</div>
+      <div class="rtrack"><div class="rfill" style="width:5.357142857142857%;background:linear-gradient(90deg,#e2933f,#f2c48b);"></div></div>
+      <div class="rval">3대</div>
+    </div>
+    <div class="bar-row">
+      <div class="rlabel">DG社</div>
+      <div class="rtrack"><div class="rfill" style="width:5.357142857142857%;background:linear-gradient(90deg,#3fb6ae,#8fdcd6);"></div></div>
+      <div class="rval">3대</div>
+    </div>
+    <div class="bar-row">
+      <div class="rlabel">M2N社</div>
+      <div class="rtrack"><div class="rfill" style="width:3.571428571428571%;background:linear-gradient(90deg,#e0c257,#f0dd9f);"></div></div>
+      <div class="rval">2대</div>
+    </div>
+    <div class="bar-row">
+      <div class="rlabel">KI社</div>
+      <div class="rtrack"><div class="rfill" style="width:3.571428571428571%;background:linear-gradient(90deg,#3fa672,#7fd6a8);"></div></div>
+      <div class="rval">2대</div>
+    </div>
+    <div class="bar-row">
+      <div class="rlabel">BE社</div>
+      <div class="rtrack"><div class="rfill" style="width:1.7857142857142856%;background:linear-gradient(90deg,#4c8fd6,#8ec0ee);"></div></div>
+      <div class="rval">1대</div>
+    </div>
+    <div class="bar-row">
+      <div class="rlabel">ZF社</div>
+      <div class="rtrack"><div class="rfill" style="width:1.7857142857142856%;background:linear-gradient(90deg,#9b7fe0,#c3b3f2);"></div></div>
+      <div class="rval">1대</div>
+    </div></div>
       </div>
       <div class="panel">
         <div class="section-title" style="margin-top:0;">구분별 현황 (pLSMB / sLSMB / dLSMB)</div>
-        <div id="catBars"></div>
+        <div id="catBars">
+    <div class="bar-row">
+      <div class="rlabel">pLSMB</div>
+      <div class="rtrack"><div class="rfill" style="width:100%;background:linear-gradient(90deg,#e2933f,#f2c48b);"></div></div>
+      <div class="rval">82대</div>
+    </div>
+    <div class="bar-row">
+      <div class="rlabel">sLSMB</div>
+      <div class="rtrack"><div class="rfill" style="width:1.2195121951219512%;background:linear-gradient(90deg,#4c8fd6,#8ec0ee);"></div></div>
+      <div class="rval">1대</div>
+    </div>
+    <div class="bar-row">
+      <div class="rlabel">dLSMB</div>
+      <div class="rtrack"><div class="rfill" style="width:0%;background:linear-gradient(90deg,#9b7fe0,#c3b3f2);"></div></div>
+      <div class="rval">0대</div>
+    </div></div>
         <div class="section-title" style="font-size:13px;">특이사항 (중국 셋업·협의 요청 등)</div>
-        <div class="issue-list" id="issueList"></div>
+        <div class="issue-list" id="issueList">
+    <div class="issue-item">
+      <div class="who">TS社</div>
+      <div class="what">PIS 3대 · 제작완료</div>
+    </div>
+    <div class="issue-item">
+      <div class="who">TS社</div>
+      <div class="what">HSB 10 5대 · 제작 중</div>
+    </div>
+    <div class="issue-item">
+      <div class="who">BE社</div>
+      <div class="what">LJS 1 · 제작 중</div>
+    </div>
+    <div class="issue-item">
+      <div class="who">TS社</div>
+      <div class="what">HSB 10 5대 · 제작 중</div>
+    </div>
+    <div class="issue-item">
+      <div class="who">TS社</div>
+      <div class="what">HSB 12 5대 · 제작 중</div>
+    </div>
+    <div class="issue-item">
+      <div class="who">TS社</div>
+      <div class="what">HSB 12 5대 · 중국 셋업 전환 검토</div>
+    </div>
+    <div class="issue-item">
+      <div class="who">TS社</div>
+      <div class="what">HSB 12 2대 · 제작 중</div>
+    </div>
+    <div class="issue-item">
+      <div class="who">TS社</div>
+      <div class="what">HSB 5대 · 제작 중 · 중국 셋업</div>
+    </div>
+    <div class="issue-item">
+      <div class="who">TS社</div>
+      <div class="what">PIS 5대 · 제작 중 · 중국 셋업</div>
+    </div>
+    <div class="issue-item">
+      <div class="who">ME社</div>
+      <div class="what">HSB5·PIS3·PCS1 · 제작 중 · 중국 셋업</div>
+    </div>
+    <div class="issue-item">
+      <div class="who">PM社</div>
+      <div class="what">HSB1 · 설비컨셉 협의 要</div>
+    </div>
+    <div class="issue-item">
+      <div class="who">TS社</div>
+      <div class="what">PIS 3대 · 제작 중</div>
+    </div>
+    <div class="issue-item">
+      <div class="who">PM社</div>
+      <div class="what">PIS · 제작 중</div>
+    </div>
+    <div class="issue-item">
+      <div class="who">PM社</div>
+      <div class="what">PCS · 제작 중</div>
+    </div>
+    <div class="issue-item">
+      <div class="who">TS社</div>
+      <div class="what">HSB우 3대 · 제작 중 (변경 전 12-11)</div>
+    </div>
+    <div class="issue-item">
+      <div class="who">M2N社</div>
+      <div class="what">HSB·LMB · 제작 중 · 중국 셋업 (변경 전 11-27)</div>
+    </div>
+    <div class="issue-item">
+      <div class="who">NIDEC社</div>
+      <div class="what">LMB·LMR · 제작 중 · 중국 셋업</div>
+    </div>
+    <div class="issue-item">
+      <div class="who">NIDEC社</div>
+      <div class="what">LMB · 제작 중 · 중국 셋업</div>
+    </div>
+    <div class="issue-item">
+      <div class="who">NIDEC社</div>
+      <div class="what">LMR · 제작 중 · 중국 셋업</div>
+    </div>
+    <div class="issue-item">
+      <div class="who">NIDEC社</div>
+      <div class="what">PCS · 제작 중 · 중국 셋업</div>
+    </div>
+    <div class="issue-item">
+      <div class="who">NIDEC社</div>
+      <div class="what">PIS · 제작 중 · 중국 셋업</div>
+    </div>
+    <div class="issue-item">
+      <div class="who">TS社</div>
+      <div class="what">PIS 3대 · 제작 중 · 중국 셋업</div>
+    </div>
+    <div class="issue-item">
+      <div class="who">TS社</div>
+      <div class="what">HSB 5대 · 제작 중 · 중국 셋업</div>
+    </div>
+    <div class="issue-item">
+      <div class="who">DG社</div>
+      <div class="what">HSB · 제작 중 · 중국 셋업</div>
+    </div>
+    <div class="issue-item">
+      <div class="who">DG社</div>
+      <div class="what">LMB · 제작 중 · 중국 셋업</div>
+    </div>
+    <div class="issue-item">
+      <div class="who">TS社</div>
+      <div class="what">HSB5·PIS2·PCS1 · 제작 중 · 중국 셋업</div>
+    </div>
+    <div class="issue-item">
+      <div class="who">ZF社</div>
+      <div class="what">HSB · 제작 중 · 중국 셋업</div>
+    </div>
+    <div class="issue-item">
+      <div class="who">KI社</div>
+      <div class="what">- · 8월초 발주 예정</div>
+    </div></div>
       </div>
     </div>
 
     <div class="panel" style="margin-top:16px;">
       <div class="section-title" style="margin-top:0;">최근 변경 이력 <small>최근 20건 · 표 수정·행 추가/삭제·엑셀 업로드 시 자동 기록</small></div>
-      <div class="log-list" id="changeLogList"></div>
+      <div class="log-list" id="changeLogList"><div class="empty">변경 이력이 없습니다.</div></div>
     </div>
   </div>
 
   <!-- MANAGE -->
   <div class="tab-panel" id="tab-manage">
     <div class="filters">
-      <select id="fYear"><option value="all">연도 전체</option></select>
-      <select id="fCust"><option value="all">고객사 전체</option></select>
+      <select id="fYear"><option value="all">연도 전체</option><option value="2026">2026년</option><option value="2027">2027년</option></select>
+      <select id="fCust"><option value="all">고객사 전체</option><option value="BE社">BE社</option><option value="DG社">DG社</option><option value="KI社">KI社</option><option value="M2N社">M2N社</option><option value="ME社">ME社</option><option value="NIDEC社">NIDEC社</option><option value="PM社">PM社</option><option value="TS社">TS社</option><option value="ZF社">ZF社</option></select>
       <select id="fStatus">
         <option value="all">상태 전체</option>
         <option value="수주확정">수주확정</option>
@@ -442,7 +648,7 @@
       <button class="admin-only" id="addRowBtn">+ 행 추가</button>
       <button class="admin-only" id="excelUploadBtn">엑셀 업로드</button>
       <input type="file" id="excelFile" accept=".xlsx,.xls,.csv" style="display:none">
-      <span class="status-pill pill-blue" id="filterCount">0건</span>
+      <span class="status-pill pill-blue" id="filterCount">28건 · 83대</span>
       <span class="status-pill pill-purple" id="monthFilterPill" style="display:none;cursor:pointer;" title="클릭 시 월별 필터 해제"></span>
     </div>
     <div class="order-table-wrap">
@@ -453,17 +659,693 @@
             <th>구분</th><th>상태</th><th>담당자</th><th>Issue / 현황</th><th>비고</th><th></th>
           </tr>
         </thead>
-        <tbody id="orderTbody"></tbody>
+        <tbody id="orderTbody">
+    <tr class="month-mint" data-id="o1">
+      <td contenteditable="true" data-field="cust">TS社</td>
+      <td contenteditable="true" data-field="system">PIS 3대</td>
+      <td contenteditable="true" data-field="qty" style="width:60px;">3</td>
+      <td>
+        <input type="date" value="2026-08-07" data-field="due" style="background:transparent;border:none;color:var(--text);font-family:inherit;font-size:13px;"><span class="due-badge overdue">D+18 지연</span>
+      </td>
+      <td>
+        <select class="cat-select" data-field="cat">
+          <option value="pLSMB" selected="">pLSMB</option><option value="sLSMB">sLSMB</option><option value="dLSMB">dLSMB</option>
+        </select>
+      </td>
+      <td>
+        <select class="status-select" data-field="status">
+          <option value="수주확정" selected="">수주확정</option>
+          <option value="발주예정">발주예정</option>
+          <option value="납품완료">납품완료</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td contenteditable="true" data-field="issue">제작완료</td>
+      <td contenteditable="true" data-field="note"></td>
+      <td class="row-actions"><button class="small danger" data-del="o1">삭제</button></td>
+    </tr>
+    <tr class="month-mint" data-id="o2">
+      <td contenteditable="true" data-field="cust">TS社</td>
+      <td contenteditable="true" data-field="system">HSB 10 5대</td>
+      <td contenteditable="true" data-field="qty" style="width:60px;">5</td>
+      <td>
+        <input type="date" value="2026-08-28" data-field="due" style="background:transparent;border:none;color:var(--text);font-family:inherit;font-size:13px;"><span class="due-badge soon">D-3</span>
+      </td>
+      <td>
+        <select class="cat-select" data-field="cat">
+          <option value="pLSMB" selected="">pLSMB</option><option value="sLSMB">sLSMB</option><option value="dLSMB">dLSMB</option>
+        </select>
+      </td>
+      <td>
+        <select class="status-select" data-field="status">
+          <option value="수주확정" selected="">수주확정</option>
+          <option value="발주예정">발주예정</option>
+          <option value="납품완료">납품완료</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td contenteditable="true" data-field="issue">제작 중</td>
+      <td contenteditable="true" data-field="note"></td>
+      <td class="row-actions"><button class="small danger" data-del="o2">삭제</button></td>
+    </tr>
+    <tr class="month-mint" data-id="o3">
+      <td contenteditable="true" data-field="cust">BE社</td>
+      <td contenteditable="true" data-field="system">LJS 1</td>
+      <td contenteditable="true" data-field="qty" style="width:60px;">1</td>
+      <td>
+        <input type="date" value="2026-08-28" data-field="due" style="background:transparent;border:none;color:var(--text);font-family:inherit;font-size:13px;"><span class="due-badge soon">D-3</span>
+      </td>
+      <td>
+        <select class="cat-select" data-field="cat">
+          <option value="pLSMB">pLSMB</option><option value="sLSMB" selected="">sLSMB</option><option value="dLSMB">dLSMB</option>
+        </select>
+      </td>
+      <td>
+        <select class="status-select" data-field="status">
+          <option value="수주확정" selected="">수주확정</option>
+          <option value="발주예정">발주예정</option>
+          <option value="납품완료">납품완료</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td contenteditable="true" data-field="issue">제작 중</td>
+      <td contenteditable="true" data-field="note"></td>
+      <td class="row-actions"><button class="small danger" data-del="o3">삭제</button></td>
+    </tr>
+    <tr class="month-lav" data-id="o4">
+      <td contenteditable="true" data-field="cust">TS社</td>
+      <td contenteditable="true" data-field="system">HSB 10 5대</td>
+      <td contenteditable="true" data-field="qty" style="width:60px;">5</td>
+      <td>
+        <input type="date" value="2026-09-11" data-field="due" style="background:transparent;border:none;color:var(--text);font-family:inherit;font-size:13px;">
+      </td>
+      <td>
+        <select class="cat-select" data-field="cat">
+          <option value="pLSMB" selected="">pLSMB</option><option value="sLSMB">sLSMB</option><option value="dLSMB">dLSMB</option>
+        </select>
+      </td>
+      <td>
+        <select class="status-select" data-field="status">
+          <option value="수주확정" selected="">수주확정</option>
+          <option value="발주예정">발주예정</option>
+          <option value="납품완료">납품완료</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td contenteditable="true" data-field="issue">제작 중</td>
+      <td contenteditable="true" data-field="note"></td>
+      <td class="row-actions"><button class="small danger" data-del="o4">삭제</button></td>
+    </tr>
+    <tr class="month-lav" data-id="o5">
+      <td contenteditable="true" data-field="cust">TS社</td>
+      <td contenteditable="true" data-field="system">HSB 12 5대</td>
+      <td contenteditable="true" data-field="qty" style="width:60px;">5</td>
+      <td>
+        <input type="date" value="2026-09-30" data-field="due" style="background:transparent;border:none;color:var(--text);font-family:inherit;font-size:13px;">
+      </td>
+      <td>
+        <select class="cat-select" data-field="cat">
+          <option value="pLSMB" selected="">pLSMB</option><option value="sLSMB">sLSMB</option><option value="dLSMB">dLSMB</option>
+        </select>
+      </td>
+      <td>
+        <select class="status-select" data-field="status">
+          <option value="수주확정" selected="">수주확정</option>
+          <option value="발주예정">발주예정</option>
+          <option value="납품완료">납품완료</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td contenteditable="true" data-field="issue">제작 중</td>
+      <td contenteditable="true" data-field="note"></td>
+      <td class="row-actions"><button class="small danger" data-del="o5">삭제</button></td>
+    </tr>
+    <tr class="month-mint" data-id="o6">
+      <td contenteditable="true" data-field="cust">TS社</td>
+      <td contenteditable="true" data-field="system">HSB 12 5대</td>
+      <td contenteditable="true" data-field="qty" style="width:60px;">5</td>
+      <td>
+        <input type="date" value="2026-10-16" data-field="due" style="background:transparent;border:none;color:var(--text);font-family:inherit;font-size:13px;">
+      </td>
+      <td>
+        <select class="cat-select" data-field="cat">
+          <option value="pLSMB" selected="">pLSMB</option><option value="sLSMB">sLSMB</option><option value="dLSMB">dLSMB</option>
+        </select>
+      </td>
+      <td>
+        <select class="status-select" data-field="status">
+          <option value="수주확정" selected="">수주확정</option>
+          <option value="발주예정">발주예정</option>
+          <option value="납품완료">납품완료</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td contenteditable="true" data-field="issue">중국 셋업 전환 검토</td>
+      <td contenteditable="true" data-field="note"></td>
+      <td class="row-actions"><button class="small danger" data-del="o6">삭제</button></td>
+    </tr>
+    <tr class="month-mint" data-id="o7">
+      <td contenteditable="true" data-field="cust">TS社</td>
+      <td contenteditable="true" data-field="system">HSB 12 2대</td>
+      <td contenteditable="true" data-field="qty" style="width:60px;">2</td>
+      <td>
+        <input type="date" value="2026-10-30" data-field="due" style="background:transparent;border:none;color:var(--text);font-family:inherit;font-size:13px;">
+      </td>
+      <td>
+        <select class="cat-select" data-field="cat">
+          <option value="pLSMB" selected="">pLSMB</option><option value="sLSMB">sLSMB</option><option value="dLSMB">dLSMB</option>
+        </select>
+      </td>
+      <td>
+        <select class="status-select" data-field="status">
+          <option value="수주확정" selected="">수주확정</option>
+          <option value="발주예정">발주예정</option>
+          <option value="납품완료">납품완료</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td contenteditable="true" data-field="issue">제작 중</td>
+      <td contenteditable="true" data-field="note"></td>
+      <td class="row-actions"><button class="small danger" data-del="o7">삭제</button></td>
+    </tr>
+    <tr class="month-lav" data-id="o8">
+      <td contenteditable="true" data-field="cust">TS社</td>
+      <td contenteditable="true" data-field="system">HSB 5대</td>
+      <td contenteditable="true" data-field="qty" style="width:60px;">5</td>
+      <td>
+        <input type="date" value="2026-11-13" data-field="due" style="background:transparent;border:none;color:var(--text);font-family:inherit;font-size:13px;">
+      </td>
+      <td>
+        <select class="cat-select" data-field="cat">
+          <option value="pLSMB" selected="">pLSMB</option><option value="sLSMB">sLSMB</option><option value="dLSMB">dLSMB</option>
+        </select>
+      </td>
+      <td>
+        <select class="status-select" data-field="status">
+          <option value="수주확정" selected="">수주확정</option>
+          <option value="발주예정">발주예정</option>
+          <option value="납품완료">납품완료</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td contenteditable="true" data-field="issue">제작 중 · 중국 셋업</td>
+      <td contenteditable="true" data-field="note"></td>
+      <td class="row-actions"><button class="small danger" data-del="o8">삭제</button></td>
+    </tr>
+    <tr class="month-lav" data-id="o9">
+      <td contenteditable="true" data-field="cust">TS社</td>
+      <td contenteditable="true" data-field="system">PIS 5대</td>
+      <td contenteditable="true" data-field="qty" style="width:60px;">5</td>
+      <td>
+        <input type="date" value="2026-11-20" data-field="due" style="background:transparent;border:none;color:var(--text);font-family:inherit;font-size:13px;">
+      </td>
+      <td>
+        <select class="cat-select" data-field="cat">
+          <option value="pLSMB" selected="">pLSMB</option><option value="sLSMB">sLSMB</option><option value="dLSMB">dLSMB</option>
+        </select>
+      </td>
+      <td>
+        <select class="status-select" data-field="status">
+          <option value="수주확정" selected="">수주확정</option>
+          <option value="발주예정">발주예정</option>
+          <option value="납품완료">납품완료</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td contenteditable="true" data-field="issue">제작 중 · 중국 셋업</td>
+      <td contenteditable="true" data-field="note"></td>
+      <td class="row-actions"><button class="small danger" data-del="o9">삭제</button></td>
+    </tr>
+    <tr class="month-mint" data-id="o10">
+      <td contenteditable="true" data-field="cust">ME社</td>
+      <td contenteditable="true" data-field="system">HSB5·PIS3·PCS1</td>
+      <td contenteditable="true" data-field="qty" style="width:60px;">9</td>
+      <td>
+        <input type="date" value="2026-12-04" data-field="due" style="background:transparent;border:none;color:var(--text);font-family:inherit;font-size:13px;">
+      </td>
+      <td>
+        <select class="cat-select" data-field="cat">
+          <option value="pLSMB" selected="">pLSMB</option><option value="sLSMB">sLSMB</option><option value="dLSMB">dLSMB</option>
+        </select>
+      </td>
+      <td>
+        <select class="status-select" data-field="status">
+          <option value="수주확정" selected="">수주확정</option>
+          <option value="발주예정">발주예정</option>
+          <option value="납품완료">납품완료</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td contenteditable="true" data-field="issue">제작 중 · 중국 셋업</td>
+      <td contenteditable="true" data-field="note"></td>
+      <td class="row-actions"><button class="small danger" data-del="o10">삭제</button></td>
+    </tr>
+    <tr class="month-mint" data-id="o11">
+      <td contenteditable="true" data-field="cust">PM社</td>
+      <td contenteditable="true" data-field="system">HSB1</td>
+      <td contenteditable="true" data-field="qty" style="width:60px;">1</td>
+      <td>
+        <input type="date" value="2026-12-08" data-field="due" style="background:transparent;border:none;color:var(--text);font-family:inherit;font-size:13px;">
+      </td>
+      <td>
+        <select class="cat-select" data-field="cat">
+          <option value="pLSMB" selected="">pLSMB</option><option value="sLSMB">sLSMB</option><option value="dLSMB">dLSMB</option>
+        </select>
+      </td>
+      <td>
+        <select class="status-select" data-field="status">
+          <option value="수주확정" selected="">수주확정</option>
+          <option value="발주예정">발주예정</option>
+          <option value="납품완료">납품완료</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td contenteditable="true" data-field="issue">설비컨셉 협의 要</td>
+      <td contenteditable="true" data-field="note"></td>
+      <td class="row-actions"><button class="small danger" data-del="o11">삭제</button></td>
+    </tr>
+    <tr class="month-mint" data-id="o12">
+      <td contenteditable="true" data-field="cust">TS社</td>
+      <td contenteditable="true" data-field="system">PIS 3대</td>
+      <td contenteditable="true" data-field="qty" style="width:60px;">3</td>
+      <td>
+        <input type="date" value="2026-12-11" data-field="due" style="background:transparent;border:none;color:var(--text);font-family:inherit;font-size:13px;">
+      </td>
+      <td>
+        <select class="cat-select" data-field="cat">
+          <option value="pLSMB" selected="">pLSMB</option><option value="sLSMB">sLSMB</option><option value="dLSMB">dLSMB</option>
+        </select>
+      </td>
+      <td>
+        <select class="status-select" data-field="status">
+          <option value="수주확정" selected="">수주확정</option>
+          <option value="발주예정">발주예정</option>
+          <option value="납품완료">납품완료</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td contenteditable="true" data-field="issue">제작 중</td>
+      <td contenteditable="true" data-field="note"></td>
+      <td class="row-actions"><button class="small danger" data-del="o12">삭제</button></td>
+    </tr>
+    <tr class="month-lav" data-id="o13">
+      <td contenteditable="true" data-field="cust">PM社</td>
+      <td contenteditable="true" data-field="system">PIS</td>
+      <td contenteditable="true" data-field="qty" style="width:60px;">1</td>
+      <td>
+        <input type="date" value="2027-01-15" data-field="due" style="background:transparent;border:none;color:var(--text);font-family:inherit;font-size:13px;">
+      </td>
+      <td>
+        <select class="cat-select" data-field="cat">
+          <option value="pLSMB" selected="">pLSMB</option><option value="sLSMB">sLSMB</option><option value="dLSMB">dLSMB</option>
+        </select>
+      </td>
+      <td>
+        <select class="status-select" data-field="status">
+          <option value="수주확정" selected="">수주확정</option>
+          <option value="발주예정">발주예정</option>
+          <option value="납품완료">납품완료</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td contenteditable="true" data-field="issue">제작 중</td>
+      <td contenteditable="true" data-field="note"></td>
+      <td class="row-actions"><button class="small danger" data-del="o13">삭제</button></td>
+    </tr>
+    <tr class="month-lav" data-id="o14">
+      <td contenteditable="true" data-field="cust">PM社</td>
+      <td contenteditable="true" data-field="system">PCS</td>
+      <td contenteditable="true" data-field="qty" style="width:60px;">1</td>
+      <td>
+        <input type="date" value="2027-01-15" data-field="due" style="background:transparent;border:none;color:var(--text);font-family:inherit;font-size:13px;">
+      </td>
+      <td>
+        <select class="cat-select" data-field="cat">
+          <option value="pLSMB" selected="">pLSMB</option><option value="sLSMB">sLSMB</option><option value="dLSMB">dLSMB</option>
+        </select>
+      </td>
+      <td>
+        <select class="status-select" data-field="status">
+          <option value="수주확정" selected="">수주확정</option>
+          <option value="발주예정">발주예정</option>
+          <option value="납품완료">납품완료</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td contenteditable="true" data-field="issue">제작 중</td>
+      <td contenteditable="true" data-field="note"></td>
+      <td class="row-actions"><button class="small danger" data-del="o14">삭제</button></td>
+    </tr>
+    <tr class="month-lav" data-id="o15">
+      <td contenteditable="true" data-field="cust">TS社</td>
+      <td contenteditable="true" data-field="system">HSB우 3대</td>
+      <td contenteditable="true" data-field="qty" style="width:60px;">3</td>
+      <td>
+        <input type="date" value="2027-01-22" data-field="due" style="background:transparent;border:none;color:var(--text);font-family:inherit;font-size:13px;">
+      </td>
+      <td>
+        <select class="cat-select" data-field="cat">
+          <option value="pLSMB" selected="">pLSMB</option><option value="sLSMB">sLSMB</option><option value="dLSMB">dLSMB</option>
+        </select>
+      </td>
+      <td>
+        <select class="status-select" data-field="status">
+          <option value="수주확정" selected="">수주확정</option>
+          <option value="발주예정">발주예정</option>
+          <option value="납품완료">납품완료</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td contenteditable="true" data-field="issue">제작 중</td>
+      <td contenteditable="true" data-field="note">변경 전 12-11</td>
+      <td class="row-actions"><button class="small danger" data-del="o15">삭제</button></td>
+    </tr>
+    <tr class="month-lav" data-id="o16">
+      <td contenteditable="true" data-field="cust">M2N社</td>
+      <td contenteditable="true" data-field="system">HSB·LMB</td>
+      <td contenteditable="true" data-field="qty" style="width:60px;">2</td>
+      <td>
+        <input type="date" value="2027-01-29" data-field="due" style="background:transparent;border:none;color:var(--text);font-family:inherit;font-size:13px;">
+      </td>
+      <td>
+        <select class="cat-select" data-field="cat">
+          <option value="pLSMB" selected="">pLSMB</option><option value="sLSMB">sLSMB</option><option value="dLSMB">dLSMB</option>
+        </select>
+      </td>
+      <td>
+        <select class="status-select" data-field="status">
+          <option value="수주확정" selected="">수주확정</option>
+          <option value="발주예정">발주예정</option>
+          <option value="납품완료">납품완료</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td contenteditable="true" data-field="issue">제작 중 · 중국 셋업</td>
+      <td contenteditable="true" data-field="note">변경 전 11-27</td>
+      <td class="row-actions"><button class="small danger" data-del="o16">삭제</button></td>
+    </tr>
+    <tr class="month-mint" data-id="o17">
+      <td contenteditable="true" data-field="cust">NIDEC社</td>
+      <td contenteditable="true" data-field="system">LMB·LMR</td>
+      <td contenteditable="true" data-field="qty" style="width:60px;">2</td>
+      <td>
+        <input type="date" value="2027-02-05" data-field="due" style="background:transparent;border:none;color:var(--text);font-family:inherit;font-size:13px;">
+      </td>
+      <td>
+        <select class="cat-select" data-field="cat">
+          <option value="pLSMB" selected="">pLSMB</option><option value="sLSMB">sLSMB</option><option value="dLSMB">dLSMB</option>
+        </select>
+      </td>
+      <td>
+        <select class="status-select" data-field="status">
+          <option value="수주확정" selected="">수주확정</option>
+          <option value="발주예정">발주예정</option>
+          <option value="납품완료">납품완료</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td contenteditable="true" data-field="issue">제작 중 · 중국 셋업</td>
+      <td contenteditable="true" data-field="note"></td>
+      <td class="row-actions"><button class="small danger" data-del="o17">삭제</button></td>
+    </tr>
+    <tr class="month-mint" data-id="o18">
+      <td contenteditable="true" data-field="cust">NIDEC社</td>
+      <td contenteditable="true" data-field="system">LMB</td>
+      <td contenteditable="true" data-field="qty" style="width:60px;">1</td>
+      <td>
+        <input type="date" value="2027-02-05" data-field="due" style="background:transparent;border:none;color:var(--text);font-family:inherit;font-size:13px;">
+      </td>
+      <td>
+        <select class="cat-select" data-field="cat">
+          <option value="pLSMB" selected="">pLSMB</option><option value="sLSMB">sLSMB</option><option value="dLSMB">dLSMB</option>
+        </select>
+      </td>
+      <td>
+        <select class="status-select" data-field="status">
+          <option value="수주확정" selected="">수주확정</option>
+          <option value="발주예정">발주예정</option>
+          <option value="납품완료">납품완료</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td contenteditable="true" data-field="issue">제작 중 · 중국 셋업</td>
+      <td contenteditable="true" data-field="note"></td>
+      <td class="row-actions"><button class="small danger" data-del="o18">삭제</button></td>
+    </tr>
+    <tr class="month-mint" data-id="o19">
+      <td contenteditable="true" data-field="cust">NIDEC社</td>
+      <td contenteditable="true" data-field="system">LMR</td>
+      <td contenteditable="true" data-field="qty" style="width:60px;">1</td>
+      <td>
+        <input type="date" value="2027-02-05" data-field="due" style="background:transparent;border:none;color:var(--text);font-family:inherit;font-size:13px;">
+      </td>
+      <td>
+        <select class="cat-select" data-field="cat">
+          <option value="pLSMB" selected="">pLSMB</option><option value="sLSMB">sLSMB</option><option value="dLSMB">dLSMB</option>
+        </select>
+      </td>
+      <td>
+        <select class="status-select" data-field="status">
+          <option value="수주확정" selected="">수주확정</option>
+          <option value="발주예정">발주예정</option>
+          <option value="납품완료">납품완료</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td contenteditable="true" data-field="issue">제작 중 · 중국 셋업</td>
+      <td contenteditable="true" data-field="note"></td>
+      <td class="row-actions"><button class="small danger" data-del="o19">삭제</button></td>
+    </tr>
+    <tr class="month-mint" data-id="o20">
+      <td contenteditable="true" data-field="cust">NIDEC社</td>
+      <td contenteditable="true" data-field="system">PCS</td>
+      <td contenteditable="true" data-field="qty" style="width:60px;">1</td>
+      <td>
+        <input type="date" value="2027-02-05" data-field="due" style="background:transparent;border:none;color:var(--text);font-family:inherit;font-size:13px;">
+      </td>
+      <td>
+        <select class="cat-select" data-field="cat">
+          <option value="pLSMB" selected="">pLSMB</option><option value="sLSMB">sLSMB</option><option value="dLSMB">dLSMB</option>
+        </select>
+      </td>
+      <td>
+        <select class="status-select" data-field="status">
+          <option value="수주확정" selected="">수주확정</option>
+          <option value="발주예정">발주예정</option>
+          <option value="납품완료">납품완료</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td contenteditable="true" data-field="issue">제작 중 · 중국 셋업</td>
+      <td contenteditable="true" data-field="note"></td>
+      <td class="row-actions"><button class="small danger" data-del="o20">삭제</button></td>
+    </tr>
+    <tr class="month-mint" data-id="o21">
+      <td contenteditable="true" data-field="cust">NIDEC社</td>
+      <td contenteditable="true" data-field="system">PIS</td>
+      <td contenteditable="true" data-field="qty" style="width:60px;">1</td>
+      <td>
+        <input type="date" value="2027-02-05" data-field="due" style="background:transparent;border:none;color:var(--text);font-family:inherit;font-size:13px;">
+      </td>
+      <td>
+        <select class="cat-select" data-field="cat">
+          <option value="pLSMB" selected="">pLSMB</option><option value="sLSMB">sLSMB</option><option value="dLSMB">dLSMB</option>
+        </select>
+      </td>
+      <td>
+        <select class="status-select" data-field="status">
+          <option value="수주확정" selected="">수주확정</option>
+          <option value="발주예정">발주예정</option>
+          <option value="납품완료">납품완료</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td contenteditable="true" data-field="issue">제작 중 · 중국 셋업</td>
+      <td contenteditable="true" data-field="note"></td>
+      <td class="row-actions"><button class="small danger" data-del="o21">삭제</button></td>
+    </tr>
+    <tr class="month-mint" data-id="o22">
+      <td contenteditable="true" data-field="cust">TS社</td>
+      <td contenteditable="true" data-field="system">PIS 3대</td>
+      <td contenteditable="true" data-field="qty" style="width:60px;">2</td>
+      <td>
+        <input type="date" value="2027-02-12" data-field="due" style="background:transparent;border:none;color:var(--text);font-family:inherit;font-size:13px;">
+      </td>
+      <td>
+        <select class="cat-select" data-field="cat">
+          <option value="pLSMB" selected="">pLSMB</option><option value="sLSMB">sLSMB</option><option value="dLSMB">dLSMB</option>
+        </select>
+      </td>
+      <td>
+        <select class="status-select" data-field="status">
+          <option value="수주확정" selected="">수주확정</option>
+          <option value="발주예정">발주예정</option>
+          <option value="납품완료">납품완료</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td contenteditable="true" data-field="issue">제작 중 · 중국 셋업</td>
+      <td contenteditable="true" data-field="note"></td>
+      <td class="row-actions"><button class="small danger" data-del="o22">삭제</button></td>
+    </tr>
+    <tr class="month-mint" data-id="o23">
+      <td contenteditable="true" data-field="cust">TS社</td>
+      <td contenteditable="true" data-field="system">HSB 5대</td>
+      <td contenteditable="true" data-field="qty" style="width:60px;">5</td>
+      <td>
+        <input type="date" value="2027-02-12" data-field="due" style="background:transparent;border:none;color:var(--text);font-family:inherit;font-size:13px;">
+      </td>
+      <td>
+        <select class="cat-select" data-field="cat">
+          <option value="pLSMB" selected="">pLSMB</option><option value="sLSMB">sLSMB</option><option value="dLSMB">dLSMB</option>
+        </select>
+      </td>
+      <td>
+        <select class="status-select" data-field="status">
+          <option value="수주확정" selected="">수주확정</option>
+          <option value="발주예정">발주예정</option>
+          <option value="납품완료">납품완료</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td contenteditable="true" data-field="issue">제작 중 · 중국 셋업</td>
+      <td contenteditable="true" data-field="note"></td>
+      <td class="row-actions"><button class="small danger" data-del="o23">삭제</button></td>
+    </tr>
+    <tr class="month-mint" data-id="o24">
+      <td contenteditable="true" data-field="cust">DG社</td>
+      <td contenteditable="true" data-field="system">HSB</td>
+      <td contenteditable="true" data-field="qty" style="width:60px;">2</td>
+      <td>
+        <input type="date" value="2027-02-15" data-field="due" style="background:transparent;border:none;color:var(--text);font-family:inherit;font-size:13px;">
+      </td>
+      <td>
+        <select class="cat-select" data-field="cat">
+          <option value="pLSMB" selected="">pLSMB</option><option value="sLSMB">sLSMB</option><option value="dLSMB">dLSMB</option>
+        </select>
+      </td>
+      <td>
+        <select class="status-select" data-field="status">
+          <option value="수주확정" selected="">수주확정</option>
+          <option value="발주예정">발주예정</option>
+          <option value="납품완료">납품완료</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td contenteditable="true" data-field="issue">제작 중 · 중국 셋업</td>
+      <td contenteditable="true" data-field="note"></td>
+      <td class="row-actions"><button class="small danger" data-del="o24">삭제</button></td>
+    </tr>
+    <tr class="month-mint" data-id="o25">
+      <td contenteditable="true" data-field="cust">DG社</td>
+      <td contenteditable="true" data-field="system">LMB</td>
+      <td contenteditable="true" data-field="qty" style="width:60px;">1</td>
+      <td>
+        <input type="date" value="2027-02-15" data-field="due" style="background:transparent;border:none;color:var(--text);font-family:inherit;font-size:13px;">
+      </td>
+      <td>
+        <select class="cat-select" data-field="cat">
+          <option value="pLSMB" selected="">pLSMB</option><option value="sLSMB">sLSMB</option><option value="dLSMB">dLSMB</option>
+        </select>
+      </td>
+      <td>
+        <select class="status-select" data-field="status">
+          <option value="수주확정" selected="">수주확정</option>
+          <option value="발주예정">발주예정</option>
+          <option value="납품완료">납품완료</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td contenteditable="true" data-field="issue">제작 중 · 중국 셋업</td>
+      <td contenteditable="true" data-field="note"></td>
+      <td class="row-actions"><button class="small danger" data-del="o25">삭제</button></td>
+    </tr>
+    <tr class="month-mint" data-id="o26">
+      <td contenteditable="true" data-field="cust">TS社</td>
+      <td contenteditable="true" data-field="system">HSB5·PIS2·PCS1</td>
+      <td contenteditable="true" data-field="qty" style="width:60px;">8</td>
+      <td>
+        <input type="date" value="2027-02-19" data-field="due" style="background:transparent;border:none;color:var(--text);font-family:inherit;font-size:13px;">
+      </td>
+      <td>
+        <select class="cat-select" data-field="cat">
+          <option value="pLSMB" selected="">pLSMB</option><option value="sLSMB">sLSMB</option><option value="dLSMB">dLSMB</option>
+        </select>
+      </td>
+      <td>
+        <select class="status-select" data-field="status">
+          <option value="수주확정" selected="">수주확정</option>
+          <option value="발주예정">발주예정</option>
+          <option value="납품완료">납품완료</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td contenteditable="true" data-field="issue">제작 중 · 중국 셋업</td>
+      <td contenteditable="true" data-field="note"></td>
+      <td class="row-actions"><button class="small danger" data-del="o26">삭제</button></td>
+    </tr>
+    <tr class="month-mint" data-id="o27">
+      <td contenteditable="true" data-field="cust">ZF社</td>
+      <td contenteditable="true" data-field="system">HSB</td>
+      <td contenteditable="true" data-field="qty" style="width:60px;">1</td>
+      <td>
+        <input type="date" value="2027-02-19" data-field="due" style="background:transparent;border:none;color:var(--text);font-family:inherit;font-size:13px;">
+      </td>
+      <td>
+        <select class="cat-select" data-field="cat">
+          <option value="pLSMB" selected="">pLSMB</option><option value="sLSMB">sLSMB</option><option value="dLSMB">dLSMB</option>
+        </select>
+      </td>
+      <td>
+        <select class="status-select" data-field="status">
+          <option value="수주확정" selected="">수주확정</option>
+          <option value="발주예정">발주예정</option>
+          <option value="납품완료">납품완료</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td contenteditable="true" data-field="issue">제작 중 · 중국 셋업</td>
+      <td contenteditable="true" data-field="note"></td>
+      <td class="row-actions"><button class="small danger" data-del="o27">삭제</button></td>
+    </tr>
+    <tr class="month-lav" data-id="o28">
+      <td contenteditable="true" data-field="cust">KI社</td>
+      <td contenteditable="true" data-field="system">-</td>
+      <td contenteditable="true" data-field="qty" style="width:60px;">2</td>
+      <td>
+        <input type="date" value="" data-field="due" style="background:transparent;border:none;color:var(--text);font-family:inherit;font-size:13px;">
+      </td>
+      <td>
+        <select class="cat-select" data-field="cat">
+          <option value="pLSMB" selected="">pLSMB</option><option value="sLSMB">sLSMB</option><option value="dLSMB">dLSMB</option>
+        </select>
+      </td>
+      <td>
+        <select class="status-select" data-field="status">
+          <option value="수주확정">수주확정</option>
+          <option value="발주예정" selected="">발주예정</option>
+          <option value="납품완료">납품완료</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td contenteditable="true" data-field="issue">8월초 발주 예정</td>
+      <td contenteditable="true" data-field="note"></td>
+      <td class="row-actions"><button class="small danger" data-del="o28">삭제</button></td>
+    </tr></tbody>
       </table>
     </div>
   </div>
 
   <!-- STAGE 입고관리 -->
   <div class="tab-panel" id="tab-stage">
-    <div class="mini-stats" id="stageStats"></div>
+    <div class="mini-stats" id="stageStats">
+    <div class="mini-stat ms-green"><div class="ms-num">45대</div><div class="ms-label">총 STAGE 관리 수량</div></div>
+    <div class="mini-stat ms-orange"><div class="ms-num">21건</div><div class="ms-label">PJT (취소·대체 1건 포함)</div></div>
+    <div class="mini-stat ms-blue"><div class="ms-num">4건</div><div class="ms-label">입고일 미정</div></div>
+  </div>
     <div class="filters">
-      <select id="sgCat"><option value="all">구분 전체</option></select>
-      <select id="sgVendor"><option value="all">업체 전체</option></select>
+      <select id="sgCat"><option value="all">구분 전체</option><option value="HSB-D">HSB-D</option><option value="HSB-S">HSB-S</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option></select>
+      <select id="sgVendor"><option value="all">업체 전체</option><option value="디씨티">디씨티</option><option value="아크리비스">아크리비스</option><option value="져스텍">져스텍</option></select>
       <select id="sgFlag">
         <option value="all">상태 전체</option>
         <option value="">정상</option>
@@ -475,7 +1357,7 @@
       <button class="admin-only" id="sgAddRowBtn">+ 행 추가</button>
       <button class="admin-only" id="sgExcelUploadBtn">엑셀 업로드</button>
       <input type="file" id="sgExcelFile" accept=".xlsx,.xls,.csv" style="display:none">
-      <span class="status-pill pill-blue" id="sgFilterCount">0건</span>
+      <span class="status-pill pill-blue" id="sgFilterCount">45건</span>
     </div>
     <div class="order-table-wrap">
       <table class="order-table" id="stageTable">
@@ -485,7 +1367,997 @@
             <th>업체</th><th>담당자</th><th>납기일</th><th>비고</th><th>상태</th><th></th>
           </tr>
         </thead>
-        <tbody id="stageTbody"></tbody>
+        <tbody id="stageTbody">
+    <tr class="stage-pjt-start" data-id="s1">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--orange-bg);color:var(--orange);border-color:var(--orange-bg);font-weight:700;">
+          <option value="HSB-S" selected="">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBTS12603</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">4</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.08.28</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2026-10-30</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s1">삭제</button></td>
+    </tr>
+    <tr class="" data-id="s2">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--orange-bg);color:var(--orange);border-color:var(--orange-bg);font-weight:700;">
+          <option value="HSB-S" selected="">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBTS12603</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">5</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.08.28</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2026-10-30</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s2">삭제</button></td>
+    </tr>
+    <tr class="" data-id="s3">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--orange-bg);color:var(--orange);border-color:var(--orange-bg);font-weight:700;">
+          <option value="HSB-S" selected="">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBTS12603</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">6</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.08.28</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2026-10-30</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s3">삭제</button></td>
+    </tr>
+    <tr class="" data-id="s4">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--orange-bg);color:var(--orange);border-color:var(--orange-bg);font-weight:700;">
+          <option value="HSB-S" selected="">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBTS12603</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">7</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.09.02</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2026-10-30</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s4">삭제</button></td>
+    </tr>
+    <tr class="" data-id="s5">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--orange-bg);color:var(--orange);border-color:var(--orange-bg);font-weight:700;">
+          <option value="HSB-S" selected="">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBTS12603</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">8</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.09.02</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2026-10-30</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s5">삭제</button></td>
+    </tr>
+    <tr class="" data-id="s6">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--orange-bg);color:var(--orange);border-color:var(--orange-bg);font-weight:700;">
+          <option value="HSB-S" selected="">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBTS12603</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">9</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.09.09</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2026-10-30</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s6">삭제</button></td>
+    </tr>
+    <tr class="" data-id="s7">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--orange-bg);color:var(--orange);border-color:var(--orange-bg);font-weight:700;">
+          <option value="HSB-S" selected="">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBTS12603</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">10</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.09.09</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2026-10-30</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s7">삭제</button></td>
+    </tr>
+    <tr class="stage-pjt-start" data-id="s8">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--orange-bg);color:var(--orange);border-color:var(--orange-bg);font-weight:700;">
+          <option value="HSB-S" selected="">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBTS12605</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">1</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.09.21</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2026-11-20</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s8">삭제</button></td>
+    </tr>
+    <tr class="" data-id="s9">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--orange-bg);color:var(--orange);border-color:var(--orange-bg);font-weight:700;">
+          <option value="HSB-S" selected="">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBTS12605</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">2</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.09.21</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2026-11-20</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s9">삭제</button></td>
+    </tr>
+    <tr class="" data-id="s10">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--orange-bg);color:var(--orange);border-color:var(--orange-bg);font-weight:700;">
+          <option value="HSB-S" selected="">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBTS12605</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">3</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.09.21</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2026-11-20</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s10">삭제</button></td>
+    </tr>
+    <tr class="" data-id="s11">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--orange-bg);color:var(--orange);border-color:var(--orange-bg);font-weight:700;">
+          <option value="HSB-S" selected="">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBTS12605</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">4</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.09.21</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2026-11-20</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s11">삭제</button></td>
+    </tr>
+    <tr class="" data-id="s12">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--orange-bg);color:var(--orange);border-color:var(--orange-bg);font-weight:700;">
+          <option value="HSB-S" selected="">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBTS12605</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">5</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.09.21</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2026-11-20</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s12">삭제</button></td>
+    </tr>
+    <tr class="stage-pjt-start" data-id="s13">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--navy-700);color:var(--text-dim);border-color:var(--navy-700);font-weight:700;">
+          <option value="HSB-S">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS" selected="">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">TCSKP12601</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">1</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.09.04</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2026-12-31</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s13">삭제</button></td>
+    </tr>
+    <tr class="stage-pjt-start" data-id="s14">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--green-bg);color:var(--green);border-color:var(--green-bg);font-weight:700;">
+          <option value="HSB-S">HSB-S</option><option value="HSB-D" selected="">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBME12601</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">1</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.10.08</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2026-12-04</span></td>
+      <td contenteditable="true" data-field="note">단축요청</td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s14">삭제</button></td>
+    </tr>
+    <tr class="" data-id="s15">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--green-bg);color:var(--green);border-color:var(--green-bg);font-weight:700;">
+          <option value="HSB-S">HSB-S</option><option value="HSB-D" selected="">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBME12601</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">2</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.10.08</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2026-12-04</span></td>
+      <td contenteditable="true" data-field="note">단축요청</td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s15">삭제</button></td>
+    </tr>
+    <tr class="" data-id="s16">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--green-bg);color:var(--green);border-color:var(--green-bg);font-weight:700;">
+          <option value="HSB-S">HSB-S</option><option value="HSB-D" selected="">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBME12601</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">3</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.10.08</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2026-12-04</span></td>
+      <td contenteditable="true" data-field="note">단축요청</td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s16">삭제</button></td>
+    </tr>
+    <tr class="" data-id="s17">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--green-bg);color:var(--green);border-color:var(--green-bg);font-weight:700;">
+          <option value="HSB-S">HSB-S</option><option value="HSB-D" selected="">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBME12601</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">4</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.10.08</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2026-12-04</span></td>
+      <td contenteditable="true" data-field="note">단축요청</td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s17">삭제</button></td>
+    </tr>
+    <tr class="" data-id="s18">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--green-bg);color:var(--green);border-color:var(--green-bg);font-weight:700;">
+          <option value="HSB-S">HSB-S</option><option value="HSB-D" selected="">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBME12601</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">5</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.10.08</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2026-12-04</span></td>
+      <td contenteditable="true" data-field="note">단축요청</td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s18">삭제</button></td>
+    </tr>
+    <tr class="stage-pjt-start stage-hl" data-id="s19">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--green-bg);color:var(--green);border-color:var(--green-bg);font-weight:700;">
+          <option value="HSB-S">HSB-S</option><option value="HSB-D" selected="">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBMN12601</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">1</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.10.08</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2027-01-29</span></td>
+      <td contenteditable="true" data-field="note">기존 HSBPM12601과 변경</td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="">정상</option>
+          <option value="hl" selected="">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s19">삭제</button></td>
+    </tr>
+    <tr class="stage-pjt-start" data-id="s20">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--navy-700);color:var(--text-dim);border-color:var(--navy-700);font-weight:700;">
+          <option value="HSB-S">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS" selected="">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">PCSPM12601</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">1</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.10.16</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">디씨티</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2027-01-15</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s20">삭제</button></td>
+    </tr>
+    <tr class="stage-pjt-start" data-id="s21">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--orange-bg);color:var(--orange);border-color:var(--orange-bg);font-weight:700;">
+          <option value="HSB-S" selected="">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBTS12606</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">1</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.10.20</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2027-01-22</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s21">삭제</button></td>
+    </tr>
+    <tr class="" data-id="s22">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--orange-bg);color:var(--orange);border-color:var(--orange-bg);font-weight:700;">
+          <option value="HSB-S" selected="">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBTS12606</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">2</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.10.20</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2027-01-22</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s22">삭제</button></td>
+    </tr>
+    <tr class="stage-hl" data-id="s23">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--orange-bg);color:var(--orange);border-color:var(--orange-bg);font-weight:700;">
+          <option value="HSB-S" selected="">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBTS12606</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">3</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.10.20</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2027-01-22</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="">정상</option>
+          <option value="hl" selected="">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s23">삭제</button></td>
+    </tr>
+    <tr class="stage-pjt-start" data-id="s24">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--navy-700);color:var(--text-dim);border-color:var(--navy-700);font-weight:700;">
+          <option value="HSB-S">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS" selected="">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">PCSME12601</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">1</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.10.29</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">디씨티</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2026-12-04</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s24">삭제</button></td>
+    </tr>
+    <tr class="stage-pjt-start" data-id="s25">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--blue-bg);color:var(--blue);border-color:var(--blue-bg);font-weight:700;">
+          <option value="HSB-S">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB" selected="">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">LMBNI12601</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">1</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.10.30</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">져스텍</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2027-02-08</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s25">삭제</button></td>
+    </tr>
+    <tr class="stage-pjt-start" data-id="s26">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--blue-bg);color:var(--blue);border-color:var(--blue-bg);font-weight:700;">
+          <option value="HSB-S">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB" selected="">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">LMBNI12602</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">1</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.10.30</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">져스텍</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2027-02-08</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s26">삭제</button></td>
+    </tr>
+    <tr class="stage-pjt-start stage-hl" data-id="s27">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--blue-bg);color:var(--blue);border-color:var(--blue-bg);font-weight:700;">
+          <option value="HSB-S">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB" selected="">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">LMBMN12601</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">1</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.11.06</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">져스텍</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2027-01-29</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="">정상</option>
+          <option value="hl" selected="">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s27">삭제</button></td>
+    </tr>
+    <tr class="stage-pjt-start stage-cancel" data-id="s28">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--green-bg);color:var(--green);border-color:var(--green-bg);font-weight:700;">
+          <option value="HSB-S">HSB-S</option><option value="HSB-D" selected="">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBPM12601</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">1</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.11.20</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">–</span></td>
+      <td contenteditable="true" data-field="note">취소 → HSBPM12602로 사양 변경 진행</td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel" selected="">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s28">삭제</button></td>
+    </tr>
+    <tr class="stage-pjt-start" data-id="s29">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--green-bg);color:var(--green);border-color:var(--green-bg);font-weight:700;">
+          <option value="HSB-S">HSB-S</option><option value="HSB-D" selected="">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBZF12601</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">1</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.11.20</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2027-02-19</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s29">삭제</button></td>
+    </tr>
+    <tr class="stage-pjt-start" data-id="s30">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--green-bg);color:var(--green);border-color:var(--green-bg);font-weight:700;">
+          <option value="HSB-S">HSB-S</option><option value="HSB-D" selected="">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBDG12601</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">1</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.11.20</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2027-02-15</span></td>
+      <td contenteditable="true" data-field="note">기존 HSBMN12601 대체 → 최초 HSBPM12601 진행 건</td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s30">삭제</button></td>
+    </tr>
+    <tr class="stage-pjt-start" data-id="s31">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--blue-bg);color:var(--blue);border-color:var(--blue-bg);font-weight:700;">
+          <option value="HSB-S">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB" selected="">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">LMBDG12601</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">1</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.11.13</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">져스텍</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2027-02-15</span></td>
+      <td contenteditable="true" data-field="note">양책임 STAGE TYPE 확인 중 → 8/20 확인 후 진행 예상일정, 최소 13일까지는 가능할 듯</td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s31">삭제</button></td>
+    </tr>
+    <tr class="stage-pjt-start" data-id="s32">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--orange-bg);color:var(--orange);border-color:var(--orange-bg);font-weight:700;">
+          <option value="HSB-S" selected="">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBTS12607</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">1</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.12.02</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2027-02-12</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s32">삭제</button></td>
+    </tr>
+    <tr class="" data-id="s33">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--orange-bg);color:var(--orange);border-color:var(--orange-bg);font-weight:700;">
+          <option value="HSB-S" selected="">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBTS12607</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">2</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.12.02</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2027-02-12</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s33">삭제</button></td>
+    </tr>
+    <tr class="" data-id="s34">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--orange-bg);color:var(--orange);border-color:var(--orange-bg);font-weight:700;">
+          <option value="HSB-S" selected="">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBTS12607</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">3</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.12.02</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2027-02-12</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s34">삭제</button></td>
+    </tr>
+    <tr class="" data-id="s35">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--orange-bg);color:var(--orange);border-color:var(--orange-bg);font-weight:700;">
+          <option value="HSB-S" selected="">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBTS12607</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">4</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.12.02</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2027-02-12</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s35">삭제</button></td>
+    </tr>
+    <tr class="" data-id="s36">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--orange-bg);color:var(--orange);border-color:var(--orange-bg);font-weight:700;">
+          <option value="HSB-S" selected="">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBTS12607</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">5</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.12.02</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2027-02-12</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s36">삭제</button></td>
+    </tr>
+    <tr class="stage-pjt-start" data-id="s37">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--orange-bg);color:var(--orange);border-color:var(--orange-bg);font-weight:700;">
+          <option value="HSB-S" selected="">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBTS12608</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">1</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.12.09</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2027-02-19</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s37">삭제</button></td>
+    </tr>
+    <tr class="" data-id="s38">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--orange-bg);color:var(--orange);border-color:var(--orange-bg);font-weight:700;">
+          <option value="HSB-S" selected="">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBTS12608</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">2</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.12.09</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2027-02-19</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s38">삭제</button></td>
+    </tr>
+    <tr class="" data-id="s39">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--orange-bg);color:var(--orange);border-color:var(--orange-bg);font-weight:700;">
+          <option value="HSB-S" selected="">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBTS12608</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">3</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.12.09</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2027-02-19</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s39">삭제</button></td>
+    </tr>
+    <tr class="" data-id="s40">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--orange-bg);color:var(--orange);border-color:var(--orange-bg);font-weight:700;">
+          <option value="HSB-S" selected="">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBTS12608</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">4</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.12.09</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2027-02-19</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s40">삭제</button></td>
+    </tr>
+    <tr class="" data-id="s41">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--orange-bg);color:var(--orange);border-color:var(--orange-bg);font-weight:700;">
+          <option value="HSB-S" selected="">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBTS12608</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">5</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">2026.12.09</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2027-02-19</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s41">삭제</button></td>
+    </tr>
+    <tr class="stage-pjt-start" data-id="s42">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:#3a3410;color:var(--gold);border-color:#3a3410;font-weight:700;">
+          <option value="HSB-S">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB">LMB</option><option value="LMR" selected="">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">LMRNI12601</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">1</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">미정</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">져스텍</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2027-02-08</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s42">삭제</button></td>
+    </tr>
+    <tr class="stage-pjt-start" data-id="s43">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:#3a3410;color:var(--gold);border-color:#3a3410;font-weight:700;">
+          <option value="HSB-S">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB">LMB</option><option value="LMR" selected="">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">LMRNI12602</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">1</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">미정</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">져스텍</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2027-02-08</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s43">삭제</button></td>
+    </tr>
+    <tr class="stage-pjt-start" data-id="s44">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--navy-700);color:var(--text-dim);border-color:var(--navy-700);font-weight:700;">
+          <option value="HSB-S">HSB-S</option><option value="HSB-D">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS" selected="">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">PCSNI12601</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">1</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">미정</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">디씨티</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2027-02-08</span></td>
+      <td contenteditable="true" data-field="note"></td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s44">삭제</button></td>
+    </tr>
+    <tr class="stage-pjt-start" data-id="s45">
+      <td>
+        <select class="cat-select" data-field="cat" style="background:var(--green-bg);color:var(--green);border-color:var(--green-bg);font-weight:700;">
+          <option value="HSB-S">HSB-S</option><option value="HSB-D" selected="">HSB-D</option><option value="LMB">LMB</option><option value="LMR">LMR</option><option value="PCS">PCS</option><option value="TCS">TCS</option>
+        </select>
+      </td>
+      <td contenteditable="true" data-field="pjt">HSBPM12602</td>
+      <td contenteditable="true" data-field="seq" style="width:44px;">1</td>
+      <td contenteditable="true" data-field="inDate" style="width:100px;">미정</td>
+      <td contenteditable="true" data-field="vendor" style="width:90px;">아크리비스</td>
+      <td contenteditable="true" data-field="assignee" style="width:80px;"></td>
+      <td style="width:100px;"><span contenteditable="true" data-field="dueDate">2027-03-26</span></td>
+      <td contenteditable="true" data-field="note">HSB-S PASTE DIPPING 추가, HSB-S에서 2축 사이즈 변경 예정, 확정 후 진행</td>
+      <td>
+        <select class="status-select" data-field="flag">
+          <option value="" selected="">정상</option>
+          <option value="hl">변경</option>
+          <option value="cancel">취소</option>
+        </select>
+      </td>
+      <td class="row-actions"><button class="small danger" data-sgdel="s45">삭제</button></td>
+    </tr></tbody>
       </table>
     </div>
     <div class="stage-note">
@@ -498,8 +2370,8 @@
   <div class="tab-panel" id="tab-yearly">
     <div class="year-select-row">
       <label style="font-size:13px;color:var(--text-dim);">연간 필터</label>
-      <select id="yearlySelect"></select>
-      <span class="status-pill pill-purple" id="yearlyTotal">-</span>
+      <select id="yearlySelect"><option value="2026">2026년</option><option value="2027">2027년</option><option value="all">전체 기간</option></select>
+      <span class="status-pill pill-purple" id="yearlyTotal">12건 · 49대</span>
     </div>
     <div class="panel">
       <table class="cum-table">
@@ -509,14 +2381,52 @@
             <th class="num">목표 대비</th><th>진행률</th>
           </tr>
         </thead>
-        <tbody id="cumTbody"></tbody>
+        <tbody id="cumTbody"><tr>
+      <td>26.08</td>
+      <td class="num">9대</td>
+      <td class="num">9대</td>
+      <td class="num">11%</td>
+      <td><span class="progress-track"><span class="progress-fill" style="width:11%; display:block;"></span></span></td>
+    </tr><tr>
+      <td>26.09</td>
+      <td class="num">10대</td>
+      <td class="num">19대</td>
+      <td class="num">23%</td>
+      <td><span class="progress-track"><span class="progress-fill" style="width:23%; display:block;"></span></span></td>
+    </tr><tr>
+      <td>26.10</td>
+      <td class="num">7대</td>
+      <td class="num">26대</td>
+      <td class="num">31%</td>
+      <td><span class="progress-track"><span class="progress-fill" style="width:31%; display:block;"></span></span></td>
+    </tr><tr>
+      <td>26.11</td>
+      <td class="num">10대</td>
+      <td class="num">36대</td>
+      <td class="num">43%</td>
+      <td><span class="progress-track"><span class="progress-fill" style="width:43%; display:block;"></span></span></td>
+    </tr><tr>
+      <td>26.12</td>
+      <td class="num">13대</td>
+      <td class="num">49대</td>
+      <td class="num">59%</td>
+      <td><span class="progress-track"><span class="progress-fill" style="width:59%; display:block;"></span></span></td>
+    </tr></tbody>
       </table>
     </div>
     <div class="section-title">연도별 고객사 누적 (선택 연도 기준)</div>
     <div class="panel">
       <table>
         <thead><tr><th>고객사</th><th class="num">확정/납품완료</th><th class="num">발주예정</th><th class="num">합계</th></tr></thead>
-        <tbody id="yearlyCustTbody"></tbody>
+        <tbody id="yearlyCustTbody">
+    <tr><td>TS社</td><td class="num">38대</td><td class="num">0대</td><td class="num">38대</td></tr>
+  
+    <tr><td>ME社</td><td class="num">9대</td><td class="num">0대</td><td class="num">9대</td></tr>
+  
+    <tr><td>BE社</td><td class="num">1대</td><td class="num">0대</td><td class="num">1대</td></tr>
+  
+    <tr><td>PM社</td><td class="num">1대</td><td class="num">0대</td><td class="num">1대</td></tr>
+  </tbody>
       </table>
     </div>
   </div>
@@ -528,91 +2438,7 @@
 
 </div>
 
-<script type="application/json" id="state-data">
-{
-  "baseDate": "2026-08-20",
-  "reporter": "최길복 수석 (제조그룹장)",
-  "target": 83,
-  "changeLog": [],
-  "orders": [
-    {"id":"o1","cust":"TS社","system":"PIS 3대","qty":3,"due":"2026-08-07","cat":"pLSMB","status":"수주확정","issue":"제작완료","note":""},
-    {"id":"o2","cust":"TS社","system":"HSB 10 5대","qty":5,"due":"2026-08-28","cat":"pLSMB","status":"수주확정","issue":"제작 중","note":""},
-    {"id":"o3","cust":"BE社","system":"LJS 1","qty":1,"due":"2026-08-28","cat":"sLSMB","status":"수주확정","issue":"제작 중","note":""},
-    {"id":"o4","cust":"TS社","system":"HSB 10 5대","qty":5,"due":"2026-09-11","cat":"pLSMB","status":"수주확정","issue":"제작 중","note":""},
-    {"id":"o5","cust":"TS社","system":"HSB 12 5대","qty":5,"due":"2026-09-30","cat":"pLSMB","status":"수주확정","issue":"제작 중","note":""},
-    {"id":"o6","cust":"TS社","system":"HSB 12 5대","qty":5,"due":"2026-10-16","cat":"pLSMB","status":"수주확정","issue":"중국 셋업 전환 검토","note":""},
-    {"id":"o7","cust":"TS社","system":"HSB 12 2대","qty":2,"due":"2026-10-30","cat":"pLSMB","status":"수주확정","issue":"제작 중","note":""},
-    {"id":"o8","cust":"TS社","system":"HSB 5대","qty":5,"due":"2026-11-13","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},
-    {"id":"o9","cust":"TS社","system":"PIS 5대","qty":5,"due":"2026-11-20","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},
-    {"id":"o10","cust":"ME社","system":"HSB5·PIS3·PCS1","qty":9,"due":"2026-12-04","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},
-    {"id":"o11","cust":"PM社","system":"HSB1","qty":1,"due":"2026-12-08","cat":"pLSMB","status":"수주확정","issue":"설비컨셉 협의 要","note":""},
-    {"id":"o12","cust":"TS社","system":"PIS 3대","qty":3,"due":"2026-12-11","cat":"pLSMB","status":"수주확정","issue":"제작 중","note":""},
-    {"id":"o13","cust":"PM社","system":"PIS","qty":1,"due":"2027-01-15","cat":"pLSMB","status":"수주확정","issue":"제작 중","note":""},
-    {"id":"o14","cust":"PM社","system":"PCS","qty":1,"due":"2027-01-15","cat":"pLSMB","status":"수주확정","issue":"제작 중","note":""},
-    {"id":"o15","cust":"TS社","system":"HSB우 3대","qty":3,"due":"2027-01-22","cat":"pLSMB","status":"수주확정","issue":"제작 중","note":"변경 전 12-11"},
-    {"id":"o16","cust":"M2N社","system":"HSB·LMB","qty":2,"due":"2027-01-29","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":"변경 전 11-27"},
-    {"id":"o17","cust":"NIDEC社","system":"LMB·LMR","qty":2,"due":"2027-02-05","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},
-    {"id":"o18","cust":"NIDEC社","system":"LMB","qty":1,"due":"2027-02-05","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},
-    {"id":"o19","cust":"NIDEC社","system":"LMR","qty":1,"due":"2027-02-05","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},
-    {"id":"o20","cust":"NIDEC社","system":"PCS","qty":1,"due":"2027-02-05","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},
-    {"id":"o21","cust":"NIDEC社","system":"PIS","qty":1,"due":"2027-02-05","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},
-    {"id":"o22","cust":"TS社","system":"PIS 3대","qty":2,"due":"2027-02-12","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},
-    {"id":"o23","cust":"TS社","system":"HSB 5대","qty":5,"due":"2027-02-12","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},
-    {"id":"o24","cust":"DG社","system":"HSB","qty":2,"due":"2027-02-15","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},
-    {"id":"o25","cust":"DG社","system":"LMB","qty":1,"due":"2027-02-15","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},
-    {"id":"o26","cust":"TS社","system":"HSB5·PIS2·PCS1","qty":8,"due":"2027-02-19","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},
-    {"id":"o27","cust":"ZF社","system":"HSB","qty":1,"due":"2027-02-19","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},
-    {"id":"o28","cust":"KI社","system":"-","qty":2,"due":"","cat":"pLSMB","status":"발주예정","issue":"8월초 발주 예정","note":""}
-  ],
-  "stageItems": [
-    {"id":"s1","cat":"HSB-S","pjt":"HSBTS12603","seq":"4","inDate":"2026.08.28","vendor":"아크리비스","dueDate":"2026-10-30","note":"","flag":""},
-    {"id":"s2","cat":"HSB-S","pjt":"HSBTS12603","seq":"5","inDate":"2026.08.28","vendor":"아크리비스","dueDate":"2026-10-30","note":"","flag":""},
-    {"id":"s3","cat":"HSB-S","pjt":"HSBTS12603","seq":"6","inDate":"2026.08.28","vendor":"아크리비스","dueDate":"2026-10-30","note":"","flag":""},
-    {"id":"s4","cat":"HSB-S","pjt":"HSBTS12603","seq":"7","inDate":"2026.09.02","vendor":"아크리비스","dueDate":"2026-10-30","note":"","flag":""},
-    {"id":"s5","cat":"HSB-S","pjt":"HSBTS12603","seq":"8","inDate":"2026.09.02","vendor":"아크리비스","dueDate":"2026-10-30","note":"","flag":""},
-    {"id":"s6","cat":"HSB-S","pjt":"HSBTS12603","seq":"9","inDate":"2026.09.09","vendor":"아크리비스","dueDate":"2026-10-30","note":"","flag":""},
-    {"id":"s7","cat":"HSB-S","pjt":"HSBTS12603","seq":"10","inDate":"2026.09.09","vendor":"아크리비스","dueDate":"2026-10-30","note":"","flag":""},
-    {"id":"s8","cat":"HSB-S","pjt":"HSBTS12605","seq":"1","inDate":"2026.09.21","vendor":"아크리비스","dueDate":"2026-11-20","note":"","flag":""},
-    {"id":"s9","cat":"HSB-S","pjt":"HSBTS12605","seq":"2","inDate":"2026.09.21","vendor":"아크리비스","dueDate":"2026-11-20","note":"","flag":""},
-    {"id":"s10","cat":"HSB-S","pjt":"HSBTS12605","seq":"3","inDate":"2026.09.21","vendor":"아크리비스","dueDate":"2026-11-20","note":"","flag":""},
-    {"id":"s11","cat":"HSB-S","pjt":"HSBTS12605","seq":"4","inDate":"2026.09.21","vendor":"아크리비스","dueDate":"2026-11-20","note":"","flag":""},
-    {"id":"s12","cat":"HSB-S","pjt":"HSBTS12605","seq":"5","inDate":"2026.09.21","vendor":"아크리비스","dueDate":"2026-11-20","note":"","flag":""},
-    {"id":"s13","cat":"TCS","pjt":"TCSKP12601","seq":"1","inDate":"2026.09.04","vendor":"아크리비스","dueDate":"2026-12-31","note":"","flag":""},
-    {"id":"s14","cat":"HSB-D","pjt":"HSBME12601","seq":"1","inDate":"2026.10.08","vendor":"아크리비스","dueDate":"2026-12-04","note":"단축요청","flag":""},
-    {"id":"s15","cat":"HSB-D","pjt":"HSBME12601","seq":"2","inDate":"2026.10.08","vendor":"아크리비스","dueDate":"2026-12-04","note":"단축요청","flag":""},
-    {"id":"s16","cat":"HSB-D","pjt":"HSBME12601","seq":"3","inDate":"2026.10.08","vendor":"아크리비스","dueDate":"2026-12-04","note":"단축요청","flag":""},
-    {"id":"s17","cat":"HSB-D","pjt":"HSBME12601","seq":"4","inDate":"2026.10.08","vendor":"아크리비스","dueDate":"2026-12-04","note":"단축요청","flag":""},
-    {"id":"s18","cat":"HSB-D","pjt":"HSBME12601","seq":"5","inDate":"2026.10.08","vendor":"아크리비스","dueDate":"2026-12-04","note":"단축요청","flag":""},
-    {"id":"s19","cat":"HSB-D","pjt":"HSBMN12601","seq":"1","inDate":"2026.10.08","vendor":"아크리비스","dueDate":"2027-01-29","note":"기존 HSBPM12601과 변경","flag":"hl"},
-    {"id":"s20","cat":"PCS","pjt":"PCSPM12601","seq":"1","inDate":"2026.10.16","vendor":"디씨티","dueDate":"2027-01-15","note":"","flag":""},
-    {"id":"s21","cat":"HSB-S","pjt":"HSBTS12606","seq":"1","inDate":"2026.10.20","vendor":"아크리비스","dueDate":"2027-01-22","note":"","flag":""},
-    {"id":"s22","cat":"HSB-S","pjt":"HSBTS12606","seq":"2","inDate":"2026.10.20","vendor":"아크리비스","dueDate":"2027-01-22","note":"","flag":""},
-    {"id":"s23","cat":"HSB-S","pjt":"HSBTS12606","seq":"3","inDate":"2026.10.20","vendor":"아크리비스","dueDate":"2027-01-22","note":"","flag":"hl"},
-    {"id":"s24","cat":"PCS","pjt":"PCSME12601","seq":"1","inDate":"2026.10.29","vendor":"디씨티","dueDate":"2026-12-04","note":"","flag":""},
-    {"id":"s25","cat":"LMB","pjt":"LMBNI12601","seq":"1","inDate":"2026.10.30","vendor":"져스텍","dueDate":"2027-02-08","note":"","flag":""},
-    {"id":"s26","cat":"LMB","pjt":"LMBNI12602","seq":"1","inDate":"2026.10.30","vendor":"져스텍","dueDate":"2027-02-08","note":"","flag":""},
-    {"id":"s27","cat":"LMB","pjt":"LMBMN12601","seq":"1","inDate":"2026.11.06","vendor":"져스텍","dueDate":"2027-01-29","note":"","flag":"hl"},
-    {"id":"s28","cat":"HSB-D","pjt":"HSBPM12601","seq":"1","inDate":"2026.11.20","vendor":"아크리비스","dueDate":"–","note":"취소 → HSBPM12602로 사양 변경 진행","flag":"cancel"},
-    {"id":"s29","cat":"HSB-D","pjt":"HSBZF12601","seq":"1","inDate":"2026.11.20","vendor":"아크리비스","dueDate":"2027-02-19","note":"","flag":""},
-    {"id":"s30","cat":"HSB-D","pjt":"HSBDG12601","seq":"1","inDate":"2026.11.20","vendor":"아크리비스","dueDate":"2027-02-15","note":"기존 HSBMN12601 대체 → 최초 HSBPM12601 진행 건","flag":""},
-    {"id":"s31","cat":"LMB","pjt":"LMBDG12601","seq":"1","inDate":"2026.11.13","vendor":"져스텍","dueDate":"2027-02-15","note":"양책임 STAGE TYPE 확인 중 → 8/20 확인 후 진행 예상일정, 최소 13일까지는 가능할 듯","flag":""},
-    {"id":"s32","cat":"HSB-S","pjt":"HSBTS12607","seq":"1","inDate":"2026.12.02","vendor":"아크리비스","dueDate":"2027-02-12","note":"","flag":""},
-    {"id":"s33","cat":"HSB-S","pjt":"HSBTS12607","seq":"2","inDate":"2026.12.02","vendor":"아크리비스","dueDate":"2027-02-12","note":"","flag":""},
-    {"id":"s34","cat":"HSB-S","pjt":"HSBTS12607","seq":"3","inDate":"2026.12.02","vendor":"아크리비스","dueDate":"2027-02-12","note":"","flag":""},
-    {"id":"s35","cat":"HSB-S","pjt":"HSBTS12607","seq":"4","inDate":"2026.12.02","vendor":"아크리비스","dueDate":"2027-02-12","note":"","flag":""},
-    {"id":"s36","cat":"HSB-S","pjt":"HSBTS12607","seq":"5","inDate":"2026.12.02","vendor":"아크리비스","dueDate":"2027-02-12","note":"","flag":""},
-    {"id":"s37","cat":"HSB-S","pjt":"HSBTS12608","seq":"1","inDate":"2026.12.09","vendor":"아크리비스","dueDate":"2027-02-19","note":"","flag":""},
-    {"id":"s38","cat":"HSB-S","pjt":"HSBTS12608","seq":"2","inDate":"2026.12.09","vendor":"아크리비스","dueDate":"2027-02-19","note":"","flag":""},
-    {"id":"s39","cat":"HSB-S","pjt":"HSBTS12608","seq":"3","inDate":"2026.12.09","vendor":"아크리비스","dueDate":"2027-02-19","note":"","flag":""},
-    {"id":"s40","cat":"HSB-S","pjt":"HSBTS12608","seq":"4","inDate":"2026.12.09","vendor":"아크리비스","dueDate":"2027-02-19","note":"","flag":""},
-    {"id":"s41","cat":"HSB-S","pjt":"HSBTS12608","seq":"5","inDate":"2026.12.09","vendor":"아크리비스","dueDate":"2027-02-19","note":"","flag":""},
-    {"id":"s42","cat":"LMR","pjt":"LMRNI12601","seq":"1","inDate":"미정","vendor":"져스텍","dueDate":"2027-02-08","note":"","flag":""},
-    {"id":"s43","cat":"LMR","pjt":"LMRNI12602","seq":"1","inDate":"미정","vendor":"져스텍","dueDate":"2027-02-08","note":"","flag":""},
-    {"id":"s44","cat":"PCS","pjt":"PCSNI12601","seq":"1","inDate":"미정","vendor":"디씨티","dueDate":"2027-02-08","note":"","flag":""},
-    {"id":"s45","cat":"HSB-D","pjt":"HSBPM12602","seq":"1","inDate":"미정","vendor":"아크리비스","dueDate":"2027-03-26","note":"HSB-S PASTE DIPPING 추가, HSB-S에서 2축 사이즈 변경 예정, 확정 후 진행","flag":""}
-  ]
-}
-</script>
+<script type="application/json" id="state-data">{"baseDate":"2026-08-20","reporter":"최길복 수석 (제조그룹장)","target":83,"changeLog":[],"orders":[{"id":"o1","cust":"TS社","system":"PIS 3대","qty":3,"due":"2026-08-07","cat":"pLSMB","status":"수주확정","issue":"제작완료","note":""},{"id":"o2","cust":"TS社","system":"HSB 10 5대","qty":5,"due":"2026-08-28","cat":"pLSMB","status":"수주확정","issue":"제작 중","note":""},{"id":"o3","cust":"BE社","system":"LJS 1","qty":1,"due":"2026-08-28","cat":"sLSMB","status":"수주확정","issue":"제작 중","note":""},{"id":"o4","cust":"TS社","system":"HSB 10 5대","qty":5,"due":"2026-09-11","cat":"pLSMB","status":"수주확정","issue":"제작 중","note":""},{"id":"o5","cust":"TS社","system":"HSB 12 5대","qty":5,"due":"2026-09-30","cat":"pLSMB","status":"수주확정","issue":"제작 중","note":""},{"id":"o6","cust":"TS社","system":"HSB 12 5대","qty":5,"due":"2026-10-16","cat":"pLSMB","status":"수주확정","issue":"중국 셋업 전환 검토","note":""},{"id":"o7","cust":"TS社","system":"HSB 12 2대","qty":2,"due":"2026-10-30","cat":"pLSMB","status":"수주확정","issue":"제작 중","note":""},{"id":"o8","cust":"TS社","system":"HSB 5대","qty":5,"due":"2026-11-13","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},{"id":"o9","cust":"TS社","system":"PIS 5대","qty":5,"due":"2026-11-20","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},{"id":"o10","cust":"ME社","system":"HSB5·PIS3·PCS1","qty":9,"due":"2026-12-04","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},{"id":"o11","cust":"PM社","system":"HSB1","qty":1,"due":"2026-12-08","cat":"pLSMB","status":"수주확정","issue":"설비컨셉 협의 要","note":""},{"id":"o12","cust":"TS社","system":"PIS 3대","qty":3,"due":"2026-12-11","cat":"pLSMB","status":"수주확정","issue":"제작 중","note":""},{"id":"o13","cust":"PM社","system":"PIS","qty":1,"due":"2027-01-15","cat":"pLSMB","status":"수주확정","issue":"제작 중","note":""},{"id":"o14","cust":"PM社","system":"PCS","qty":1,"due":"2027-01-15","cat":"pLSMB","status":"수주확정","issue":"제작 중","note":""},{"id":"o15","cust":"TS社","system":"HSB우 3대","qty":3,"due":"2027-01-22","cat":"pLSMB","status":"수주확정","issue":"제작 중","note":"변경 전 12-11"},{"id":"o16","cust":"M2N社","system":"HSB·LMB","qty":2,"due":"2027-01-29","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":"변경 전 11-27"},{"id":"o17","cust":"NIDEC社","system":"LMB·LMR","qty":2,"due":"2027-02-05","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},{"id":"o18","cust":"NIDEC社","system":"LMB","qty":1,"due":"2027-02-05","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},{"id":"o19","cust":"NIDEC社","system":"LMR","qty":1,"due":"2027-02-05","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},{"id":"o20","cust":"NIDEC社","system":"PCS","qty":1,"due":"2027-02-05","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},{"id":"o21","cust":"NIDEC社","system":"PIS","qty":1,"due":"2027-02-05","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},{"id":"o22","cust":"TS社","system":"PIS 3대","qty":2,"due":"2027-02-12","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},{"id":"o23","cust":"TS社","system":"HSB 5대","qty":5,"due":"2027-02-12","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},{"id":"o24","cust":"DG社","system":"HSB","qty":2,"due":"2027-02-15","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},{"id":"o25","cust":"DG社","system":"LMB","qty":1,"due":"2027-02-15","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},{"id":"o26","cust":"TS社","system":"HSB5·PIS2·PCS1","qty":8,"due":"2027-02-19","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},{"id":"o27","cust":"ZF社","system":"HSB","qty":1,"due":"2027-02-19","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},{"id":"o28","cust":"KI社","system":"-","qty":2,"due":"","cat":"pLSMB","status":"발주예정","issue":"8월초 발주 예정","note":""}],"stageItems":[{"id":"s1","cat":"HSB-S","pjt":"HSBTS12603","seq":"4","inDate":"2026.08.28","vendor":"아크리비스","dueDate":"2026-10-30","note":"","flag":""},{"id":"s2","cat":"HSB-S","pjt":"HSBTS12603","seq":"5","inDate":"2026.08.28","vendor":"아크리비스","dueDate":"2026-10-30","note":"","flag":""},{"id":"s3","cat":"HSB-S","pjt":"HSBTS12603","seq":"6","inDate":"2026.08.28","vendor":"아크리비스","dueDate":"2026-10-30","note":"","flag":""},{"id":"s4","cat":"HSB-S","pjt":"HSBTS12603","seq":"7","inDate":"2026.09.02","vendor":"아크리비스","dueDate":"2026-10-30","note":"","flag":""},{"id":"s5","cat":"HSB-S","pjt":"HSBTS12603","seq":"8","inDate":"2026.09.02","vendor":"아크리비스","dueDate":"2026-10-30","note":"","flag":""},{"id":"s6","cat":"HSB-S","pjt":"HSBTS12603","seq":"9","inDate":"2026.09.09","vendor":"아크리비스","dueDate":"2026-10-30","note":"","flag":""},{"id":"s7","cat":"HSB-S","pjt":"HSBTS12603","seq":"10","inDate":"2026.09.09","vendor":"아크리비스","dueDate":"2026-10-30","note":"","flag":""},{"id":"s8","cat":"HSB-S","pjt":"HSBTS12605","seq":"1","inDate":"2026.09.21","vendor":"아크리비스","dueDate":"2026-11-20","note":"","flag":""},{"id":"s9","cat":"HSB-S","pjt":"HSBTS12605","seq":"2","inDate":"2026.09.21","vendor":"아크리비스","dueDate":"2026-11-20","note":"","flag":""},{"id":"s10","cat":"HSB-S","pjt":"HSBTS12605","seq":"3","inDate":"2026.09.21","vendor":"아크리비스","dueDate":"2026-11-20","note":"","flag":""},{"id":"s11","cat":"HSB-S","pjt":"HSBTS12605","seq":"4","inDate":"2026.09.21","vendor":"아크리비스","dueDate":"2026-11-20","note":"","flag":""},{"id":"s12","cat":"HSB-S","pjt":"HSBTS12605","seq":"5","inDate":"2026.09.21","vendor":"아크리비스","dueDate":"2026-11-20","note":"","flag":""},{"id":"s13","cat":"TCS","pjt":"TCSKP12601","seq":"1","inDate":"2026.09.04","vendor":"아크리비스","dueDate":"2026-12-31","note":"","flag":""},{"id":"s14","cat":"HSB-D","pjt":"HSBME12601","seq":"1","inDate":"2026.10.08","vendor":"아크리비스","dueDate":"2026-12-04","note":"단축요청","flag":""},{"id":"s15","cat":"HSB-D","pjt":"HSBME12601","seq":"2","inDate":"2026.10.08","vendor":"아크리비스","dueDate":"2026-12-04","note":"단축요청","flag":""},{"id":"s16","cat":"HSB-D","pjt":"HSBME12601","seq":"3","inDate":"2026.10.08","vendor":"아크리비스","dueDate":"2026-12-04","note":"단축요청","flag":""},{"id":"s17","cat":"HSB-D","pjt":"HSBME12601","seq":"4","inDate":"2026.10.08","vendor":"아크리비스","dueDate":"2026-12-04","note":"단축요청","flag":""},{"id":"s18","cat":"HSB-D","pjt":"HSBME12601","seq":"5","inDate":"2026.10.08","vendor":"아크리비스","dueDate":"2026-12-04","note":"단축요청","flag":""},{"id":"s19","cat":"HSB-D","pjt":"HSBMN12601","seq":"1","inDate":"2026.10.08","vendor":"아크리비스","dueDate":"2027-01-29","note":"기존 HSBPM12601과 변경","flag":"hl"},{"id":"s20","cat":"PCS","pjt":"PCSPM12601","seq":"1","inDate":"2026.10.16","vendor":"디씨티","dueDate":"2027-01-15","note":"","flag":""},{"id":"s21","cat":"HSB-S","pjt":"HSBTS12606","seq":"1","inDate":"2026.10.20","vendor":"아크리비스","dueDate":"2027-01-22","note":"","flag":""},{"id":"s22","cat":"HSB-S","pjt":"HSBTS12606","seq":"2","inDate":"2026.10.20","vendor":"아크리비스","dueDate":"2027-01-22","note":"","flag":""},{"id":"s23","cat":"HSB-S","pjt":"HSBTS12606","seq":"3","inDate":"2026.10.20","vendor":"아크리비스","dueDate":"2027-01-22","note":"","flag":"hl"},{"id":"s24","cat":"PCS","pjt":"PCSME12601","seq":"1","inDate":"2026.10.29","vendor":"디씨티","dueDate":"2026-12-04","note":"","flag":""},{"id":"s25","cat":"LMB","pjt":"LMBNI12601","seq":"1","inDate":"2026.10.30","vendor":"져스텍","dueDate":"2027-02-08","note":"","flag":""},{"id":"s26","cat":"LMB","pjt":"LMBNI12602","seq":"1","inDate":"2026.10.30","vendor":"져스텍","dueDate":"2027-02-08","note":"","flag":""},{"id":"s27","cat":"LMB","pjt":"LMBMN12601","seq":"1","inDate":"2026.11.06","vendor":"져스텍","dueDate":"2027-01-29","note":"","flag":"hl"},{"id":"s28","cat":"HSB-D","pjt":"HSBPM12601","seq":"1","inDate":"2026.11.20","vendor":"아크리비스","dueDate":"–","note":"취소 → HSBPM12602로 사양 변경 진행","flag":"cancel"},{"id":"s29","cat":"HSB-D","pjt":"HSBZF12601","seq":"1","inDate":"2026.11.20","vendor":"아크리비스","dueDate":"2027-02-19","note":"","flag":""},{"id":"s30","cat":"HSB-D","pjt":"HSBDG12601","seq":"1","inDate":"2026.11.20","vendor":"아크리비스","dueDate":"2027-02-15","note":"기존 HSBMN12601 대체 → 최초 HSBPM12601 진행 건","flag":""},{"id":"s31","cat":"LMB","pjt":"LMBDG12601","seq":"1","inDate":"2026.11.13","vendor":"져스텍","dueDate":"2027-02-15","note":"양책임 STAGE TYPE 확인 중 → 8/20 확인 후 진행 예상일정, 최소 13일까지는 가능할 듯","flag":""},{"id":"s32","cat":"HSB-S","pjt":"HSBTS12607","seq":"1","inDate":"2026.12.02","vendor":"아크리비스","dueDate":"2027-02-12","note":"","flag":""},{"id":"s33","cat":"HSB-S","pjt":"HSBTS12607","seq":"2","inDate":"2026.12.02","vendor":"아크리비스","dueDate":"2027-02-12","note":"","flag":""},{"id":"s34","cat":"HSB-S","pjt":"HSBTS12607","seq":"3","inDate":"2026.12.02","vendor":"아크리비스","dueDate":"2027-02-12","note":"","flag":""},{"id":"s35","cat":"HSB-S","pjt":"HSBTS12607","seq":"4","inDate":"2026.12.02","vendor":"아크리비스","dueDate":"2027-02-12","note":"","flag":""},{"id":"s36","cat":"HSB-S","pjt":"HSBTS12607","seq":"5","inDate":"2026.12.02","vendor":"아크리비스","dueDate":"2027-02-12","note":"","flag":""},{"id":"s37","cat":"HSB-S","pjt":"HSBTS12608","seq":"1","inDate":"2026.12.09","vendor":"아크리비스","dueDate":"2027-02-19","note":"","flag":""},{"id":"s38","cat":"HSB-S","pjt":"HSBTS12608","seq":"2","inDate":"2026.12.09","vendor":"아크리비스","dueDate":"2027-02-19","note":"","flag":""},{"id":"s39","cat":"HSB-S","pjt":"HSBTS12608","seq":"3","inDate":"2026.12.09","vendor":"아크리비스","dueDate":"2027-02-19","note":"","flag":""},{"id":"s40","cat":"HSB-S","pjt":"HSBTS12608","seq":"4","inDate":"2026.12.09","vendor":"아크리비스","dueDate":"2027-02-19","note":"","flag":""},{"id":"s41","cat":"HSB-S","pjt":"HSBTS12608","seq":"5","inDate":"2026.12.09","vendor":"아크리비스","dueDate":"2027-02-19","note":"","flag":""},{"id":"s42","cat":"LMR","pjt":"LMRNI12601","seq":"1","inDate":"미정","vendor":"져스텍","dueDate":"2027-02-08","note":"","flag":""},{"id":"s43","cat":"LMR","pjt":"LMRNI12602","seq":"1","inDate":"미정","vendor":"져스텍","dueDate":"2027-02-08","note":"","flag":""},{"id":"s44","cat":"PCS","pjt":"PCSNI12601","seq":"1","inDate":"미정","vendor":"디씨티","dueDate":"2027-02-08","note":"","flag":""},{"id":"s45","cat":"HSB-D","pjt":"HSBPM12602","seq":"1","inDate":"미정","vendor":"아크리비스","dueDate":"2027-03-26","note":"HSB-S PASTE DIPPING 추가, HSB-S에서 2축 사이즈 변경 예정, 확정 후 진행","flag":""}]}</script>
 
 <script>
 /* SheetJS xlsx.core.min.js (Apache-2.0) — inlined so Excel-upload parsing works with no external network request */
@@ -1800,5 +3626,6 @@ function renderAll(){
 
 renderAll();
 </script>
-</body>
-</html>
+
+
+</body></html>
