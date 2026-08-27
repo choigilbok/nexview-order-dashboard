@@ -284,6 +284,45 @@
   .excel-preview .ep-total{color:var(--text);font-weight:700;margin-bottom:6px;}
   .admin-only{display:none;}
   body.is-admin .admin-only{display:inline-block;}
+  /* ---------- 생산일정관리(Gantt) ---------- */
+  .sch-toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px;}
+  .sch-toolbar select{background:var(--navy-800);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-size:13px;}
+  .sch-meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px 20px;background:var(--navy-800);border:1px solid var(--line);border-radius:var(--card-radius);padding:14px 18px;margin-bottom:14px;}
+  .sch-meta .sch-field label{display:block;font-size:11px;color:var(--text-dim);letter-spacing:.04em;margin-bottom:4px;}
+  .sch-meta .sch-field .sch-val{font-size:13px;color:var(--text);border-bottom:1px solid var(--line);padding:2px 0;min-height:18px;}
+  .sch-meta .sch-field .sch-val[contenteditable="true"]{cursor:text;}
+  .sch-meta .sch-field .sch-val[contenteditable="true"]:focus{outline:1px solid var(--green);border-radius:4px;background:var(--navy-700);}
+  .sch-empty{padding:40px 20px;text-align:center;color:var(--text-dim);background:var(--navy-800);border:1px dashed var(--line);border-radius:var(--card-radius);}
+  .sch-table-wrap{overflow-x:auto;background:var(--navy-800);border:1px solid var(--line);border-radius:var(--card-radius);}
+  table.sch-table{border-collapse:collapse;font-size:12px;min-width:1600px;}
+  table.sch-table th, table.sch-table td{border:1px solid var(--line);padding:5px 7px;text-align:center;white-space:nowrap;}
+  table.sch-table thead th{background:var(--navy-800);color:var(--text-dim);font-weight:700;position:sticky;top:0;z-index:2;font-size:11px;}
+  table.sch-table thead th.sch-step-th-wrap{min-width:64px;}
+  table.sch-table thead span.sch-step-th{display:inline-block;cursor:text;min-width:56px;}
+  table.sch-table thead span.sch-step-th[contenteditable="true"]:focus{outline:1px solid var(--green);background:var(--navy-700);border-radius:4px;}
+  table.sch-table .sch-step-del{display:block;margin:2px auto 0;font-size:10px;line-height:1;color:var(--red);background:none;border:none;cursor:pointer;padding:0;}
+  table.sch-table td.sch-unit-cell{background:var(--navy-700);font-weight:700;text-align:left;position:sticky;left:0;z-index:1;min-width:110px;}
+  table.sch-table td.sch-unit-cell .sch-tag{display:block;margin-top:2px;font-size:10px;font-weight:600;color:var(--orange);}
+  table.sch-table td.sch-pm-cell{background:var(--navy-700);color:var(--text-dim);position:sticky;left:110px;z-index:1;min-width:80px;}
+  table.sch-table td.sch-rowlabel{background:rgba(255,255,255,.03);color:var(--text-dim);font-size:10px;position:sticky;left:190px;z-index:1;min-width:70px;}
+  table.sch-table td.sch-cell{min-width:60px;}
+  table.sch-table td.sch-cell[contenteditable="true"]{cursor:text;}
+  table.sch-table td.sch-cell[contenteditable="true"]:focus{outline:1px solid var(--green);border-radius:4px;background:var(--navy-600);}
+  .sch-c-done{color:var(--blue);font-weight:700;}
+  .sch-c-progress{color:var(--orange);font-weight:700;}
+  .sch-c-issue{color:var(--red);font-weight:700;}
+  .sch-c-good{color:var(--green);}
+  .sch-c-plan{color:var(--gold)}
+  .sch-c-dim{color:var(--text-dim);}
+  .sch-unit-actions{margin-left:6px;}
+  .sch-progress-wrap{margin-top:4px;white-space:nowrap;}
+  .sch-progress-track{background:var(--navy-600);border-radius:5px;height:6px;width:80px;overflow:hidden;display:inline-block;vertical-align:middle;}
+  .sch-progress-fill{height:100%;background:linear-gradient(90deg,#3fb6ae,#8fdcd6);}
+  .sch-progress-pct{font-size:10px;color:var(--text-dim);margin-left:4px;}
+  .sch-archive-toggle{cursor:pointer;color:var(--teal);font-size:12px;background:none;border:1px solid var(--line);border-radius:8px;padding:7px 12px;text-align:left;margin-top:10px;}
+  .sch-archive-toggle:hover{background:var(--navy-700);}
+  #schDashStats{cursor:pointer;}
+
 </style>
 </head>
 <body class="locked">
@@ -397,6 +436,7 @@
     <button class="tab-btn active" data-tab="manage">수주현황 관리</button>
     <button class="tab-btn" data-tab="stage">STAGE 입고관리</button>
     <button class="tab-btn" data-tab="yearly">연간 누적 관리</button>
+    <button class="tab-btn" data-tab="schedule">생산일정관리</button>
   </div>
 
   <!-- DASHBOARD -->
@@ -640,6 +680,8 @@
       <div class="log-msg">수주현황 수정 — TS社 · 상태: "수주확정" → "납품완료"</div>
     </div></div>
     </div>
+    <div class="section-title" style="font-size:13px;">생산일정관리 요약 <small>클릭 시 생산일정관리 탭으로 이동</small></div>
+    <div class="mini-stats" id="schDashStats"></div>
   </div>
 
   <!-- MANAGE -->
@@ -2447,6 +2489,71 @@
     </div>
   </div>
 
+  <div class="tab-panel" id="tab-schedule">
+    <div class="sch-toolbar">
+      <select id="schProjectSelect"></select>
+      <button class="admin-only" id="schAddProjectBtn">+ 새 일정표 추가</button>
+      <button class="admin-only small danger" id="schDelProjectBtn">이 일정표 삭제</button>
+      <select id="schPmFilter"><option value="all">담당자 전체</option></select>
+      <button class="admin-only small" id="schExcelUploadBtn">엑셀 업로드</button>
+      <input type="file" id="schExcelFile" accept=".xlsx,.xls,.csv" style="display:none">
+      <span class="status-pill pill-blue" id="schCountPill"></span>
+    </div>
+    <div id="schEmpty" class="sch-empty" style="display:none;">
+      등록된 생산 일정표가 없습니다. <span class="admin-only">우측 상단 「+ 새 일정표 추가」로 새 장비의 일정표를 만들 수 있습니다.</span>
+    </div>
+    <div id="schContent" style="display:none;">
+      <div class="sch-meta">
+        <div class="sch-field">
+          <label>일정표 제목</label>
+          <div class="sch-val" id="schTitle" data-field="title"></div>
+        </div>
+        <div class="sch-field">
+          <label>PJT NO</label>
+          <div class="sch-val" id="schPjt" data-field="pjt"></div>
+        </div>
+        <div class="sch-field">
+          <label>기준일</label>
+          <input type="date" id="schBaseDate" data-field="baseDate" style="background:transparent;border:none;border-bottom:1px solid var(--line);color:var(--text);font-family:inherit;font-size:13px;padding:2px 0;width:100%;">
+        </div>
+        <div class="sch-field">
+          <label>총인원</label>
+          <div class="sch-val" id="schHeadcount" data-field="headcount"></div>
+        </div>
+        <div class="sch-field" style="grid-column:span 2;">
+          <label>제조/전장/영업/ST/회수 담당자 메모</label>
+          <div class="sch-val" id="schTeamNote" data-field="teamNote"></div>
+        </div>
+      </div>
+      <div class="sch-table-wrap">
+        <table class="sch-table" id="schTable">
+          <thead id="schThead"></thead>
+          <tbody id="schTbody"></tbody>
+        </table>
+      </div>
+      <div class="sch-toolbar" style="margin-top:10px;">
+        <button class="admin-only small" id="schAddUnitBtn">+ 호기 추가</button>
+        <button class="admin-only small" id="schAddStepBtn">+ 공정 단계(컬럼) 추가</button>
+        <span style="font-size:11px;color:var(--text-dim);">
+          <span class="sch-c-done">■ 완료</span> ·
+          <span class="sch-c-progress">■ 진행중▲</span> ·
+          <span class="sch-c-issue">■ Issue▲/지연(계획일 경과)</span> ·
+          <span class="sch-c-good">■ 조기완료·정상</span>
+          — 실적/단축·지연/사유 칸에 직접 입력하시면 자동으로 색이 반영되고, 계획일이 지났는데 실적이 "완료"가 아니면 자동으로 지연 표시됩니다.
+        </span>
+      </div>
+      <button class="sch-archive-toggle" id="schArchiveToggle" style="display:none;"></button>
+      <div id="schArchiveWrap" style="display:none;">
+        <div class="sch-table-wrap" style="margin-top:8px;">
+          <table class="sch-table" id="schArchiveTable">
+            <thead id="schArchiveThead"></thead>
+            <tbody id="schArchiveTbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="footer-note">
     ※ 초기 데이터는 「2026년 하반기 전체 수주·납기 현황」 및 「STAGE 부품 입고관리 일정표」 PPT(기준일 2026-08-20) 내용을 기반으로 구성한 디자인 초안입니다.<br>
     ※ 표의 모든 셀은 직접 클릭하여 수정할 수 있습니다. 우측 상단 「저장」 버튼을 누르면 현재 상태가 이 페이지의 새 버전으로 발행(클로드 아티팩트 환경) 또는 GitHub 저장소에 직접 반영(GitHub 연동 시)되어, 이후 이 링크로 접속하는 모든 화면에 동일하게 반영됩니다. 저장 전 수정 내용은 이 브라우저 탭에만 임시로 남아 있으니, 중요한 변경은 저장을 완료하거나 「JSON 내보내기」로 별도 백업해 두시기 바랍니다.
@@ -2454,7 +2561,7 @@
 
 </div>
 
-<script type="application/json" id="state-data">{"baseDate":"2026-08-27","reporter":"최길복 수석 (제조그룹장)","target":83,"changeLog":[{"ts":"2026-08-27 15:33","msg":"수주현황 수정 — BE社 · Issue/현황: \"제작 중\" → \"일정 변경 8.28 -> 9.10\""},{"ts":"2026-08-27 15:33","msg":"수주현황 수정 — BE社 · 납기(예정): \"2026-08-28\" → \"2026-09-10\""},{"ts":"2026-08-25 10:04","msg":"수주현황 수정 — TS社 · 상태: \"수주확정\" → \"납품완료\""}],"orders":[{"id":"o1","cust":"TS社","system":"PIS 3대","qty":3,"due":"2026-08-07","cat":"pLSMB","status":"납품완료","issue":"제작완료","note":""},{"id":"o2","cust":"TS社","system":"HSB 10 5대","qty":5,"due":"2026-08-28","cat":"pLSMB","status":"수주확정","issue":"제작 중","note":""},{"id":"o3","cust":"BE社","system":"LJS 1","qty":1,"due":"2026-09-10","cat":"sLSMB","status":"수주확정","issue":"일정 변경 8.28 -> 9.10","note":""},{"id":"o4","cust":"TS社","system":"HSB 10 5대","qty":5,"due":"2026-09-11","cat":"pLSMB","status":"수주확정","issue":"제작 중","note":""},{"id":"o5","cust":"TS社","system":"HSB 12 5대","qty":5,"due":"2026-09-30","cat":"pLSMB","status":"수주확정","issue":"제작 중","note":""},{"id":"o6","cust":"TS社","system":"HSB 12 5대","qty":5,"due":"2026-10-16","cat":"pLSMB","status":"수주확정","issue":"중국 셋업 전환 검토","note":""},{"id":"o7","cust":"TS社","system":"HSB 12 2대","qty":2,"due":"2026-10-30","cat":"pLSMB","status":"수주확정","issue":"제작 중","note":""},{"id":"o8","cust":"TS社","system":"HSB 5대","qty":5,"due":"2026-11-13","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},{"id":"o9","cust":"TS社","system":"PIS 5대","qty":5,"due":"2026-11-20","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},{"id":"o10","cust":"ME社","system":"HSB5·PIS3·PCS1","qty":9,"due":"2026-12-04","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},{"id":"o11","cust":"PM社","system":"HSB1","qty":1,"due":"2026-12-08","cat":"pLSMB","status":"수주확정","issue":"설비컨셉 협의 要","note":""},{"id":"o12","cust":"TS社","system":"PIS 3대","qty":3,"due":"2026-12-11","cat":"pLSMB","status":"수주확정","issue":"제작 중","note":""},{"id":"o13","cust":"PM社","system":"PIS","qty":1,"due":"2027-01-15","cat":"pLSMB","status":"수주확정","issue":"제작 중","note":""},{"id":"o14","cust":"PM社","system":"PCS","qty":1,"due":"2027-01-15","cat":"pLSMB","status":"수주확정","issue":"제작 중","note":""},{"id":"o15","cust":"TS社","system":"HSB우 3대","qty":3,"due":"2027-01-22","cat":"pLSMB","status":"수주확정","issue":"제작 중","note":"변경 전 12-11"},{"id":"o16","cust":"M2N社","system":"HSB·LMB","qty":2,"due":"2027-01-29","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":"변경 전 11-27"},{"id":"o17","cust":"NIDEC社","system":"LMB·LMR","qty":2,"due":"2027-02-05","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},{"id":"o18","cust":"NIDEC社","system":"LMB","qty":1,"due":"2027-02-05","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},{"id":"o19","cust":"NIDEC社","system":"LMR","qty":1,"due":"2027-02-05","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},{"id":"o20","cust":"NIDEC社","system":"PCS","qty":1,"due":"2027-02-05","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},{"id":"o21","cust":"NIDEC社","system":"PIS","qty":1,"due":"2027-02-05","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},{"id":"o22","cust":"TS社","system":"PIS 3대","qty":2,"due":"2027-02-12","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},{"id":"o23","cust":"TS社","system":"HSB 5대","qty":5,"due":"2027-02-12","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},{"id":"o24","cust":"DG社","system":"HSB","qty":2,"due":"2027-02-15","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},{"id":"o25","cust":"DG社","system":"LMB","qty":1,"due":"2027-02-15","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},{"id":"o26","cust":"TS社","system":"HSB5·PIS2·PCS1","qty":8,"due":"2027-02-19","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},{"id":"o27","cust":"ZF社","system":"HSB","qty":1,"due":"2027-02-19","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},{"id":"o28","cust":"KI社","system":"-","qty":2,"due":"","cat":"pLSMB","status":"발주예정","issue":"8월초 발주 예정","note":""}],"stageItems":[{"id":"s1","cat":"HSB-S","pjt":"HSBTS12603","seq":"4","inDate":"2026.08.28","vendor":"아크리비스","dueDate":"2026-10-30","note":"","flag":""},{"id":"s2","cat":"HSB-S","pjt":"HSBTS12603","seq":"5","inDate":"2026.08.28","vendor":"아크리비스","dueDate":"2026-10-30","note":"","flag":""},{"id":"s3","cat":"HSB-S","pjt":"HSBTS12603","seq":"6","inDate":"2026.08.28","vendor":"아크리비스","dueDate":"2026-10-30","note":"","flag":""},{"id":"s4","cat":"HSB-S","pjt":"HSBTS12603","seq":"7","inDate":"2026.09.02","vendor":"아크리비스","dueDate":"2026-10-30","note":"","flag":""},{"id":"s5","cat":"HSB-S","pjt":"HSBTS12603","seq":"8","inDate":"2026.09.02","vendor":"아크리비스","dueDate":"2026-10-30","note":"","flag":""},{"id":"s6","cat":"HSB-S","pjt":"HSBTS12603","seq":"9","inDate":"2026.09.09","vendor":"아크리비스","dueDate":"2026-10-30","note":"","flag":""},{"id":"s7","cat":"HSB-S","pjt":"HSBTS12603","seq":"10","inDate":"2026.09.09","vendor":"아크리비스","dueDate":"2026-10-30","note":"","flag":""},{"id":"s8","cat":"HSB-S","pjt":"HSBTS12605","seq":"1","inDate":"2026.09.21","vendor":"아크리비스","dueDate":"2026-11-20","note":"","flag":""},{"id":"s9","cat":"HSB-S","pjt":"HSBTS12605","seq":"2","inDate":"2026.09.21","vendor":"아크리비스","dueDate":"2026-11-20","note":"","flag":""},{"id":"s10","cat":"HSB-S","pjt":"HSBTS12605","seq":"3","inDate":"2026.09.21","vendor":"아크리비스","dueDate":"2026-11-20","note":"","flag":""},{"id":"s11","cat":"HSB-S","pjt":"HSBTS12605","seq":"4","inDate":"2026.09.21","vendor":"아크리비스","dueDate":"2026-11-20","note":"","flag":""},{"id":"s12","cat":"HSB-S","pjt":"HSBTS12605","seq":"5","inDate":"2026.09.21","vendor":"아크리비스","dueDate":"2026-11-20","note":"","flag":""},{"id":"s13","cat":"TCS","pjt":"TCSKP12601","seq":"1","inDate":"2026.09.04","vendor":"아크리비스","dueDate":"2026-12-31","note":"","flag":""},{"id":"s14","cat":"HSB-D","pjt":"HSBME12601","seq":"1","inDate":"2026.10.08","vendor":"아크리비스","dueDate":"2026-12-04","note":"단축요청","flag":""},{"id":"s15","cat":"HSB-D","pjt":"HSBME12601","seq":"2","inDate":"2026.10.08","vendor":"아크리비스","dueDate":"2026-12-04","note":"단축요청","flag":""},{"id":"s16","cat":"HSB-D","pjt":"HSBME12601","seq":"3","inDate":"2026.10.08","vendor":"아크리비스","dueDate":"2026-12-04","note":"단축요청","flag":""},{"id":"s17","cat":"HSB-D","pjt":"HSBME12601","seq":"4","inDate":"2026.10.08","vendor":"아크리비스","dueDate":"2026-12-04","note":"단축요청","flag":""},{"id":"s18","cat":"HSB-D","pjt":"HSBME12601","seq":"5","inDate":"2026.10.08","vendor":"아크리비스","dueDate":"2026-12-04","note":"단축요청","flag":""},{"id":"s19","cat":"HSB-D","pjt":"HSBMN12601","seq":"1","inDate":"2026.10.08","vendor":"아크리비스","dueDate":"2027-01-29","note":"기존 HSBPM12601과 변경","flag":"hl"},{"id":"s20","cat":"PCS","pjt":"PCSPM12601","seq":"1","inDate":"2026.10.16","vendor":"디씨티","dueDate":"2027-01-15","note":"","flag":""},{"id":"s21","cat":"HSB-S","pjt":"HSBTS12606","seq":"1","inDate":"2026.10.20","vendor":"아크리비스","dueDate":"2027-01-22","note":"","flag":""},{"id":"s22","cat":"HSB-S","pjt":"HSBTS12606","seq":"2","inDate":"2026.10.20","vendor":"아크리비스","dueDate":"2027-01-22","note":"","flag":""},{"id":"s23","cat":"HSB-S","pjt":"HSBTS12606","seq":"3","inDate":"2026.10.20","vendor":"아크리비스","dueDate":"2027-01-22","note":"","flag":"hl"},{"id":"s24","cat":"PCS","pjt":"PCSME12601","seq":"1","inDate":"2026.10.29","vendor":"디씨티","dueDate":"2026-12-04","note":"","flag":""},{"id":"s25","cat":"LMB","pjt":"LMBNI12601","seq":"1","inDate":"2026.10.30","vendor":"져스텍","dueDate":"2027-02-08","note":"","flag":""},{"id":"s26","cat":"LMB","pjt":"LMBNI12602","seq":"1","inDate":"2026.10.30","vendor":"져스텍","dueDate":"2027-02-08","note":"","flag":""},{"id":"s27","cat":"LMB","pjt":"LMBMN12601","seq":"1","inDate":"2026.11.06","vendor":"져스텍","dueDate":"2027-01-29","note":"","flag":"hl"},{"id":"s28","cat":"HSB-D","pjt":"HSBPM12601","seq":"1","inDate":"2026.11.20","vendor":"아크리비스","dueDate":"–","note":"취소 → HSBPM12602로 사양 변경 진행","flag":"cancel"},{"id":"s29","cat":"HSB-D","pjt":"HSBZF12601","seq":"1","inDate":"2026.11.20","vendor":"아크리비스","dueDate":"2027-02-19","note":"","flag":""},{"id":"s30","cat":"HSB-D","pjt":"HSBDG12601","seq":"1","inDate":"2026.11.20","vendor":"아크리비스","dueDate":"2027-02-15","note":"기존 HSBMN12601 대체 → 최초 HSBPM12601 진행 건","flag":""},{"id":"s31","cat":"LMB","pjt":"LMBDG12601","seq":"1","inDate":"2026.11.13","vendor":"져스텍","dueDate":"2027-02-15","note":"양책임 STAGE TYPE 확인 중 → 8/20 확인 후 진행 예상일정, 최소 13일까지는 가능할 듯","flag":""},{"id":"s32","cat":"HSB-S","pjt":"HSBTS12607","seq":"1","inDate":"2026.12.02","vendor":"아크리비스","dueDate":"2027-02-12","note":"","flag":""},{"id":"s33","cat":"HSB-S","pjt":"HSBTS12607","seq":"2","inDate":"2026.12.02","vendor":"아크리비스","dueDate":"2027-02-12","note":"","flag":""},{"id":"s34","cat":"HSB-S","pjt":"HSBTS12607","seq":"3","inDate":"2026.12.02","vendor":"아크리비스","dueDate":"2027-02-12","note":"","flag":""},{"id":"s35","cat":"HSB-S","pjt":"HSBTS12607","seq":"4","inDate":"2026.12.02","vendor":"아크리비스","dueDate":"2027-02-12","note":"","flag":""},{"id":"s36","cat":"HSB-S","pjt":"HSBTS12607","seq":"5","inDate":"2026.12.02","vendor":"아크리비스","dueDate":"2027-02-12","note":"","flag":""},{"id":"s37","cat":"HSB-S","pjt":"HSBTS12608","seq":"1","inDate":"2026.12.09","vendor":"아크리비스","dueDate":"2027-02-19","note":"","flag":""},{"id":"s38","cat":"HSB-S","pjt":"HSBTS12608","seq":"2","inDate":"2026.12.09","vendor":"아크리비스","dueDate":"2027-02-19","note":"","flag":""},{"id":"s39","cat":"HSB-S","pjt":"HSBTS12608","seq":"3","inDate":"2026.12.09","vendor":"아크리비스","dueDate":"2027-02-19","note":"","flag":""},{"id":"s40","cat":"HSB-S","pjt":"HSBTS12608","seq":"4","inDate":"2026.12.09","vendor":"아크리비스","dueDate":"2027-02-19","note":"","flag":""},{"id":"s41","cat":"HSB-S","pjt":"HSBTS12608","seq":"5","inDate":"2026.12.09","vendor":"아크리비스","dueDate":"2027-02-19","note":"","flag":""},{"id":"s42","cat":"LMR","pjt":"LMRNI12601","seq":"1","inDate":"미정","vendor":"져스텍","dueDate":"2027-02-08","note":"","flag":""},{"id":"s43","cat":"LMR","pjt":"LMRNI12602","seq":"1","inDate":"미정","vendor":"져스텍","dueDate":"2027-02-08","note":"","flag":""},{"id":"s44","cat":"PCS","pjt":"PCSNI12601","seq":"1","inDate":"미정","vendor":"디씨티","dueDate":"2027-02-08","note":"","flag":""},{"id":"s45","cat":"HSB-D","pjt":"HSBPM12602","seq":"1","inDate":"미정","vendor":"아크리비스","dueDate":"2027-03-26","note":"HSB-S PASTE DIPPING 추가, HSB-S에서 2축 사이즈 변경 예정, 확정 후 진행","flag":""}]}</script>
+<script type="application/json" id="state-data">{"baseDate": "2026-08-27", "reporter": "최길복 수석 (제조그룹장)", "target": 83, "changeLog": [{"ts": "2026-08-27 15:33", "msg": "수주현황 수정 — BE社 · Issue/현황: \"제작 중\" → \"일정 변경 8.28 -> 9.10\""}, {"ts": "2026-08-27 15:33", "msg": "수주현황 수정 — BE社 · 납기(예정): \"2026-08-28\" → \"2026-09-10\""}, {"ts": "2026-08-25 10:04", "msg": "수주현황 수정 — TS社 · 상태: \"수주확정\" → \"납품완료\""}], "orders": [{"id": "o1", "cust": "TS社", "system": "PIS 3대", "qty": 3, "due": "2026-08-07", "cat": "pLSMB", "status": "납품완료", "issue": "제작완료", "note": ""}, {"id": "o2", "cust": "TS社", "system": "HSB 10 5대", "qty": 5, "due": "2026-08-28", "cat": "pLSMB", "status": "수주확정", "issue": "제작 중", "note": ""}, {"id": "o3", "cust": "BE社", "system": "LJS 1", "qty": 1, "due": "2026-09-10", "cat": "sLSMB", "status": "수주확정", "issue": "일정 변경 8.28 -> 9.10", "note": ""}, {"id": "o4", "cust": "TS社", "system": "HSB 10 5대", "qty": 5, "due": "2026-09-11", "cat": "pLSMB", "status": "수주확정", "issue": "제작 중", "note": ""}, {"id": "o5", "cust": "TS社", "system": "HSB 12 5대", "qty": 5, "due": "2026-09-30", "cat": "pLSMB", "status": "수주확정", "issue": "제작 중", "note": ""}, {"id": "o6", "cust": "TS社", "system": "HSB 12 5대", "qty": 5, "due": "2026-10-16", "cat": "pLSMB", "status": "수주확정", "issue": "중국 셋업 전환 검토", "note": ""}, {"id": "o7", "cust": "TS社", "system": "HSB 12 2대", "qty": 2, "due": "2026-10-30", "cat": "pLSMB", "status": "수주확정", "issue": "제작 중", "note": ""}, {"id": "o8", "cust": "TS社", "system": "HSB 5대", "qty": 5, "due": "2026-11-13", "cat": "pLSMB", "status": "수주확정", "issue": "제작 중 · 중국 셋업", "note": ""}, {"id": "o9", "cust": "TS社", "system": "PIS 5대", "qty": 5, "due": "2026-11-20", "cat": "pLSMB", "status": "수주확정", "issue": "제작 중 · 중국 셋업", "note": ""}, {"id": "o10", "cust": "ME社", "system": "HSB5·PIS3·PCS1", "qty": 9, "due": "2026-12-04", "cat": "pLSMB", "status": "수주확정", "issue": "제작 중 · 중국 셋업", "note": ""}, {"id": "o11", "cust": "PM社", "system": "HSB1", "qty": 1, "due": "2026-12-08", "cat": "pLSMB", "status": "수주확정", "issue": "설비컨셉 협의 要", "note": ""}, {"id": "o12", "cust": "TS社", "system": "PIS 3대", "qty": 3, "due": "2026-12-11", "cat": "pLSMB", "status": "수주확정", "issue": "제작 중", "note": ""}, {"id": "o13", "cust": "PM社", "system": "PIS", "qty": 1, "due": "2027-01-15", "cat": "pLSMB", "status": "수주확정", "issue": "제작 중", "note": ""}, {"id": "o14", "cust": "PM社", "system": "PCS", "qty": 1, "due": "2027-01-15", "cat": "pLSMB", "status": "수주확정", "issue": "제작 중", "note": ""}, {"id": "o15", "cust": "TS社", "system": "HSB우 3대", "qty": 3, "due": "2027-01-22", "cat": "pLSMB", "status": "수주확정", "issue": "제작 중", "note": "변경 전 12-11"}, {"id": "o16", "cust": "M2N社", "system": "HSB·LMB", "qty": 2, "due": "2027-01-29", "cat": "pLSMB", "status": "수주확정", "issue": "제작 중 · 중국 셋업", "note": "변경 전 11-27"}, {"id": "o17", "cust": "NIDEC社", "system": "LMB·LMR", "qty": 2, "due": "2027-02-05", "cat": "pLSMB", "status": "수주확정", "issue": "제작 중 · 중국 셋업", "note": ""}, {"id": "o18", "cust": "NIDEC社", "system": "LMB", "qty": 1, "due": "2027-02-05", "cat": "pLSMB", "status": "수주확정", "issue": "제작 중 · 중국 셋업", "note": ""}, {"id": "o19", "cust": "NIDEC社", "system": "LMR", "qty": 1, "due": "2027-02-05", "cat": "pLSMB", "status": "수주확정", "issue": "제작 중 · 중국 셋업", "note": ""}, {"id": "o20", "cust": "NIDEC社", "system": "PCS", "qty": 1, "due": "2027-02-05", "cat": "pLSMB", "status": "수주확정", "issue": "제작 중 · 중국 셋업", "note": ""}, {"id": "o21", "cust": "NIDEC社", "system": "PIS", "qty": 1, "due": "2027-02-05", "cat": "pLSMB", "status": "수주확정", "issue": "제작 중 · 중국 셋업", "note": ""}, {"id": "o22", "cust": "TS社", "system": "PIS 3대", "qty": 2, "due": "2027-02-12", "cat": "pLSMB", "status": "수주확정", "issue": "제작 중 · 중국 셋업", "note": ""}, {"id": "o23", "cust": "TS社", "system": "HSB 5대", "qty": 5, "due": "2027-02-12", "cat": "pLSMB", "status": "수주확정", "issue": "제작 중 · 중국 셋업", "note": ""}, {"id": "o24", "cust": "DG社", "system": "HSB", "qty": 2, "due": "2027-02-15", "cat": "pLSMB", "status": "수주확정", "issue": "제작 중 · 중국 셋업", "note": ""}, {"id": "o25", "cust": "DG社", "system": "LMB", "qty": 1, "due": "2027-02-15", "cat": "pLSMB", "status": "수주확정", "issue": "제작 중 · 중국 셋업", "note": ""}, {"id": "o26", "cust": "TS社", "system": "HSB5·PIS2·PCS1", "qty": 8, "due": "2027-02-19", "cat": "pLSMB", "status": "수주확정", "issue": "제작 중 · 중국 셋업", "note": ""}, {"id": "o27", "cust": "ZF社", "system": "HSB", "qty": 1, "due": "2027-02-19", "cat": "pLSMB", "status": "수주확정", "issue": "제작 중 · 중국 셋업", "note": ""}, {"id": "o28", "cust": "KI社", "system": "-", "qty": 2, "due": "", "cat": "pLSMB", "status": "발주예정", "issue": "8월초 발주 예정", "note": ""}], "stageItems": [{"id": "s1", "cat": "HSB-S", "pjt": "HSBTS12603", "seq": "4", "inDate": "2026.08.28", "vendor": "아크리비스", "dueDate": "2026-10-30", "note": "", "flag": ""}, {"id": "s2", "cat": "HSB-S", "pjt": "HSBTS12603", "seq": "5", "inDate": "2026.08.28", "vendor": "아크리비스", "dueDate": "2026-10-30", "note": "", "flag": ""}, {"id": "s3", "cat": "HSB-S", "pjt": "HSBTS12603", "seq": "6", "inDate": "2026.08.28", "vendor": "아크리비스", "dueDate": "2026-10-30", "note": "", "flag": ""}, {"id": "s4", "cat": "HSB-S", "pjt": "HSBTS12603", "seq": "7", "inDate": "2026.09.02", "vendor": "아크리비스", "dueDate": "2026-10-30", "note": "", "flag": ""}, {"id": "s5", "cat": "HSB-S", "pjt": "HSBTS12603", "seq": "8", "inDate": "2026.09.02", "vendor": "아크리비스", "dueDate": "2026-10-30", "note": "", "flag": ""}, {"id": "s6", "cat": "HSB-S", "pjt": "HSBTS12603", "seq": "9", "inDate": "2026.09.09", "vendor": "아크리비스", "dueDate": "2026-10-30", "note": "", "flag": ""}, {"id": "s7", "cat": "HSB-S", "pjt": "HSBTS12603", "seq": "10", "inDate": "2026.09.09", "vendor": "아크리비스", "dueDate": "2026-10-30", "note": "", "flag": ""}, {"id": "s8", "cat": "HSB-S", "pjt": "HSBTS12605", "seq": "1", "inDate": "2026.09.21", "vendor": "아크리비스", "dueDate": "2026-11-20", "note": "", "flag": ""}, {"id": "s9", "cat": "HSB-S", "pjt": "HSBTS12605", "seq": "2", "inDate": "2026.09.21", "vendor": "아크리비스", "dueDate": "2026-11-20", "note": "", "flag": ""}, {"id": "s10", "cat": "HSB-S", "pjt": "HSBTS12605", "seq": "3", "inDate": "2026.09.21", "vendor": "아크리비스", "dueDate": "2026-11-20", "note": "", "flag": ""}, {"id": "s11", "cat": "HSB-S", "pjt": "HSBTS12605", "seq": "4", "inDate": "2026.09.21", "vendor": "아크리비스", "dueDate": "2026-11-20", "note": "", "flag": ""}, {"id": "s12", "cat": "HSB-S", "pjt": "HSBTS12605", "seq": "5", "inDate": "2026.09.21", "vendor": "아크리비스", "dueDate": "2026-11-20", "note": "", "flag": ""}, {"id": "s13", "cat": "TCS", "pjt": "TCSKP12601", "seq": "1", "inDate": "2026.09.04", "vendor": "아크리비스", "dueDate": "2026-12-31", "note": "", "flag": ""}, {"id": "s14", "cat": "HSB-D", "pjt": "HSBME12601", "seq": "1", "inDate": "2026.10.08", "vendor": "아크리비스", "dueDate": "2026-12-04", "note": "단축요청", "flag": ""}, {"id": "s15", "cat": "HSB-D", "pjt": "HSBME12601", "seq": "2", "inDate": "2026.10.08", "vendor": "아크리비스", "dueDate": "2026-12-04", "note": "단축요청", "flag": ""}, {"id": "s16", "cat": "HSB-D", "pjt": "HSBME12601", "seq": "3", "inDate": "2026.10.08", "vendor": "아크리비스", "dueDate": "2026-12-04", "note": "단축요청", "flag": ""}, {"id": "s17", "cat": "HSB-D", "pjt": "HSBME12601", "seq": "4", "inDate": "2026.10.08", "vendor": "아크리비스", "dueDate": "2026-12-04", "note": "단축요청", "flag": ""}, {"id": "s18", "cat": "HSB-D", "pjt": "HSBME12601", "seq": "5", "inDate": "2026.10.08", "vendor": "아크리비스", "dueDate": "2026-12-04", "note": "단축요청", "flag": ""}, {"id": "s19", "cat": "HSB-D", "pjt": "HSBMN12601", "seq": "1", "inDate": "2026.10.08", "vendor": "아크리비스", "dueDate": "2027-01-29", "note": "기존 HSBPM12601과 변경", "flag": "hl"}, {"id": "s20", "cat": "PCS", "pjt": "PCSPM12601", "seq": "1", "inDate": "2026.10.16", "vendor": "디씨티", "dueDate": "2027-01-15", "note": "", "flag": ""}, {"id": "s21", "cat": "HSB-S", "pjt": "HSBTS12606", "seq": "1", "inDate": "2026.10.20", "vendor": "아크리비스", "dueDate": "2027-01-22", "note": "", "flag": ""}, {"id": "s22", "cat": "HSB-S", "pjt": "HSBTS12606", "seq": "2", "inDate": "2026.10.20", "vendor": "아크리비스", "dueDate": "2027-01-22", "note": "", "flag": ""}, {"id": "s23", "cat": "HSB-S", "pjt": "HSBTS12606", "seq": "3", "inDate": "2026.10.20", "vendor": "아크리비스", "dueDate": "2027-01-22", "note": "", "flag": "hl"}, {"id": "s24", "cat": "PCS", "pjt": "PCSME12601", "seq": "1", "inDate": "2026.10.29", "vendor": "디씨티", "dueDate": "2026-12-04", "note": "", "flag": ""}, {"id": "s25", "cat": "LMB", "pjt": "LMBNI12601", "seq": "1", "inDate": "2026.10.30", "vendor": "져스텍", "dueDate": "2027-02-08", "note": "", "flag": ""}, {"id": "s26", "cat": "LMB", "pjt": "LMBNI12602", "seq": "1", "inDate": "2026.10.30", "vendor": "져스텍", "dueDate": "2027-02-08", "note": "", "flag": ""}, {"id": "s27", "cat": "LMB", "pjt": "LMBMN12601", "seq": "1", "inDate": "2026.11.06", "vendor": "져스텍", "dueDate": "2027-01-29", "note": "", "flag": "hl"}, {"id": "s28", "cat": "HSB-D", "pjt": "HSBPM12601", "seq": "1", "inDate": "2026.11.20", "vendor": "아크리비스", "dueDate": "–", "note": "취소 → HSBPM12602로 사양 변경 진행", "flag": "cancel"}, {"id": "s29", "cat": "HSB-D", "pjt": "HSBZF12601", "seq": "1", "inDate": "2026.11.20", "vendor": "아크리비스", "dueDate": "2027-02-19", "note": "", "flag": ""}, {"id": "s30", "cat": "HSB-D", "pjt": "HSBDG12601", "seq": "1", "inDate": "2026.11.20", "vendor": "아크리비스", "dueDate": "2027-02-15", "note": "기존 HSBMN12601 대체 → 최초 HSBPM12601 진행 건", "flag": ""}, {"id": "s31", "cat": "LMB", "pjt": "LMBDG12601", "seq": "1", "inDate": "2026.11.13", "vendor": "져스텍", "dueDate": "2027-02-15", "note": "양책임 STAGE TYPE 확인 중 → 8/20 확인 후 진행 예상일정, 최소 13일까지는 가능할 듯", "flag": ""}, {"id": "s32", "cat": "HSB-S", "pjt": "HSBTS12607", "seq": "1", "inDate": "2026.12.02", "vendor": "아크리비스", "dueDate": "2027-02-12", "note": "", "flag": ""}, {"id": "s33", "cat": "HSB-S", "pjt": "HSBTS12607", "seq": "2", "inDate": "2026.12.02", "vendor": "아크리비스", "dueDate": "2027-02-12", "note": "", "flag": ""}, {"id": "s34", "cat": "HSB-S", "pjt": "HSBTS12607", "seq": "3", "inDate": "2026.12.02", "vendor": "아크리비스", "dueDate": "2027-02-12", "note": "", "flag": ""}, {"id": "s35", "cat": "HSB-S", "pjt": "HSBTS12607", "seq": "4", "inDate": "2026.12.02", "vendor": "아크리비스", "dueDate": "2027-02-12", "note": "", "flag": ""}, {"id": "s36", "cat": "HSB-S", "pjt": "HSBTS12607", "seq": "5", "inDate": "2026.12.02", "vendor": "아크리비스", "dueDate": "2027-02-12", "note": "", "flag": ""}, {"id": "s37", "cat": "HSB-S", "pjt": "HSBTS12608", "seq": "1", "inDate": "2026.12.09", "vendor": "아크리비스", "dueDate": "2027-02-19", "note": "", "flag": ""}, {"id": "s38", "cat": "HSB-S", "pjt": "HSBTS12608", "seq": "2", "inDate": "2026.12.09", "vendor": "아크리비스", "dueDate": "2027-02-19", "note": "", "flag": ""}, {"id": "s39", "cat": "HSB-S", "pjt": "HSBTS12608", "seq": "3", "inDate": "2026.12.09", "vendor": "아크리비스", "dueDate": "2027-02-19", "note": "", "flag": ""}, {"id": "s40", "cat": "HSB-S", "pjt": "HSBTS12608", "seq": "4", "inDate": "2026.12.09", "vendor": "아크리비스", "dueDate": "2027-02-19", "note": "", "flag": ""}, {"id": "s41", "cat": "HSB-S", "pjt": "HSBTS12608", "seq": "5", "inDate": "2026.12.09", "vendor": "아크리비스", "dueDate": "2027-02-19", "note": "", "flag": ""}, {"id": "s42", "cat": "LMR", "pjt": "LMRNI12601", "seq": "1", "inDate": "미정", "vendor": "져스텍", "dueDate": "2027-02-08", "note": "", "flag": ""}, {"id": "s43", "cat": "LMR", "pjt": "LMRNI12602", "seq": "1", "inDate": "미정", "vendor": "져스텍", "dueDate": "2027-02-08", "note": "", "flag": ""}, {"id": "s44", "cat": "PCS", "pjt": "PCSNI12601", "seq": "1", "inDate": "미정", "vendor": "디씨티", "dueDate": "2027-02-08", "note": "", "flag": ""}, {"id": "s45", "cat": "HSB-D", "pjt": "HSBPM12602", "seq": "1", "inDate": "미정", "vendor": "아크리비스", "dueDate": "2027-03-26", "note": "HSB-S PASTE DIPPING 추가, HSB-S에서 2축 사이즈 변경 예정, 확정 후 진행", "flag": ""}], "schedules": [{"id": "sch1", "title": "T社 HSB-S 12대 [#11호기 ~ #22호기] / [HSBTS12603]", "pjt": "HSBTS12603", "baseDate": "2026-08-26", "headcount": "", "teamNote": "제조그룹(제조): 최길복 수석·김한기 책임·정정재 선임 / 제조그룹(전장): 김남길 수석 / 영업그룹: 박주형 책임·김대광 책임·나황계철 책임 / ST그룹: 이용렬 책임 / 외주 전장: 신우혁", "steps": [{"key": "k1", "label": "상세설계"}, {"key": "k2", "label": "도면출도"}, {"key": "k3", "label": "가공품 임고"}, {"key": "k4", "label": "상부Cover 임고"}, {"key": "k5", "label": "구매품 임고"}, {"key": "k6", "label": "PC 임고"}, {"key": "k7", "label": "광학계 임고"}, {"key": "k8", "label": "STAGE 임고"}, {"key": "k9", "label": "기구조립(Ass'y)"}, {"key": "k10", "label": "장비전체조립"}, {"key": "k11", "label": "전장 배선"}, {"key": "k12", "label": "I/O Check"}, {"key": "k13", "label": "PCB&비전 Setting"}, {"key": "k14", "label": "Motor Tunning"}, {"key": "k15", "label": "제어 Set-up"}, {"key": "k16", "label": "공정 및 Auto Run"}, {"key": "k17", "label": "검수"}, {"key": "k18", "label": "분해 및 포장"}, {"key": "k19", "label": "출하"}], "units": [{"id": "hu11", "name": "HSB-S #11", "tag": "", "partManager": "", "cells": {"k1": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k2": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k3": {"plan": "6/30", "actual": "완료", "delta": "", "reason": ""}, "k4": {"plan": "8/5", "actual": "완료", "delta": "08/12 완료", "reason": ""}, "k5": {"plan": "7/8", "actual": "완료", "delta": "", "reason": ""}, "k6": {"plan": "8/6", "actual": "완료", "delta": "", "reason": ""}, "k7": {"plan": "7/31", "actual": "완료", "delta": "", "reason": ""}, "k8": {"plan": "8/14", "actual": "완료", "delta": "", "reason": ""}, "k9": {"plan": "8/13", "actual": "완료", "delta": "", "reason": ""}, "k10": {"plan": "8/19", "actual": "▲", "delta": "1일 단축↓", "reason": "08/18 완료"}, "k11": {"plan": "8/28", "actual": "", "delta": "", "reason": ""}, "k12": {"plan": "8/31", "actual": "", "delta": "", "reason": ""}, "k13": {"plan": "9/1", "actual": "", "delta": "", "reason": ""}, "k14": {"plan": "9/2", "actual": "", "delta": "", "reason": ""}, "k15": {"plan": "9/4", "actual": "", "delta": "", "reason": ""}, "k16": {"plan": "9/28", "actual": "", "delta": "", "reason": ""}, "k17": {"plan": "", "actual": "", "delta": "", "reason": ""}, "k18": {"plan": "9/29", "actual": "", "delta": "", "reason": ""}, "k19": {"plan": "9/30", "actual": "", "delta": "", "reason": ""}}}, {"id": "hu12", "name": "HSB-S #12", "tag": "", "partManager": "", "cells": {"k1": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k2": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k3": {"plan": "6/30", "actual": "완료", "delta": "", "reason": ""}, "k4": {"plan": "8/5", "actual": "완료", "delta": "08/12 완료", "reason": ""}, "k5": {"plan": "7/8", "actual": "완료", "delta": "", "reason": ""}, "k6": {"plan": "8/6", "actual": "완료", "delta": "", "reason": ""}, "k7": {"plan": "7/31", "actual": "완료", "delta": "", "reason": ""}, "k8": {"plan": "8/14", "actual": "완료", "delta": "", "reason": ""}, "k9": {"plan": "8/13", "actual": "완료", "delta": "", "reason": ""}, "k10": {"plan": "8/19", "actual": "▲", "delta": "1일 단축↓", "reason": "08/18 완료"}, "k11": {"plan": "8/28", "actual": "", "delta": "", "reason": ""}, "k12": {"plan": "8/31", "actual": "", "delta": "", "reason": ""}, "k13": {"plan": "9/1", "actual": "", "delta": "", "reason": ""}, "k14": {"plan": "9/2", "actual": "", "delta": "", "reason": ""}, "k15": {"plan": "9/4", "actual": "", "delta": "", "reason": ""}, "k16": {"plan": "9/28", "actual": "", "delta": "", "reason": ""}, "k17": {"plan": "", "actual": "", "delta": "", "reason": ""}, "k18": {"plan": "9/29", "actual": "", "delta": "", "reason": ""}, "k19": {"plan": "9/30", "actual": "", "delta": "", "reason": ""}}}, {"id": "hu13", "name": "HSB-S #13", "tag": "", "partManager": "", "cells": {"k1": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k2": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k3": {"plan": "6/30", "actual": "완료", "delta": "", "reason": ""}, "k4": {"plan": "8/5", "actual": "완료", "delta": "08/12 완료", "reason": ""}, "k5": {"plan": "7/8", "actual": "완료", "delta": "", "reason": ""}, "k6": {"plan": "8/6", "actual": "완료", "delta": "", "reason": ""}, "k7": {"plan": "8/21", "actual": "완료", "delta": "", "reason": ""}, "k8": {"plan": "8/14", "actual": "완료", "delta": "", "reason": ""}, "k9": {"plan": "8/13", "actual": "완료", "delta": "", "reason": ""}, "k10": {"plan": "8/21", "actual": "▲", "delta": "2일 단축↓", "reason": "08/18 완료"}, "k11": {"plan": "9/1", "actual": "", "delta": "", "reason": ""}, "k12": {"plan": "9/2", "actual": "", "delta": "", "reason": ""}, "k13": {"plan": "9/3", "actual": "", "delta": "", "reason": ""}, "k14": {"plan": "9/4", "actual": "", "delta": "", "reason": ""}, "k15": {"plan": "9/8", "actual": "", "delta": "", "reason": ""}, "k16": {"plan": "9/28", "actual": "", "delta": "", "reason": ""}, "k17": {"plan": "", "actual": "", "delta": "", "reason": ""}, "k18": {"plan": "9/29", "actual": "", "delta": "", "reason": ""}, "k19": {"plan": "9/30", "actual": "", "delta": "", "reason": ""}}}, {"id": "hu14", "name": "HSB-S #14", "tag": "", "partManager": "", "cells": {"k1": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k2": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k3": {"plan": "6/30", "actual": "완료", "delta": "", "reason": ""}, "k4": {"plan": "8/5", "actual": "완료", "delta": "08/12 완료", "reason": ""}, "k5": {"plan": "7/8", "actual": "완료", "delta": "", "reason": ""}, "k6": {"plan": "8/6", "actual": "완료", "delta": "", "reason": ""}, "k7": {"plan": "8/21", "actual": "완료", "delta": "", "reason": ""}, "k8": {"plan": "8/14", "actual": "완료", "delta": "", "reason": "08월 19일"}, "k9": {"plan": "8/13", "actual": "완료", "delta": "", "reason": ""}, "k10": {"plan": "8/21", "actual": "▲", "delta": "", "reason": ""}, "k11": {"plan": "9/1", "actual": "", "delta": "", "reason": ""}, "k12": {"plan": "9/2", "actual": "", "delta": "", "reason": ""}, "k13": {"plan": "9/3", "actual": "", "delta": "", "reason": ""}, "k14": {"plan": "9/4", "actual": "", "delta": "", "reason": ""}, "k15": {"plan": "9/8", "actual": "", "delta": "", "reason": ""}, "k16": {"plan": "9/28", "actual": "", "delta": "", "reason": ""}, "k17": {"plan": "", "actual": "", "delta": "", "reason": ""}, "k18": {"plan": "9/29", "actual": "", "delta": "", "reason": ""}, "k19": {"plan": "9/30", "actual": "", "delta": "", "reason": ""}}}, {"id": "hu15", "name": "HSB-S #15", "tag": "", "partManager": "", "cells": {"k1": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k2": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k3": {"plan": "6/30", "actual": "완료", "delta": "", "reason": ""}, "k4": {"plan": "8/5", "actual": "완료", "delta": "08/12 완료", "reason": ""}, "k5": {"plan": "7/8", "actual": "완료", "delta": "", "reason": ""}, "k6": {"plan": "8/6", "actual": "완료", "delta": "", "reason": ""}, "k7": {"plan": "8/21", "actual": "완료", "delta": "", "reason": ""}, "k8": {"plan": "8/14", "actual": "완료", "delta": "", "reason": "08월 19일"}, "k9": {"plan": "8/13", "actual": "완료", "delta": "", "reason": ""}, "k10": {"plan": "8/21", "actual": "▲", "delta": "1일 단축↓", "reason": "08/24 완료"}, "k11": {"plan": "9/1", "actual": "", "delta": "", "reason": ""}, "k12": {"plan": "9/2", "actual": "", "delta": "", "reason": ""}, "k13": {"plan": "9/3", "actual": "", "delta": "", "reason": ""}, "k14": {"plan": "9/4", "actual": "", "delta": "", "reason": ""}, "k15": {"plan": "9/8", "actual": "", "delta": "", "reason": ""}, "k16": {"plan": "9/28", "actual": "", "delta": "", "reason": ""}, "k17": {"plan": "", "actual": "", "delta": "", "reason": ""}, "k18": {"plan": "9/29", "actual": "", "delta": "", "reason": ""}, "k19": {"plan": "9/30", "actual": "", "delta": "", "reason": ""}}}, {"id": "hu16", "name": "HSB-S #16", "tag": "[중국향 변경]", "partManager": "", "cells": {"k1": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k2": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k3": {"plan": "6/30", "actual": "완료", "delta": "", "reason": ""}, "k4": {"plan": "8/5", "actual": "완료", "delta": "08/25 예정", "reason": ""}, "k5": {"plan": "7/8", "actual": "완료", "delta": "", "reason": ""}, "k6": {"plan": "8/6", "actual": "완료", "delta": "", "reason": ""}, "k7": {"plan": "8/21", "actual": "완료", "delta": "", "reason": ""}, "k8": {"plan": "8/28", "actual": "▲", "delta": "", "reason": ""}, "k9": {"plan": "8/27", "actual": "", "delta": "", "reason": ""}, "k10": {"plan": "9/1", "actual": "", "delta": "", "reason": ""}, "k11": {"plan": "9/10", "actual": "", "delta": "", "reason": ""}, "k12": {"plan": "9/11", "actual": "", "delta": "", "reason": ""}, "k13": {"plan": "9/14", "actual": "", "delta": "", "reason": ""}, "k14": {"plan": "9/15", "actual": "", "delta": "", "reason": ""}, "k15": {"plan": "9/16", "actual": "", "delta": "", "reason": ""}, "k16": {"plan": "10/14", "actual": "", "delta": "", "reason": ""}, "k17": {"plan": "", "actual": "", "delta": "", "reason": ""}, "k18": {"plan": "10/15", "actual": "", "delta": "", "reason": ""}, "k19": {"plan": "10/16", "actual": "", "delta": "", "reason": ""}}}, {"id": "hu17", "name": "HSB-S #17", "tag": "[중국향 변경]", "partManager": "", "cells": {"k1": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k2": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k3": {"plan": "6/30", "actual": "완료", "delta": "", "reason": ""}, "k4": {"plan": "8/19", "actual": "완료", "delta": "08/25 예정", "reason": ""}, "k5": {"plan": "7/8", "actual": "완료", "delta": "", "reason": ""}, "k6": {"plan": "8/6", "actual": "완료", "delta": "", "reason": ""}, "k7": {"plan": "8/21", "actual": "완료", "delta": "", "reason": ""}, "k8": {"plan": "8/28", "actual": "▲", "delta": "", "reason": ""}, "k9": {"plan": "8/27", "actual": "", "delta": "", "reason": ""}, "k10": {"plan": "9/1", "actual": "", "delta": "", "reason": ""}, "k11": {"plan": "9/10", "actual": "", "delta": "", "reason": ""}, "k12": {"plan": "9/11", "actual": "", "delta": "", "reason": ""}, "k13": {"plan": "9/14", "actual": "", "delta": "", "reason": ""}, "k14": {"plan": "9/15", "actual": "", "delta": "", "reason": ""}, "k15": {"plan": "9/16", "actual": "", "delta": "", "reason": ""}, "k16": {"plan": "10/14", "actual": "", "delta": "", "reason": ""}, "k17": {"plan": "", "actual": "", "delta": "", "reason": ""}, "k18": {"plan": "10/15", "actual": "", "delta": "", "reason": ""}, "k19": {"plan": "10/16", "actual": "", "delta": "", "reason": ""}}}, {"id": "hu18", "name": "HSB-S #18", "tag": "[중국향 변경]", "partManager": "", "cells": {"k1": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k2": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k3": {"plan": "6/30", "actual": "완료", "delta": "", "reason": ""}, "k4": {"plan": "8/5", "actual": "완료", "delta": "08/25 예정", "reason": ""}, "k5": {"plan": "7/8", "actual": "완료", "delta": "", "reason": ""}, "k6": {"plan": "8/6", "actual": "완료", "delta": "", "reason": ""}, "k7": {"plan": "8/21", "actual": "완료", "delta": "", "reason": ""}, "k8": {"plan": "8/28", "actual": "▲", "delta": "", "reason": ""}, "k9": {"plan": "8/27", "actual": "", "delta": "", "reason": ""}, "k10": {"plan": "9/1", "actual": "", "delta": "", "reason": ""}, "k11": {"plan": "9/10", "actual": "", "delta": "", "reason": ""}, "k12": {"plan": "9/11", "actual": "", "delta": "", "reason": ""}, "k13": {"plan": "9/14", "actual": "", "delta": "", "reason": ""}, "k14": {"plan": "9/15", "actual": "", "delta": "", "reason": ""}, "k15": {"plan": "9/16", "actual": "", "delta": "", "reason": ""}, "k16": {"plan": "10/14", "actual": "", "delta": "", "reason": ""}, "k17": {"plan": "", "actual": "", "delta": "", "reason": ""}, "k18": {"plan": "10/15", "actual": "", "delta": "", "reason": ""}, "k19": {"plan": "10/16", "actual": "", "delta": "", "reason": ""}}}, {"id": "hu19", "name": "HSB-S #19", "tag": "[중국향 변경]", "partManager": "", "cells": {"k1": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k2": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k3": {"plan": "6/30", "actual": "완료", "delta": "", "reason": ""}, "k4": {"plan": "8/19", "actual": "▲", "delta": "09/03 예정", "reason": ""}, "k5": {"plan": "7/8", "actual": "", "delta": "", "reason": ""}, "k6": {"plan": "8/6", "actual": "", "delta": "", "reason": ""}, "k7": {"plan": "8/21", "actual": "", "delta": "", "reason": ""}, "k8": {"plan": "8/28", "actual": "", "delta": "", "reason": "09월 02일"}, "k9": {"plan": "8/27", "actual": "", "delta": "", "reason": ""}, "k10": {"plan": "9/3", "actual": "", "delta": "", "reason": ""}, "k11": {"plan": "9/14", "actual": "", "delta": "", "reason": ""}, "k12": {"plan": "9/15", "actual": "", "delta": "", "reason": ""}, "k13": {"plan": "9/16", "actual": "", "delta": "", "reason": ""}, "k14": {"plan": "9/17", "actual": "", "delta": "", "reason": ""}, "k15": {"plan": "9/18", "actual": "", "delta": "", "reason": ""}, "k16": {"plan": "10/14", "actual": "", "delta": "", "reason": ""}, "k17": {"plan": "", "actual": "", "delta": "", "reason": ""}, "k18": {"plan": "10/15", "actual": "", "delta": "", "reason": ""}, "k19": {"plan": "10/16", "actual": "", "delta": "", "reason": ""}}}, {"id": "hu20", "name": "HSB-S #20", "tag": "[중국향 변경]", "partManager": "", "cells": {"k1": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k2": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k3": {"plan": "6/30", "actual": "완료", "delta": "", "reason": ""}, "k4": {"plan": "8/19", "actual": "▲", "delta": "09/03 예정", "reason": ""}, "k5": {"plan": "7/8", "actual": "", "delta": "", "reason": ""}, "k6": {"plan": "8/6", "actual": "", "delta": "", "reason": ""}, "k7": {"plan": "8/21", "actual": "", "delta": "", "reason": ""}, "k8": {"plan": "8/28", "actual": "", "delta": "", "reason": "09월 02일"}, "k9": {"plan": "8/27", "actual": "", "delta": "", "reason": ""}, "k10": {"plan": "9/7", "actual": "", "delta": "", "reason": ""}, "k11": {"plan": "9/16", "actual": "", "delta": "", "reason": ""}, "k12": {"plan": "9/17", "actual": "", "delta": "", "reason": ""}, "k13": {"plan": "9/18", "actual": "", "delta": "", "reason": ""}, "k14": {"plan": "9/21", "actual": "", "delta": "", "reason": ""}, "k15": {"plan": "9/22", "actual": "", "delta": "", "reason": ""}, "k16": {"plan": "10/14", "actual": "", "delta": "", "reason": ""}, "k17": {"plan": "", "actual": "", "delta": "", "reason": ""}, "k18": {"plan": "10/15", "actual": "", "delta": "", "reason": ""}, "k19": {"plan": "10/16", "actual": "", "delta": "", "reason": ""}}}, {"id": "hu21", "name": "HSB-S #21", "tag": "[중국향 변경]", "partManager": "", "cells": {"k1": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k2": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k3": {"plan": "6/30", "actual": "완료", "delta": "", "reason": ""}, "k4": {"plan": "8/19", "actual": "▲", "delta": "09/03 예정", "reason": ""}, "k5": {"plan": "7/8", "actual": "", "delta": "", "reason": ""}, "k6": {"plan": "8/6", "actual": "", "delta": "", "reason": ""}, "k7": {"plan": "8/21", "actual": "", "delta": "", "reason": ""}, "k8": {"plan": "9/11", "actual": "", "delta": "", "reason": "09월 09일"}, "k9": {"plan": "9/10", "actual": "", "delta": "", "reason": ""}, "k10": {"plan": "9/15", "actual": "", "delta": "", "reason": ""}, "k11": {"plan": "9/29", "actual": "", "delta": "", "reason": ""}, "k12": {"plan": "9/30", "actual": "", "delta": "", "reason": ""}, "k13": {"plan": "10/1", "actual": "", "delta": "", "reason": ""}, "k14": {"plan": "10/2", "actual": "", "delta": "", "reason": ""}, "k15": {"plan": "10/8", "actual": "", "delta": "", "reason": ""}, "k16": {"plan": "10/28", "actual": "", "delta": "", "reason": ""}, "k17": {"plan": "", "actual": "", "delta": "", "reason": ""}, "k18": {"plan": "10/29", "actual": "", "delta": "", "reason": ""}, "k19": {"plan": "10/30", "actual": "", "delta": "", "reason": ""}}}, {"id": "hu22", "name": "HSB-S #22", "tag": "[중국향 변경]", "partManager": "", "cells": {"k1": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k2": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k3": {"plan": "6/30", "actual": "완료", "delta": "", "reason": ""}, "k4": {"plan": "8/19", "actual": "▲", "delta": "09/03 예정", "reason": ""}, "k5": {"plan": "7/8", "actual": "", "delta": "", "reason": ""}, "k6": {"plan": "8/6", "actual": "", "delta": "", "reason": ""}, "k7": {"plan": "8/21", "actual": "", "delta": "", "reason": ""}, "k8": {"plan": "9/11", "actual": "", "delta": "", "reason": "09월 09일"}, "k9": {"plan": "9/10", "actual": "", "delta": "", "reason": ""}, "k10": {"plan": "9/17", "actual": "", "delta": "", "reason": ""}, "k11": {"plan": "10/1", "actual": "", "delta": "", "reason": ""}, "k12": {"plan": "10/2", "actual": "", "delta": "", "reason": ""}, "k13": {"plan": "10/6", "actual": "", "delta": "", "reason": ""}, "k14": {"plan": "10/7", "actual": "", "delta": "", "reason": ""}, "k15": {"plan": "10/13", "actual": "", "delta": "", "reason": ""}, "k16": {"plan": "10/28", "actual": "", "delta": "", "reason": ""}, "k17": {"plan": "", "actual": "", "delta": "", "reason": ""}, "k18": {"plan": "10/29", "actual": "", "delta": "", "reason": ""}, "k19": {"plan": "10/30", "actual": "", "delta": "", "reason": ""}}}]}, {"id": "sch2", "title": "T社 HSB-S 10대 [1호기 ~ 10호기] / [HSBTS12604]", "pjt": "HSBTS12604", "baseDate": "2026-08-26", "headcount": "", "teamNote": "제조그룹(제조): 최길복 수석·김한기 책임·정정재 선임 / 제조그룹(전장): 김남길 수석 / 영업그룹: 박주형 책임·김대광 책임·나황계철 책임 / ST그룹: 이용렬 책임 / 외주 전장: 신우혁", "steps": [{"key": "k1", "label": "상세설계"}, {"key": "k2", "label": "도면출도"}, {"key": "k3", "label": "가공품 임고"}, {"key": "k4", "label": "상부Cover 임고"}, {"key": "k5", "label": "구매품 임고"}, {"key": "k6", "label": "PC 임고"}, {"key": "k7", "label": "광학계 임고"}, {"key": "k8", "label": "STAGE 임고"}, {"key": "k9", "label": "기구조립(Ass'y)"}, {"key": "k10", "label": "장비전체조립"}, {"key": "k11", "label": "전장 배선"}, {"key": "k12", "label": "I/O Check"}, {"key": "k13", "label": "PCB&비전 Setting"}, {"key": "k14", "label": "Motor Tunning"}, {"key": "k15", "label": "제어 Set-up"}, {"key": "k16", "label": "공정 및 Auto Run"}, {"key": "k17", "label": "검수"}, {"key": "k18", "label": "분해 및 포장"}, {"key": "k19", "label": "출하"}], "units": [{"id": "hu2_1", "name": "HSB-S #1", "tag": "", "partManager": "", "cells": {"k1": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k2": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k3": {"plan": "6/30", "actual": "완료", "delta": "", "reason": ""}, "k4": {"plan": "6/26", "actual": "완료", "delta": "", "reason": ""}, "k5": {"plan": "7/8", "actual": "완료", "delta": "", "reason": ""}, "k6": {"plan": "8/6", "actual": "완료", "delta": "", "reason": ""}, "k7": {"plan": "7/31", "actual": "완료", "delta": "", "reason": ""}, "k8": {"plan": "7/16", "actual": "완료", "delta": "", "reason": ""}, "k9": {"plan": "7/15", "actual": "완료", "delta": "", "reason": ""}, "k10": {"plan": "7/21", "actual": "완료", "delta": "", "reason": ""}, "k11": {"plan": "7/30", "actual": "완료", "delta": "", "reason": ""}, "k12": {"plan": "7/31", "actual": "완료", "delta": "", "reason": ""}, "k13": {"plan": "8/3", "actual": "완료", "delta": "", "reason": ""}, "k14": {"plan": "8/4", "actual": "완료", "delta": "", "reason": ""}, "k15": {"plan": "8/6", "actual": "완료", "delta": "", "reason": ""}, "k16": {"plan": "8/26", "actual": "▲", "delta": "", "reason": ""}, "k17": {"plan": "8/24", "actual": "완료", "delta": "", "reason": ""}, "k18": {"plan": "8/27", "actual": "", "delta": "", "reason": ""}, "k19": {"plan": "8/28", "actual": "", "delta": "", "reason": ""}}}, {"id": "hu2_2", "name": "HSB-S #2", "tag": "", "partManager": "", "cells": {"k1": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k2": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k3": {"plan": "6/30", "actual": "완료", "delta": "", "reason": ""}, "k4": {"plan": "6/26", "actual": "완료", "delta": "", "reason": ""}, "k5": {"plan": "7/8", "actual": "완료", "delta": "", "reason": ""}, "k6": {"plan": "8/6", "actual": "완료", "delta": "", "reason": ""}, "k7": {"plan": "7/31", "actual": "완료", "delta": "", "reason": ""}, "k8": {"plan": "7/16", "actual": "완료", "delta": "", "reason": ""}, "k9": {"plan": "7/15", "actual": "완료", "delta": "", "reason": ""}, "k10": {"plan": "7/21", "actual": "완료", "delta": "", "reason": ""}, "k11": {"plan": "7/30", "actual": "완료", "delta": "", "reason": ""}, "k12": {"plan": "7/31", "actual": "완료", "delta": "", "reason": ""}, "k13": {"plan": "8/3", "actual": "완료", "delta": "", "reason": ""}, "k14": {"plan": "8/4", "actual": "완료", "delta": "", "reason": ""}, "k15": {"plan": "8/6", "actual": "완료", "delta": "", "reason": ""}, "k16": {"plan": "8/26", "actual": "▲", "delta": "", "reason": ""}, "k17": {"plan": "8/24", "actual": "완료", "delta": "", "reason": ""}, "k18": {"plan": "8/27", "actual": "", "delta": "", "reason": ""}, "k19": {"plan": "8/28", "actual": "", "delta": "", "reason": ""}}}, {"id": "hu2_3", "name": "HSB-S #3", "tag": "", "partManager": "", "cells": {"k1": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k2": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k3": {"plan": "6/30", "actual": "완료", "delta": "", "reason": ""}, "k4": {"plan": "6/26", "actual": "완료", "delta": "", "reason": ""}, "k5": {"plan": "7/8", "actual": "완료", "delta": "", "reason": ""}, "k6": {"plan": "8/6", "actual": "완료", "delta": "", "reason": ""}, "k7": {"plan": "7/31", "actual": "완료", "delta": "", "reason": ""}, "k8": {"plan": "7/16", "actual": "완료", "delta": "", "reason": ""}, "k9": {"plan": "7/15", "actual": "완료", "delta": "", "reason": ""}, "k10": {"plan": "7/23", "actual": "완료", "delta": "", "reason": ""}, "k11": {"plan": "8/3", "actual": "완료", "delta": "", "reason": ""}, "k12": {"plan": "8/4", "actual": "완료", "delta": "", "reason": ""}, "k13": {"plan": "8/5", "actual": "완료", "delta": "", "reason": ""}, "k14": {"plan": "8/6", "actual": "완료", "delta": "", "reason": ""}, "k15": {"plan": "8/10", "actual": "완료", "delta": "", "reason": ""}, "k16": {"plan": "8/26", "actual": "▲", "delta": "", "reason": ""}, "k17": {"plan": "8/24", "actual": "완료", "delta": "", "reason": ""}, "k18": {"plan": "8/27", "actual": "", "delta": "", "reason": ""}, "k19": {"plan": "8/28", "actual": "", "delta": "", "reason": ""}}}, {"id": "hu2_4", "name": "HSB-S #4", "tag": "", "partManager": "", "cells": {"k1": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k2": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k3": {"plan": "6/30", "actual": "완료", "delta": "", "reason": ""}, "k4": {"plan": "6/26", "actual": "완료", "delta": "", "reason": ""}, "k5": {"plan": "7/8", "actual": "완료", "delta": "", "reason": ""}, "k6": {"plan": "8/6", "actual": "완료", "delta": "", "reason": ""}, "k7": {"plan": "7/31", "actual": "완료", "delta": "", "reason": ""}, "k8": {"plan": "7/16", "actual": "완료", "delta": "", "reason": ""}, "k9": {"plan": "7/15", "actual": "완료", "delta": "", "reason": ""}, "k10": {"plan": "7/23", "actual": "완료", "delta": "", "reason": ""}, "k11": {"plan": "8/3", "actual": "완료", "delta": "", "reason": ""}, "k12": {"plan": "8/4", "actual": "완료", "delta": "", "reason": ""}, "k13": {"plan": "8/5", "actual": "완료", "delta": "", "reason": ""}, "k14": {"plan": "8/6", "actual": "완료", "delta": "", "reason": ""}, "k15": {"plan": "8/10", "actual": "완료", "delta": "", "reason": ""}, "k16": {"plan": "8/26", "actual": "▲", "delta": "", "reason": ""}, "k17": {"plan": "8/24", "actual": "완료", "delta": "", "reason": ""}, "k18": {"plan": "8/27", "actual": "", "delta": "", "reason": ""}, "k19": {"plan": "8/28", "actual": "", "delta": "", "reason": ""}}}, {"id": "hu2_5", "name": "HSB-S #5", "tag": "", "partManager": "", "cells": {"k1": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k2": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k3": {"plan": "6/30", "actual": "완료", "delta": "", "reason": ""}, "k4": {"plan": "6/26", "actual": "완료", "delta": "", "reason": ""}, "k5": {"plan": "7/8", "actual": "완료", "delta": "", "reason": ""}, "k6": {"plan": "8/6", "actual": "완료", "delta": "", "reason": ""}, "k7": {"plan": "7/31", "actual": "완료", "delta": "", "reason": ""}, "k8": {"plan": "7/16", "actual": "완료", "delta": "", "reason": ""}, "k9": {"plan": "7/15", "actual": "완료", "delta": "", "reason": ""}, "k10": {"plan": "7/27", "actual": "완료", "delta": "", "reason": ""}, "k11": {"plan": "8/5", "actual": "완료", "delta": "", "reason": ""}, "k12": {"plan": "8/6", "actual": "완료", "delta": "", "reason": ""}, "k13": {"plan": "8/7", "actual": "완료", "delta": "", "reason": ""}, "k14": {"plan": "8/10", "actual": "완료", "delta": "", "reason": ""}, "k15": {"plan": "8/12", "actual": "완료", "delta": "", "reason": ""}, "k16": {"plan": "8/26", "actual": "▲", "delta": "", "reason": ""}, "k17": {"plan": "8/24", "actual": "완료", "delta": "", "reason": ""}, "k18": {"plan": "8/27", "actual": "", "delta": "", "reason": ""}, "k19": {"plan": "8/28", "actual": "", "delta": "", "reason": ""}}}, {"id": "hu2_6", "name": "HSB-S #6", "tag": "", "partManager": "", "cells": {"k1": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k2": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k3": {"plan": "6/30", "actual": "완료", "delta": "", "reason": ""}, "k4": {"plan": "6/26", "actual": "완료", "delta": "", "reason": ""}, "k5": {"plan": "7/8", "actual": "완료", "delta": "", "reason": ""}, "k6": {"plan": "8/6", "actual": "완료", "delta": "", "reason": ""}, "k7": {"plan": "7/31", "actual": "완료", "delta": "", "reason": ""}, "k8": {"plan": "7/30", "actual": "완료", "delta": "", "reason": ""}, "k9": {"plan": "7/31", "actual": "완료", "delta": "", "reason": ""}, "k10": {"plan": "8/4", "actual": "▲", "delta": "1일 단축↓", "reason": "07/29 입고"}, "k11": {"plan": "8/13", "actual": "", "delta": "3일 단축↓", "reason": "07/28 완료"}, "k12": {"plan": "8/14", "actual": "", "delta": "", "reason": ""}, "k13": {"plan": "8/18", "actual": "", "delta": "1일 단축↓", "reason": "08/12 완료"}, "k14": {"plan": "8/19", "actual": "", "delta": "1일 단축↓", "reason": "08/13 완료"}, "k15": {"plan": "8/21", "actual": "", "delta": "1일 단축↓", "reason": "08/14 완료"}, "k16": {"plan": "9/9", "actual": "", "delta": "", "reason": ""}, "k17": {"plan": "", "actual": "", "delta": "", "reason": ""}, "k18": {"plan": "9/10", "actual": "", "delta": "", "reason": ""}, "k19": {"plan": "9/11", "actual": "", "delta": "", "reason": ""}}}, {"id": "hu2_7", "name": "HSB-S #7", "tag": "", "partManager": "", "cells": {"k1": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k2": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k3": {"plan": "6/30", "actual": "완료", "delta": "", "reason": ""}, "k4": {"plan": "6/26", "actual": "완료", "delta": "", "reason": ""}, "k5": {"plan": "7/8", "actual": "완료", "delta": "", "reason": ""}, "k6": {"plan": "8/6", "actual": "완료", "delta": "", "reason": ""}, "k7": {"plan": "7/31", "actual": "완료", "delta": "", "reason": ""}, "k8": {"plan": "7/30", "actual": "완료", "delta": "", "reason": ""}, "k9": {"plan": "7/31", "actual": "완료", "delta": "", "reason": ""}, "k10": {"plan": "8/4", "actual": "▲", "delta": "1일 단축↓", "reason": "07/29 입고"}, "k11": {"plan": "8/13", "actual": "", "delta": "3일 단축↓", "reason": "07/28 완료"}, "k12": {"plan": "8/14", "actual": "", "delta": "", "reason": ""}, "k13": {"plan": "8/18", "actual": "", "delta": "1일 단축↓", "reason": "08/12 완료"}, "k14": {"plan": "8/19", "actual": "", "delta": "1일 단축↓", "reason": "08/13 완료"}, "k15": {"plan": "8/21", "actual": "", "delta": "1일 단축↓", "reason": "08/14 완료"}, "k16": {"plan": "9/9", "actual": "", "delta": "", "reason": ""}, "k17": {"plan": "", "actual": "", "delta": "", "reason": ""}, "k18": {"plan": "9/10", "actual": "", "delta": "", "reason": ""}, "k19": {"plan": "9/11", "actual": "", "delta": "", "reason": ""}}}, {"id": "hu2_8", "name": "HSB-S #8", "tag": "", "partManager": "", "cells": {"k1": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k2": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k3": {"plan": "6/30", "actual": "완료", "delta": "", "reason": ""}, "k4": {"plan": "6/26", "actual": "완료", "delta": "", "reason": ""}, "k5": {"plan": "7/8", "actual": "완료", "delta": "", "reason": ""}, "k6": {"plan": "8/6", "actual": "완료", "delta": "", "reason": ""}, "k7": {"plan": "7/31", "actual": "완료", "delta": "", "reason": ""}, "k8": {"plan": "7/30", "actual": "완료", "delta": "", "reason": ""}, "k9": {"plan": "7/31", "actual": "완료", "delta": "", "reason": ""}, "k10": {"plan": "8/6", "actual": "▲", "delta": "1일 단축↓", "reason": "07/29 입고"}, "k11": {"plan": "8/18", "actual": "", "delta": "3일 단축↓", "reason": "07/28 완료"}, "k12": {"plan": "8/19", "actual": "", "delta": "", "reason": ""}, "k13": {"plan": "8/20", "actual": "", "delta": "1일 단축↓", "reason": "08/14 완료"}, "k14": {"plan": "8/21", "actual": "", "delta": "1일 단축↓", "reason": "08/18 완료"}, "k15": {"plan": "8/25", "actual": "", "delta": "1일 단축↓", "reason": "08/19 완료"}, "k16": {"plan": "9/9", "actual": "", "delta": "", "reason": ""}, "k17": {"plan": "", "actual": "", "delta": "", "reason": ""}, "k18": {"plan": "9/10", "actual": "", "delta": "", "reason": ""}, "k19": {"plan": "9/11", "actual": "", "delta": "", "reason": ""}}}, {"id": "hu2_9", "name": "HSB-S #9", "tag": "", "partManager": "", "cells": {"k1": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k2": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k3": {"plan": "6/30", "actual": "완료", "delta": "", "reason": ""}, "k4": {"plan": "7/22", "actual": "완료", "delta": "", "reason": "개조건 선작업 15일 입고완료"}, "k5": {"plan": "7/8", "actual": "완료", "delta": "", "reason": ""}, "k6": {"plan": "8/6", "actual": "완료", "delta": "", "reason": ""}, "k7": {"plan": "7/31", "actual": "완료", "delta": "", "reason": ""}, "k8": {"plan": "7/30", "actual": "완료", "delta": "", "reason": ""}, "k9": {"plan": "7/31", "actual": "완료", "delta": "", "reason": ""}, "k10": {"plan": "8/6", "actual": "▲", "delta": "1일 단축↓", "reason": "07/29 입고"}, "k11": {"plan": "8/18", "actual": "", "delta": "3일 단축↓", "reason": "07/28 완료"}, "k12": {"plan": "8/19", "actual": "", "delta": "", "reason": ""}, "k13": {"plan": "8/20", "actual": "", "delta": "1일 단축↓", "reason": "08/14 완료"}, "k14": {"plan": "8/21", "actual": "", "delta": "1일 단축↓", "reason": "08/18 완료"}, "k15": {"plan": "8/25", "actual": "", "delta": "1일 단축↓", "reason": "08/19 완료"}, "k16": {"plan": "9/9", "actual": "", "delta": "", "reason": ""}, "k17": {"plan": "", "actual": "", "delta": "", "reason": ""}, "k18": {"plan": "9/10", "actual": "", "delta": "", "reason": ""}, "k19": {"plan": "9/11", "actual": "", "delta": "", "reason": ""}}}, {"id": "hu2_10", "name": "HSB-S #10", "tag": "", "partManager": "", "cells": {"k1": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k2": {"plan": "5/8", "actual": "완료", "delta": "", "reason": ""}, "k3": {"plan": "6/30", "actual": "완료", "delta": "", "reason": ""}, "k4": {"plan": "7/22", "actual": "완료", "delta": "", "reason": "개조진행으로 30일 입고완료"}, "k5": {"plan": "7/8", "actual": "완료", "delta": "", "reason": ""}, "k6": {"plan": "8/6", "actual": "완료", "delta": "", "reason": ""}, "k7": {"plan": "7/31", "actual": "완료", "delta": "", "reason": ""}, "k8": {"plan": "7/30", "actual": "완료", "delta": "", "reason": ""}, "k9": {"plan": "7/31", "actual": "완료", "delta": "", "reason": ""}, "k10": {"plan": "8/10", "actual": "▲", "delta": "1일 단축↓", "reason": "07/29 입고"}, "k11": {"plan": "8/20", "actual": "", "delta": "3일 단축↓", "reason": "07/28 완료"}, "k12": {"plan": "8/21", "actual": "", "delta": "", "reason": ""}, "k13": {"plan": "8/24", "actual": "", "delta": "2일 단축↓", "reason": "08/19 완료"}, "k14": {"plan": "8/25", "actual": "", "delta": "2일 단축↓", "reason": "08/19 완료"}, "k15": {"plan": "8/27", "actual": "", "delta": "1일 단축↓", "reason": "08/20 완료"}, "k16": {"plan": "9/9", "actual": "", "delta": "2일 단축↓", "reason": "08/24 완료"}, "k17": {"plan": "", "actual": "", "delta": "", "reason": ""}, "k18": {"plan": "9/10", "actual": "", "delta": "", "reason": ""}, "k19": {"plan": "9/11", "actual": "", "delta": "", "reason": ""}}}]}]}</script>
 
 <script>
 /* SheetJS xlsx.core.min.js (Apache-2.0) — inlined so Excel-upload parsing works with no external network request */
@@ -2692,6 +2799,9 @@ function uid(){ return 'o'+Math.random().toString(36).slice(2,10); }
 function suid(){ return 's'+Math.random().toString(36).slice(2,10); }
 
 let activeMonthFilter = null; // for dashboard->manage jump
+let selectedScheduleId = null; // for 생산일정관리 tab
+let schPmFilterVal = 'all';
+let schArchiveOpen = false;
 let selectedYearlyYear = null;
 
 function monthKey(dateStr){
@@ -3296,6 +3406,345 @@ function renderYearly(){
   `).join('') || `<tr><td colspan="4" class="empty">데이터 없음</td></tr>`;
 }
 
+
+/* ---------- render: 생산일정관리(Gantt) ---------- */
+function schUid(){ return 'sch'+Math.random().toString(36).slice(2,8); }
+function schUnitUid(){ return 'u'+Math.random().toString(36).slice(2,8); }
+function schStepUid(){ return 'k'+Math.random().toString(36).slice(2,8); }
+function escapeHtml(s){
+  return String(s==null?'':s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+}
+function DEFAULT_SCH_STEPS(){
+  return [
+    ['k1','상세설계'],['k2','도면출도'],['k3','가공품 임고'],['k4','상부Cover 임고'],['k5','구매품 임고'],
+    ['k6','PC 임고'],['k7','광학계 임고'],['k8','STAGE 임고'],['k9',"기구조립(Ass'y)"],['k10','장비전체조립'],
+    ['k11','전장 배선'],['k12','I/O Check'],['k13','PCB&비전 Setting'],['k14','Motor Tunning'],['k15','제어 Set-up'],
+    ['k16','공정 및 Auto Run'],['k17','검수'],['k18','분해 및 포장'],['k19','출하']
+  ].map(([key,label])=>({key,label}));
+}
+function selectedSchedule(){
+  const list = state.schedules || [];
+  return list.find(s=>s.id===selectedScheduleId) || list[0] || null;
+}
+/* 계획일(예: "5/8", "08/12", "2026-08-12") → Date. 연도는 기준일(baseDate)의 연도를 따른다. */
+function schParseDate(str, refYear){
+  if(!str) return null;
+  const s = String(str).trim();
+  let m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if(m) return new Date(+m[1], +m[2]-1, +m[3]);
+  m = s.match(/^(\d{1,2})[\/.](\d{1,2})/);
+  if(m) return new Date(refYear, +m[1]-1, +m[2]);
+  return null;
+}
+function schIsOverdue(planStr, baseDateStr){
+  if(!baseDateStr) return false;
+  const by = +String(baseDateStr).slice(0,4) || new Date().getFullYear();
+  const base = schParseDate(baseDateStr, by);
+  const plan = schParseDate(planStr, by);
+  if(!base || !plan) return false;
+  return plan < base;
+}
+function classifyCell(kind, text, ctx){
+  text = String(text||'').trim();
+  if(kind==='actual'){
+    if(text.includes('완료')) return 'sch-c-done';
+    if(ctx && schIsOverdue(ctx.planVal, ctx.baseDate)) return 'sch-c-issue';
+    if(!text) return '';
+    if(text.includes('▲') || text.includes('Issue') || text.includes('issue')) return 'sch-c-progress';
+    return '';
+  }
+  // delta(단축↓/지연↑), reason(사유)
+  if(!text) return '';
+  if(text.includes('지연') || text.includes('Issue') || text.includes('issue')) return 'sch-c-issue';
+  if(text.includes('단축')) return 'sch-c-done';
+  if(text.includes('완료')) return 'sch-c-good';
+  if(text.includes('예정')) return 'sch-c-dim';
+  return 'sch-c-issue';
+}
+function schUnitProgress(u, steps){
+  const total = (steps||[]).length || 1;
+  let done = 0;
+  (steps||[]).forEach(st=>{
+    const c = (u.cells && u.cells[st.key]) || {};
+    if(String(c.actual||'').includes('완료')) done++;
+  });
+  return Math.round(done/total*100);
+}
+function setSchMetaField(id, val){
+  const el = document.getElementById(id);
+  if(!el) return;
+  if(document.activeElement !== el) el.textContent = val || '';
+}
+function schHeaderRowsHtml(steps){
+  let h = '<tr><th rowspan="2" style="min-width:110px;">호기</th><th rowspan="2" style="min-width:80px;">Part 담당자</th><th rowspan="2" style="min-width:70px;">구분</th>';
+  h += steps.map(st=>`<th class="sch-step-th-wrap"><span class="sch-step-th" data-stepkey="${st.key}" ${isAdmin?'contenteditable="true"':''}>${escapeHtml(st.label)}</span>${isAdmin?`<button class="sch-step-del" data-delstep="${st.key}" title="이 단계 삭제">✕</button>`:''}</th>`).join('');
+  h += '</tr><tr>' + steps.map((st,idx)=>`<th style="font-weight:400;color:var(--text-dim);">${idx+1}</th>`).join('') + '</tr>';
+  return h;
+}
+function schBodyRowsHtml(units, steps, sch){
+  const rowKinds = [['plan','계획'],['actual','실적'],['delta','단축↓/지연↑'],['reason','사유']];
+  let html = '';
+  units.forEach(u=>{
+    const pct = schUnitProgress(u, steps);
+    rowKinds.forEach(([kind,label],ri)=>{
+      html += '<tr>';
+      if(ri===0){
+        html += `<td class="sch-unit-cell" rowspan="4"><span data-unitfield="name" data-unit="${u.id}" ${isAdmin?'contenteditable="true"':''}>${escapeHtml(u.name)}</span>${u.tag?`<span class="sch-tag">${escapeHtml(u.tag)}</span>`:''}<div class="sch-progress-wrap"><span class="sch-progress-track"><span class="sch-progress-fill" style="width:${pct}%;"></span></span><span class="sch-progress-pct">${pct}%</span></div>${isAdmin?`<button class="small danger sch-unit-actions" data-delunit="${u.id}" title="이 호기 삭제">삭제</button>`:''}</td>`;
+        html += `<td class="sch-pm-cell" rowspan="4"><span data-unitfield="partManager" data-unit="${u.id}" ${isAdmin?'contenteditable="true"':''}>${escapeHtml(u.partManager||'')}</span></td>`;
+      }
+      html += `<td class="sch-rowlabel">${label}</td>`;
+      html += steps.map(st=>{
+        const cell = (u.cells && u.cells[st.key]) || {};
+        const val = cell[kind] || '';
+        const ctx = kind==='actual' ? {planVal: cell.plan, baseDate: sch.baseDate} : undefined;
+        const cls = classifyCell(kind, val, ctx);
+        return `<td class="sch-cell ${cls}" ${isAdmin?`contenteditable="true" data-unit="${u.id}" data-step="${st.key}" data-kind="${kind}"`:''}>${escapeHtml(val)}</td>`;
+      }).join('');
+      html += '</tr>';
+    });
+  });
+  return html;
+}
+function renderSchedule(){
+  if(!Array.isArray(state.schedules)) state.schedules = [];
+  const list = state.schedules;
+  const sel = document.getElementById('schProjectSelect');
+  if(!selectedScheduleId || !list.find(s=>s.id===selectedScheduleId)){
+    selectedScheduleId = list[0] ? list[0].id : null;
+  }
+  sel.innerHTML = list.map(s=>`<option value="${s.id}">${escapeHtml(s.title||'(제목 없음)')}</option>`).join('');
+  sel.value = selectedScheduleId || '';
+  document.getElementById('schCountPill').textContent = list.length ? `${list.length}개 일정표` : '';
+  const sch = selectedSchedule();
+  document.getElementById('schEmpty').style.display = sch ? 'none' : 'block';
+  document.getElementById('schContent').style.display = sch ? '' : 'none';
+  if(!sch){ renderScheduleDashCard(); return; }
+  if(!Array.isArray(sch.units)) sch.units = [];
+  if(!Array.isArray(sch.steps)) sch.steps = [];
+
+  setSchMetaField('schTitle', sch.title);
+  setSchMetaField('schPjt', sch.pjt);
+  document.getElementById('schBaseDate').value = sch.baseDate || '';
+  setSchMetaField('schHeadcount', sch.headcount);
+  setSchMetaField('schTeamNote', sch.teamNote);
+  ['schTitle','schPjt','schHeadcount','schTeamNote'].forEach(id=>{
+    document.getElementById(id).contentEditable = isAdmin ? 'true' : 'false';
+  });
+
+  // 담당자 필터 옵션
+  const pmSel = document.getElementById('schPmFilter');
+  const pms = Array.from(new Set(sch.units.map(u=>u.partManager).filter(Boolean))).sort();
+  const keepPm = pms.includes(schPmFilterVal) ? schPmFilterVal : 'all';
+  schPmFilterVal = keepPm;
+  pmSel.innerHTML = '<option value="all">담당자 전체</option>' + pms.map(p=>`<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('');
+  pmSel.value = keepPm;
+
+  const steps = sch.steps;
+  document.getElementById('schThead').innerHTML = schHeaderRowsHtml(steps);
+
+  const filtered = sch.units.filter(u => schPmFilterVal==='all' || u.partManager===schPmFilterVal);
+  const activeUnits = filtered.filter(u => schUnitProgress(u, steps) < 100);
+  const archivedUnits = filtered.filter(u => schUnitProgress(u, steps) === 100);
+
+  document.getElementById('schTbody').innerHTML = schBodyRowsHtml(activeUnits, steps, sch);
+
+  const toggleBtn = document.getElementById('schArchiveToggle');
+  const archiveWrap = document.getElementById('schArchiveWrap');
+  if(archivedUnits.length===0){
+    toggleBtn.style.display = 'none';
+    archiveWrap.style.display = 'none';
+  }else{
+    toggleBtn.style.display = '';
+    toggleBtn.textContent = (schArchiveOpen ? '▾ ' : '▸ ') + `출하 완료(100%) 호기 ${archivedUnits.length}건 — ${schArchiveOpen?'접기':'펼쳐보기'}`;
+    archiveWrap.style.display = schArchiveOpen ? '' : 'none';
+    if(schArchiveOpen){
+      document.getElementById('schArchiveThead').innerHTML = schHeaderRowsHtml(steps);
+      document.getElementById('schArchiveTbody').innerHTML = schBodyRowsHtml(archivedUnits, steps, sch);
+    }
+  }
+
+  renderScheduleDashCard();
+
+  if(!isAdmin) return;
+  document.querySelectorAll('#schContent .sch-val[data-field]').forEach(el=>{ el.addEventListener('blur', onSchMetaEdit); });
+  document.getElementById('schBaseDate').addEventListener('change', onSchMetaEdit);
+  document.querySelectorAll('.sch-step-th[data-stepkey]').forEach(el=>{ el.addEventListener('blur', onSchStepLabelEdit); });
+  document.querySelectorAll('[data-delstep]').forEach(btn=>{
+    btn.addEventListener('click', (e)=>{ e.stopPropagation(); delSchStep(btn.getAttribute('data-delstep')); });
+  });
+  document.querySelectorAll('[data-delunit]').forEach(btn=>{
+    btn.addEventListener('click', (e)=>{ e.stopPropagation(); delSchUnit(btn.getAttribute('data-delunit')); });
+  });
+  document.querySelectorAll('[data-unitfield]').forEach(el=>{ el.addEventListener('blur', onSchUnitFieldEdit); });
+  document.querySelectorAll('.sch-cell[data-unit]').forEach(el=>{ el.addEventListener('blur', onSchCellEdit); });
+}
+function renderScheduleDashCard(){
+  const box = document.getElementById('schDashStats');
+  if(!box) return;
+  const schedules = Array.isArray(state.schedules) ? state.schedules : [];
+  let totalUnits = 0, doneUnits = 0, issueCount = 0;
+  schedules.forEach(sch=>{
+    (sch.units||[]).forEach(u=>{
+      totalUnits++;
+      const pct = schUnitProgress(u, sch.steps||[]);
+      if(pct===100) doneUnits++;
+      (sch.steps||[]).forEach(st=>{
+        const c = (u.cells && u.cells[st.key]) || {};
+        const cls = classifyCell('actual', c.actual||'', {planVal:c.plan, baseDate:sch.baseDate});
+        if(cls==='sch-c-issue') issueCount++;
+      });
+    });
+  });
+  if(!schedules.length){
+    box.innerHTML = `<div class="empty">등록된 생산 일정표가 없습니다.</div>`;
+    return;
+  }
+  box.innerHTML = `
+    <div class="mini-stat ms-blue"><div class="ms-num">${schedules.length}개</div><div class="ms-label">생산 일정표</div></div>
+    <div class="mini-stat ms-green"><div class="ms-num">${totalUnits}대</div><div class="ms-label">관리 중 호기 (완료 ${doneUnits}대)</div></div>
+    <div class="mini-stat ms-orange"><div class="ms-num">${issueCount}건</div><div class="ms-label">지연/Issue 단계</div></div>
+  `;
+}
+function onSchMetaEdit(e){
+  const sch = selectedSchedule(); if(!sch) return;
+  const el = e.target;
+  const field = el.getAttribute('data-field');
+  const val = el.tagName==='INPUT' ? el.value : el.textContent.trim();
+  if(String(sch[field]||'') !== String(val||'')){
+    sch[field] = val;
+    logChange(`생산일정 수정 — ${sch.title||''} · ${field} 변경`);
+    renderChangeLog();
+    if(field==='title'){
+      const opt = document.querySelector(`#schProjectSelect option[value="${sch.id}"]`);
+      if(opt) opt.textContent = val || '(제목 없음)';
+    }
+    if(field==='baseDate') renderSchedule();
+  }
+}
+function onSchStepLabelEdit(e){
+  const sch = selectedSchedule(); if(!sch) return;
+  const el = e.target;
+  const key = el.getAttribute('data-stepkey');
+  const step = (sch.steps||[]).find(s=>s.key===key);
+  if(!step) return;
+  const label = el.textContent.trim();
+  if(step.label !== label){
+    step.label = label;
+    logChange(`생산일정 — 공정 단계명 변경 (${sch.title||''})`);
+    renderChangeLog();
+  }
+}
+function onSchUnitFieldEdit(e){
+  const sch = selectedSchedule(); if(!sch) return;
+  const el = e.target;
+  const unitId = el.getAttribute('data-unit');
+  const field = el.getAttribute('data-unitfield');
+  const u = (sch.units||[]).find(x=>x.id===unitId);
+  if(!u) return;
+  const val = el.textContent.trim();
+  if(String(u[field]||'') !== String(val||'')){
+    u[field] = val;
+    logChange(`생산일정 — ${field==='name'?'호기명':'Part 담당자'} 변경 (${sch.title||''})`);
+    renderChangeLog();
+    renderSchedule();
+  }
+}
+function onSchCellEdit(e){
+  const sch = selectedSchedule(); if(!sch) return;
+  const el = e.target;
+  const unitId = el.getAttribute('data-unit');
+  const stepKey = el.getAttribute('data-step');
+  const kind = el.getAttribute('data-kind');
+  const u = (sch.units||[]).find(x=>x.id===unitId);
+  if(!u) return;
+  if(!u.cells) u.cells = {};
+  if(!u.cells[stepKey]) u.cells[stepKey] = {plan:'',actual:'',delta:'',reason:''};
+  const val = el.textContent.trim();
+  const old = u.cells[stepKey][kind] || '';
+  if(old !== val){
+    u.cells[stepKey][kind] = val;
+    const stepLabel = ((sch.steps||[]).find(s=>s.key===stepKey)||{}).label || stepKey;
+    const kindLabel = {plan:'계획',actual:'실적',delta:'단축/지연',reason:'사유'}[kind] || kind;
+    logChange(`생산일정 — ${u.name||''} · ${stepLabel} · ${kindLabel}: "${old}" → "${val}"`);
+    renderChangeLog();
+  }
+  renderSchedule();
+}
+function delSchStep(key){
+  const sch = selectedSchedule(); if(!sch) return;
+  if(!confirm('이 공정 단계 컬럼을 삭제할까요? 모든 호기의 해당 단계 데이터가 함께 삭제됩니다.')) return;
+  sch.steps = (sch.steps||[]).filter(s=>s.key!==key);
+  (sch.units||[]).forEach(u=>{ if(u.cells) delete u.cells[key]; });
+  logChange(`생산일정 — 공정 단계 삭제 (${sch.title||''})`);
+  renderSchedule();
+  renderChangeLog();
+}
+function delSchUnit(id){
+  const sch = selectedSchedule(); if(!sch) return;
+  const u = (sch.units||[]).find(x=>x.id===id);
+  if(!confirm(`${u?u.name:'이 호기'}를 삭제할까요?`)) return;
+  sch.units = (sch.units||[]).filter(x=>x.id!==id);
+  logChange(`생산일정 — 호기 삭제: ${u?u.name:id} (${sch.title||''})`);
+  renderSchedule();
+  renderChangeLog();
+}
+/* ---------- 생산일정 엑셀 업로드 ---------- */
+const SCHEDULE_HEADER_MAP = {
+  unit:   ['호기','호기명','장비','장비번호'],
+  step:   ['단계','공정','공정단계','항목'],
+  plan:   ['계획','계획일','plan'],
+  actual: ['실적','실적일','actual'],
+  delta:  ['단축/지연','단축','지연','단축·지연','단축↓/지연↑','단축지연'],
+  reason: ['사유','비고','note'],
+  pm:     ['part담당자','담당자','part 담당자'],
+};
+function schCellToStr(v){
+  if(v instanceof Date) return `${v.getMonth()+1}/${v.getDate()}`;
+  return String(v==null?'':v).trim();
+}
+function normalizeScheduleExcelRow(row){
+  const keys = Object.keys(row);
+  const kUnit = excelFindField(keys, SCHEDULE_HEADER_MAP.unit);
+  const kStep = excelFindField(keys, SCHEDULE_HEADER_MAP.step);
+  if(!kUnit || !kStep) return null;
+  const unitName = schCellToStr(row[kUnit]);
+  const stepLabel = schCellToStr(row[kStep]);
+  if(!unitName || !stepLabel) return null;
+  const kPlan = excelFindField(keys, SCHEDULE_HEADER_MAP.plan);
+  const kActual = excelFindField(keys, SCHEDULE_HEADER_MAP.actual);
+  const kDelta = excelFindField(keys, SCHEDULE_HEADER_MAP.delta);
+  const kReason = excelFindField(keys, SCHEDULE_HEADER_MAP.reason);
+  const kPm = excelFindField(keys, SCHEDULE_HEADER_MAP.pm);
+  return {
+    unitName, stepLabel,
+    plan: kPlan ? schCellToStr(row[kPlan]) : '',
+    actual: kActual ? schCellToStr(row[kActual]) : '',
+    delta: kDelta ? schCellToStr(row[kDelta]) : '',
+    reason: kReason ? schCellToStr(row[kReason]) : '',
+    pm: kPm ? schCellToStr(row[kPm]) : '',
+  };
+}
+function applyScheduleExcelRows(sch, rows){
+  if(!Array.isArray(sch.units)) sch.units = [];
+  if(!Array.isArray(sch.steps)) sch.steps = [];
+  rows.forEach(r=>{
+    let step = sch.steps.find(s=>s.label===r.stepLabel);
+    if(!step){ step = {key: schStepUid(), label: r.stepLabel}; sch.steps.push(step); }
+    let unit = sch.units.find(u=>u.name===r.unitName);
+    if(!unit){ unit = {id: schUnitUid(), name: r.unitName, tag:'', partManager: r.pm||'', cells:{}}; sch.units.push(unit); }
+    if(!unit.cells) unit.cells = {};
+    if(!unit.cells[step.key]) unit.cells[step.key] = {plan:'',actual:'',delta:'',reason:''};
+    if(r.plan) unit.cells[step.key].plan = r.plan;
+    if(r.actual) unit.cells[step.key].actual = r.actual;
+    if(r.delta) unit.cells[step.key].delta = r.delta;
+    if(r.reason) unit.cells[step.key].reason = r.reason;
+    if(r.pm && !unit.partManager) unit.partManager = r.pm;
+  });
+  logChange(`생산일정 — 엑셀 업로드로 ${rows.length}건 반영 (${sch.title||''})`);
+  renderSchedule();
+  renderChangeLog();
+}
+
 /* ---------- tabs ---------- */
 document.querySelectorAll('.tab-btn').forEach(btn=>{
   btn.addEventListener('click', ()=>{
@@ -3581,6 +4030,92 @@ document.getElementById('sgAddRowBtn').addEventListener('click', ()=>{
   renderChangeLog();
 });
 
+
+/* 생산일정관리 버튼 바인딩 */
+document.getElementById('schProjectSelect').addEventListener('change', (e)=>{
+  selectedScheduleId = e.target.value;
+  schPmFilterVal = 'all';
+  schArchiveOpen = false;
+  renderSchedule();
+});
+document.getElementById('schPmFilter').addEventListener('change', (e)=>{
+  schPmFilterVal = e.target.value;
+  renderSchedule();
+});
+document.getElementById('schArchiveToggle').addEventListener('click', ()=>{
+  schArchiveOpen = !schArchiveOpen;
+  renderSchedule();
+});
+document.getElementById('schAddProjectBtn').addEventListener('click', ()=>{
+  const title = prompt('새 일정표 제목을 입력하세요 (예: T社 HSB-D 5대 [#1호기~#5호기] / [HSBME12601])');
+  if(title===null) return;
+  const base = selectedSchedule();
+  const steps = base && base.steps && base.steps.length ? base.steps.map(s=>({key:s.key,label:s.label})) : DEFAULT_SCH_STEPS();
+  const newSch = {
+    id: schUid(), title: title || '새 일정표', pjt:'', baseDate: state.baseDate || todayStr(),
+    headcount:'', teamNote:'', steps, units:[]
+  };
+  if(!Array.isArray(state.schedules)) state.schedules = [];
+  state.schedules.push(newSch);
+  selectedScheduleId = newSch.id;
+  schPmFilterVal = 'all';
+  schArchiveOpen = false;
+  logChange(`생산일정 — 새 일정표 추가: ${newSch.title}`);
+  renderSchedule();
+  renderChangeLog();
+});
+document.getElementById('schDelProjectBtn').addEventListener('click', ()=>{
+  const sch = selectedSchedule(); if(!sch) return;
+  if(!confirm(`"${sch.title}" 일정표 전체를 삭제할까요? 되돌릴 수 없습니다.`)) return;
+  state.schedules = (state.schedules||[]).filter(s=>s.id!==sch.id);
+  selectedScheduleId = null;
+  logChange(`생산일정 — 일정표 삭제: ${sch.title}`);
+  renderSchedule();
+  renderChangeLog();
+});
+document.getElementById('schAddUnitBtn').addEventListener('click', ()=>{
+  const sch = selectedSchedule(); if(!sch) return;
+  const cells = {};
+  (sch.steps||[]).forEach(st=>{ cells[st.key] = {plan:'',actual:'',delta:'',reason:''}; });
+  sch.units = sch.units || [];
+  sch.units.push({id:schUnitUid(), name:`신규 호기 ${sch.units.length+1}`, tag:'', partManager:'', cells});
+  logChange(`생산일정 — 신규 호기 추가 (${sch.title||''})`);
+  renderSchedule();
+  renderChangeLog();
+});
+document.getElementById('schAddStepBtn').addEventListener('click', ()=>{
+  const sch = selectedSchedule(); if(!sch) return;
+  const key = schStepUid();
+  sch.steps = sch.steps || [];
+  sch.steps.push({key, label:'신규 단계'});
+  (sch.units||[]).forEach(u=>{ if(!u.cells) u.cells={}; u.cells[key] = {plan:'',actual:'',delta:'',reason:''}; });
+  logChange(`생산일정 — 신규 공정 단계 추가 (${sch.title||''})`);
+  renderSchedule();
+  renderChangeLog();
+});
+document.getElementById('schExcelUploadBtn').addEventListener('click', ()=>{
+  document.getElementById('schExcelFile').click();
+});
+document.getElementById('schExcelFile').addEventListener('change', (e)=>{
+  const file = e.target.files[0];
+  e.target.value = '';
+  if(!file) return;
+  const sch = selectedSchedule();
+  if(!sch){ alert('먼저 일정표를 선택하거나 새로 만들어주세요.'); return; }
+  parseExcelFile(file, SCHEDULE_HEADER_MAP, 'unit', normalizeScheduleExcelRow, (rows)=>{
+    if(!rows.length){ alert('인식된 행이 없습니다. 헤더에 호기·단계·계획·실적·단축/지연·사유 항목이 있는지 확인해 주세요.'); return; }
+    if(!confirm(`${rows.length}개 행을 "${sch.title}" 일정표에 반영할까요? (없는 호기/단계는 자동으로 새로 만들어집니다)`)) return;
+    applyScheduleExcelRows(sch, rows);
+  });
+});
+const schDashStatsEl = document.getElementById('schDashStats');
+if(schDashStatsEl){
+  schDashStatsEl.addEventListener('click', ()=>{
+    const btn = document.querySelector('.tab-btn[data-tab="schedule"]');
+    if(btn) btn.click();
+  });
+}
+
 /* header field bindings */
 document.getElementById('baseDate').addEventListener('change', (e)=>{ state.baseDate = e.target.value; });
 document.getElementById('reporter').addEventListener('change', (e)=>{ state.reporter = e.target.value; });
@@ -3619,7 +4154,9 @@ document.getElementById('importFile').addEventListener('change', (e)=>{
       if(parsed && Array.isArray(parsed.orders)){
         if(!Array.isArray(parsed.stageItems)) parsed.stageItems = state.stageItems;
         if(!Array.isArray(parsed.changeLog)) parsed.changeLog = [];
+        if(!Array.isArray(parsed.schedules)) parsed.schedules = state.schedules;
         state = parsed;
+        selectedScheduleId = null;
         logChange('JSON 백업 파일 불러오기');
         renderAll();
         setSaveStatus('불러옴 (저장 필요)', false);
@@ -3643,6 +4180,7 @@ function renderAll(){
   renderManageTable();
   renderStage();
   renderYearly();
+  renderSchedule();
 }
 
 renderAll();
