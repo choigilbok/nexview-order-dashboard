@@ -225,6 +225,8 @@
   .mini-stat.ms-blue .ms-num{color:var(--blue);}
 
   tr.stage-hl{background:rgba(226,147,63,.12);}
+  tr.stage-done{background:rgba(63,166,114,.12);}
+  tr.stage-delay{background:rgba(224,101,101,.14);}
   tr.stage-cancel{background:rgba(154,154,154,.09);color:var(--text-dim);}
   tr.stage-cancel td{text-decoration:line-through;}
   tr.stage-pjt-start td{border-top:2px solid var(--teal);}
@@ -470,9 +472,11 @@
       <select id="sgVendor"><option value="all">업체 전체</option></select>
       <select id="sgFlag">
         <option value="all">상태 전체</option>
-        <option value="">정상</option>
-        <option value="hl">사양/거래처 변경</option>
-        <option value="cancel">취소</option>
+        <option value="">입고예정</option>
+        <option value="done">입고완료</option>
+        <option value="delay">입고지연</option>
+        <option value="hl">입고변경</option>
+        <option value="cancel">입고취소</option>
       </select>
       <select id="sgAssignee"><option value="all">담당자 전체</option></select>
       <input type="text" class="grow" id="sgSearch" placeholder="검색 (PJT NO·업체·비고)">
@@ -493,7 +497,7 @@
       </table>
     </div>
     <div class="stage-note">
-      * 주황 강조 행 = 사양/거래처 변경 건 · 취소선 행 = 취소 후 사양 변경 재진행 건 · 상단 굵은 선 = PJT 구분<br>
+      * 초록 강조 행 = 입고완료 · 빨강 강조 행 = 입고지연 · 주황 강조 행 = 입고변경 · 취소선 행 = 입고취소 · 상단 굵은 선 = PJT 구분<br>
       ※ STAGE 입고관리 데이터는 「STAGE 부품 입고관리 일정표」 PPT(기준일 2026-08-20) 내용을 기반으로 구성되었습니다.
     </div>
   </div>
@@ -569,9 +573,9 @@
     {"id":"o28","cust":"KI社","system":"-","qty":2,"due":"","cat":"pLSMB","status":"발주예정","issue":"8월초 발주 예정","note":""}
   ],
   "stageItems": [
-    {"id":"s1","cat":"HSB-S","pjt":"HSBTS12603","seq":"4","inDate":"2026.08.28","vendor":"아크리비스","dueDate":"2026-10-30","note":"","flag":""},
-    {"id":"s2","cat":"HSB-S","pjt":"HSBTS12603","seq":"5","inDate":"2026.08.28","vendor":"아크리비스","dueDate":"2026-10-30","note":"","flag":""},
-    {"id":"s3","cat":"HSB-S","pjt":"HSBTS12603","seq":"6","inDate":"2026.08.28","vendor":"아크리비스","dueDate":"2026-10-30","note":"","flag":""},
+    {"id":"s1","cat":"HSB-S","pjt":"HSBTS12603","seq":"4","inDate":"2026.08.28","vendor":"아크리비스","dueDate":"2026-10-30","note":"","flag":"done"},
+    {"id":"s2","cat":"HSB-S","pjt":"HSBTS12603","seq":"5","inDate":"2026.08.28","vendor":"아크리비스","dueDate":"2026-10-30","note":"","flag":"done"},
+    {"id":"s3","cat":"HSB-S","pjt":"HSBTS12603","seq":"6","inDate":"2026.08.28","vendor":"아크리비스","dueDate":"2026-10-30","note":"","flag":"done"},
     {"id":"s4","cat":"HSB-S","pjt":"HSBTS12603","seq":"7","inDate":"2026.09.02","vendor":"아크리비스","dueDate":"2026-10-30","note":"","flag":""},
     {"id":"s5","cat":"HSB-S","pjt":"HSBTS12603","seq":"8","inDate":"2026.09.02","vendor":"아크리비스","dueDate":"2026-10-30","note":"","flag":""},
     {"id":"s6","cat":"HSB-S","pjt":"HSBTS12603","seq":"9","inDate":"2026.09.09","vendor":"아크리비스","dueDate":"2026-10-30","note":"","flag":""},
@@ -898,7 +902,7 @@ function dueAlertCounts(){
     else if(info && info.cls==='soon') soon++;
   });
   state.stageItems.forEach(o=>{
-    if(o.flag==='cancel') return; // 취소 건은 임박/지연 집계에서 제외
+    if(o.flag==='cancel' || o.flag==='done') return; // 입고취소·입고완료 건은 임박/지연 집계에서 제외
     const info = dueDayInfo(o.dueDate);
     if(info && info.cls==='overdue') overdue++;
     else if(info && info.cls==='soon') soon++;
@@ -1332,10 +1336,10 @@ function renderStage(){
   tbody.innerHTML = list.map(o=>{
     const isNewPjt = o.pjt !== prevPjt;
     prevPjt = o.pjt;
-    const rowClasses = [isNewPjt ? 'stage-pjt-start' : '', o.flag==='cancel' ? 'stage-cancel' : (o.flag==='hl' ? 'stage-hl' : '')].filter(Boolean).join(' ');
+    const rowClasses = [isNewPjt ? 'stage-pjt-start' : '', stageFlagClass(o.flag)].filter(Boolean).join(' ');
     const pill = catPillStyle(o.cat);
-    const flagLabel = o.flag==='cancel' ? '취소' : (o.flag==='hl' ? '변경' : '정상');
-    const dueBadge = o.flag==='cancel' ? '' : dueBadgeHTML(o.dueDate);
+    const flagLabel = stageFlagLabel(o.flag);
+    const dueBadge = (o.flag==='cancel' || o.flag==='done') ? '' : dueBadgeHTML(o.dueDate);
     if(!isAdmin){
       return `
       <tr class="${rowClasses}">
@@ -1369,9 +1373,11 @@ function renderStage(){
       <td contenteditable="true" data-field="note">${o.note||''}</td>
       <td>
         <select class="status-select" data-field="flag">
-          <option value="" ${!o.flag?'selected':''}>정상</option>
-          <option value="hl" ${o.flag==='hl'?'selected':''}>변경</option>
-          <option value="cancel" ${o.flag==='cancel'?'selected':''}>취소</option>
+          <option value="" ${!o.flag?'selected':''}>입고예정</option>
+          <option value="done" ${o.flag==='done'?'selected':''}>입고완료</option>
+          <option value="delay" ${o.flag==='delay'?'selected':''}>입고지연</option>
+          <option value="hl" ${o.flag==='hl'?'selected':''}>입고변경</option>
+          <option value="cancel" ${o.flag==='cancel'?'selected':''}>입고취소</option>
         </select>
       </td>
       <td class="row-actions"><button class="small danger" data-sgdel="${o.id}">삭제</button></td>
@@ -1400,7 +1406,24 @@ function renderStage(){
   });
 }
 const STAGE_FIELD_LABELS = {cat:'구분',pjt:'PJT NO',seq:'순번',inDate:'입고(예정)일',vendor:'업체',assignee:'담당자',dueDate:'납기일',note:'비고',flag:'상태'};
-function stageFlagLabel(v){ return v==='cancel' ? '취소' : (v==='hl' ? '변경' : '정상'); }
+function stageFlagLabel(v){
+  switch(v){
+    case 'cancel': return '입고취소';
+    case 'hl': return '입고변경';
+    case 'delay': return '입고지연';
+    case 'done': return '입고완료';
+    default: return '입고예정';
+  }
+}
+function stageFlagClass(v){
+  switch(v){
+    case 'cancel': return 'stage-cancel';
+    case 'hl': return 'stage-hl';
+    case 'delay': return 'stage-delay';
+    case 'done': return 'stage-done';
+    default: return '';
+  }
+}
 function onStageCellEdit(e){
   const el = e.target;
   const tr = el.closest('tr');
@@ -1415,10 +1438,11 @@ function onStageCellEdit(e){
     const fromTxt = field==='flag' ? stageFlagLabel(oldVal) : (oldVal==null?'':oldVal);
     const toTxt = field==='flag' ? stageFlagLabel(val) : (val==null?'':val);
     logChange(`STAGE 입고관리 수정 — ${item.pjt||'(PJT 미입력)'} · ${STAGE_FIELD_LABELS[field]||field}: "${fromTxt}" → "${toTxt}"`);
-    // 납기일이 실제로 바뀐 경우, 취소 건이 아니라면 「변경」 상태로 자동 표시해 일정변경을 한눈에 알 수 있게 한다.
+    // 납기일이 실제로 바뀐 경우, 입고취소 건이 아니라면 「입고변경」 상태로 자동 표시해 일정변경을 한눈에 알 수 있게 한다.
     if(field==='dueDate' && item.flag!=='cancel' && item.flag!=='hl'){
+      const prevLabel = stageFlagLabel(item.flag);
       item.flag = 'hl';
-      logChange(`STAGE 입고관리 수정 — ${item.pjt||'(PJT 미입력)'} · 상태: "정상" → "변경" (납기일 변경에 따라 자동 반영)`);
+      logChange(`STAGE 입고관리 수정 — ${item.pjt||'(PJT 미입력)'} · 상태: "${prevLabel}" → "${stageFlagLabel('hl')}" (납기일 변경에 따라 자동 반영)`);
     }
   }
   renderStage();
@@ -1592,8 +1616,13 @@ function normalizeStageExcelRow(row){
   const kStatus = excelFindField(keys, STAGE_HEADER_MAP.status);
   let cat = kCat ? String(row[kCat]).trim() : 'HSB-S';
   if(!['HSB-S','HSB-D','LMB','LMR','PCS','TCS'].includes(cat)) cat = 'HSB-S';
-  const statusRaw = kStatus ? String(row[kStatus]).trim() : '정상';
-  const flag = statusRaw==='취소' ? 'cancel' : (statusRaw==='변경' ? 'hl' : '');
+  const statusRaw = kStatus ? String(row[kStatus]).trim() : '입고예정';
+  let flag = '';
+  if(statusRaw==='입고취소' || statusRaw==='취소') flag = 'cancel';
+  else if(statusRaw==='입고변경' || statusRaw==='변경') flag = 'hl';
+  else if(statusRaw==='입고지연' || statusRaw==='지연') flag = 'delay';
+  else if(statusRaw==='입고완료' || statusRaw==='완료') flag = 'done';
+  else flag = ''; // 입고예정(기본, 구버전 '정상' 포함)
   const inDateRaw = kInDate ? row[kInDate] : '';
   const inDateStr = (typeof inDateRaw === 'string' && inDateRaw.trim()==='미정') ? '미정' : excelDateToStr(inDateRaw);
   const dueDateRaw = kDueDate ? row[kDueDate] : '';
