@@ -507,7 +507,7 @@
         <thead>
           <tr>
             <th>고객사</th><th>시스템</th><th>수량</th><th>납기(예정)</th>
-            <th>구분</th><th>상태</th><th>특이사항</th><th>담당자</th><th>비고</th><th></th>
+            <th>구분</th><th>상태</th><th>특이사항</th><th>담당자</th><th>Issue / 현황</th><th>비고</th><th></th>
           </tr>
         </thead>
         <tbody id="orderTbody"></tbody>
@@ -629,36 +629,36 @@
   "baseDate": "2026-08-20",
   "reporter": "최길복 수석 (제조그룹장)",
   "target": 83,
-  "changeLog": [{"ts":"2026-09-02 15:10","msg":"STAGE 입고관리 영업요청일 항목 삭제, HSBTS12604·HSBTS12603 납기일 15건 입력"},{"ts":"2026-09-02 15:00","msg":"엑셀 업로드(26년 하반기 STAGE 일정.xlsx)로 STAGE 입고관리 전체 교체 (61건) — 수정일·영업요청일 항목 추가"}],
+  "changeLog": [{"ts":"2026-09-02 15:20","msg":"수주현황 관리 — Issue/현황(진행상황) 컬럼 복원, 특이사항을 별도 필드로 분리해 등록된 호기만 강조 버튼 표시되도록 수정"},{"ts":"2026-09-02 15:10","msg":"STAGE 입고관리 영업요청일 항목 삭제, HSBTS12604·HSBTS12603 납기일 15건 입력"},{"ts":"2026-09-02 15:00","msg":"엑셀 업로드(26년 하반기 STAGE 일정.xlsx)로 STAGE 입고관리 전체 교체 (61건) — 수정일·영업요청일 항목 추가"}],
   "orders": [
-    {"id":"o1","cust":"TS社","system":"PIS 3대","qty":3,"due":"2026-08-07","cat":"pLSMB","status":"수주확정","issue":"제작완료","note":""},
-    {"id":"o2","cust":"TS社","system":"HSB 10 5대","qty":5,"due":"2026-08-28","cat":"pLSMB","status":"수주확정","issue":"제작 중","note":""},
-    {"id":"o3","cust":"BE社","system":"LJS 1","qty":1,"due":"2026-08-28","cat":"sLSMB","status":"수주확정","issue":"제작 중","note":""},
-    {"id":"o4","cust":"TS社","system":"HSB 10 5대","qty":5,"due":"2026-09-11","cat":"pLSMB","status":"수주확정","issue":"제작 중","note":""},
-    {"id":"o5","cust":"TS社","system":"HSB 12 5대","qty":5,"due":"2026-09-30","cat":"pLSMB","status":"수주확정","issue":"제작 중","note":""},
-    {"id":"o6","cust":"TS社","system":"HSB 12 5대","qty":5,"due":"2026-10-16","cat":"pLSMB","status":"수주확정","issue":"중국 셋업 전환 검토","note":""},
-    {"id":"o7","cust":"TS社","system":"HSB 12 2대","qty":2,"due":"2026-10-30","cat":"pLSMB","status":"수주확정","issue":"제작 중","note":""},
-    {"id":"o8","cust":"TS社","system":"HSB 5대","qty":5,"due":"2026-11-13","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},
-    {"id":"o9","cust":"TS社","system":"PIS 5대","qty":5,"due":"2026-11-20","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},
-    {"id":"o10","cust":"ME社","system":"HSB5·PIS3·PCS1","qty":9,"due":"2026-12-04","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},
-    {"id":"o11","cust":"PM社","system":"HSB1","qty":1,"due":"2026-12-08","cat":"pLSMB","status":"수주확정","issue":"설비컨셉 협의 要","note":""},
-    {"id":"o12","cust":"TS社","system":"PIS 3대","qty":3,"due":"2026-12-11","cat":"pLSMB","status":"수주확정","issue":"제작 중","note":""},
-    {"id":"o13","cust":"PM社","system":"PIS","qty":1,"due":"2027-01-15","cat":"pLSMB","status":"수주확정","issue":"제작 중","note":""},
-    {"id":"o14","cust":"PM社","system":"PCS","qty":1,"due":"2027-01-15","cat":"pLSMB","status":"수주확정","issue":"제작 중","note":""},
-    {"id":"o15","cust":"TS社","system":"HSB우 3대","qty":3,"due":"2027-01-22","cat":"pLSMB","status":"수주확정","issue":"제작 중","note":"변경 전 12-11"},
-    {"id":"o16","cust":"M2N社","system":"HSB·LMB","qty":2,"due":"2027-01-29","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":"변경 전 11-27"},
-    {"id":"o17","cust":"NIDEC社","system":"LMB·LMR","qty":2,"due":"2027-02-05","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},
-    {"id":"o18","cust":"NIDEC社","system":"LMB","qty":1,"due":"2027-02-05","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},
-    {"id":"o19","cust":"NIDEC社","system":"LMR","qty":1,"due":"2027-02-05","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},
-    {"id":"o20","cust":"NIDEC社","system":"PCS","qty":1,"due":"2027-02-05","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},
-    {"id":"o21","cust":"NIDEC社","system":"PIS","qty":1,"due":"2027-02-05","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},
-    {"id":"o22","cust":"TS社","system":"PIS 3대","qty":2,"due":"2027-02-12","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},
-    {"id":"o23","cust":"TS社","system":"HSB 5대","qty":5,"due":"2027-02-12","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},
-    {"id":"o24","cust":"DG社","system":"HSB","qty":2,"due":"2027-02-15","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},
-    {"id":"o25","cust":"DG社","system":"LMB","qty":1,"due":"2027-02-15","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},
-    {"id":"o26","cust":"TS社","system":"HSB5·PIS2·PCS1","qty":8,"due":"2027-02-19","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},
-    {"id":"o27","cust":"ZF社","system":"HSB","qty":1,"due":"2027-02-19","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","note":""},
-    {"id":"o28","cust":"KI社","system":"-","qty":2,"due":"","cat":"pLSMB","status":"발주예정","issue":"8월초 발주 예정","note":""}
+    {"id":"o1","cust":"TS社","system":"PIS 3대","qty":3,"due":"2026-08-07","cat":"pLSMB","status":"수주확정","issue":"제작완료","special":"","note":""},
+    {"id":"o2","cust":"TS社","system":"HSB 10 5대","qty":5,"due":"2026-08-28","cat":"pLSMB","status":"수주확정","issue":"제작 중","special":"","note":""},
+    {"id":"o3","cust":"BE社","system":"LJS 1","qty":1,"due":"2026-08-28","cat":"sLSMB","status":"수주확정","issue":"제작 중","special":"","note":""},
+    {"id":"o4","cust":"TS社","system":"HSB 10 5대","qty":5,"due":"2026-09-11","cat":"pLSMB","status":"수주확정","issue":"제작 중","special":"","note":""},
+    {"id":"o5","cust":"TS社","system":"HSB 12 5대","qty":5,"due":"2026-09-30","cat":"pLSMB","status":"수주확정","issue":"제작 중","special":"","note":""},
+    {"id":"o6","cust":"TS社","system":"HSB 12 5대","qty":5,"due":"2026-10-16","cat":"pLSMB","status":"수주확정","issue":"중국 셋업 전환 검토","special":"","note":""},
+    {"id":"o7","cust":"TS社","system":"HSB 12 2대","qty":2,"due":"2026-10-30","cat":"pLSMB","status":"수주확정","issue":"제작 중","special":"","note":""},
+    {"id":"o8","cust":"TS社","system":"HSB 5대","qty":5,"due":"2026-11-13","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","special":"","note":""},
+    {"id":"o9","cust":"TS社","system":"PIS 5대","qty":5,"due":"2026-11-20","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","special":"","note":""},
+    {"id":"o10","cust":"ME社","system":"HSB5·PIS3·PCS1","qty":9,"due":"2026-12-04","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","special":"","note":""},
+    {"id":"o11","cust":"PM社","system":"HSB1","qty":1,"due":"2026-12-08","cat":"pLSMB","status":"수주확정","issue":"설비컨셉 협의 要","special":"","note":""},
+    {"id":"o12","cust":"TS社","system":"PIS 3대","qty":3,"due":"2026-12-11","cat":"pLSMB","status":"수주확정","issue":"제작 중","special":"","note":""},
+    {"id":"o13","cust":"PM社","system":"PIS","qty":1,"due":"2027-01-15","cat":"pLSMB","status":"수주확정","issue":"제작 중","special":"","note":""},
+    {"id":"o14","cust":"PM社","system":"PCS","qty":1,"due":"2027-01-15","cat":"pLSMB","status":"수주확정","issue":"제작 중","special":"","note":""},
+    {"id":"o15","cust":"TS社","system":"HSB우 3대","qty":3,"due":"2027-01-22","cat":"pLSMB","status":"수주확정","issue":"제작 중","special":"","note":"변경 전 12-11"},
+    {"id":"o16","cust":"M2N社","system":"HSB·LMB","qty":2,"due":"2027-01-29","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","special":"","note":"변경 전 11-27"},
+    {"id":"o17","cust":"NIDEC社","system":"LMB·LMR","qty":2,"due":"2027-02-05","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","special":"","note":""},
+    {"id":"o18","cust":"NIDEC社","system":"LMB","qty":1,"due":"2027-02-05","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","special":"","note":""},
+    {"id":"o19","cust":"NIDEC社","system":"LMR","qty":1,"due":"2027-02-05","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","special":"","note":""},
+    {"id":"o20","cust":"NIDEC社","system":"PCS","qty":1,"due":"2027-02-05","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","special":"","note":""},
+    {"id":"o21","cust":"NIDEC社","system":"PIS","qty":1,"due":"2027-02-05","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","special":"","note":""},
+    {"id":"o22","cust":"TS社","system":"PIS 3대","qty":2,"due":"2027-02-12","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","special":"","note":""},
+    {"id":"o23","cust":"TS社","system":"HSB 5대","qty":5,"due":"2027-02-12","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","special":"","note":""},
+    {"id":"o24","cust":"DG社","system":"HSB","qty":2,"due":"2027-02-15","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","special":"","note":""},
+    {"id":"o25","cust":"DG社","system":"LMB","qty":1,"due":"2027-02-15","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","special":"","note":""},
+    {"id":"o26","cust":"TS社","system":"HSB5·PIS2·PCS1","qty":8,"due":"2027-02-19","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","special":"","note":""},
+    {"id":"o27","cust":"ZF社","system":"HSB","qty":1,"due":"2027-02-19","cat":"pLSMB","status":"수주확정","issue":"제작 중 · 중국 셋업","special":"","note":""},
+    {"id":"o28","cust":"KI社","system":"-","qty":2,"due":"","cat":"pLSMB","status":"발주예정","issue":"8월초 발주 예정","special":"","note":""}
   ],
   "stageItems": [
     {"id":"sccjt16a3","cat":"HSB-S","pjt":"HSBTS12604","seq":"1","inDate":"","vendor":"아크리비스","assignee":"","dueDate":"2026-07-16","revDate":"","note":"","flag":"done"},
@@ -1069,13 +1069,14 @@ function renderChangeLog(){
 }
 
 /* ---------- 수주현황 관리 - 프로젝트별 특이사항 확인/수정 모달 ----------
-   표의 "상태" 옆 버튼 클릭 시, 해당 프로젝트(행)의 특이사항(o.issue)만 모달로 표시/수정한다. */
+   표의 "상태" 옆 버튼 클릭 시, 해당 프로젝트(행)의 특이사항(o.special)만 모달로 표시/수정한다.
+   ※ Issue/현황(o.issue, 제작중/제작완료 등 진행상황)과는 별개의 필드로, 특이사항이 실제로 등록된 호기만 버튼이 강조 표시된다. */
 let issueModalOrderId = null;
 function openIssueModal(id){
   const order = state.orders.find(o=>o.id===id);
   if(!order) return;
   issueModalOrderId = id;
-  const text = order.issue || '';
+  const text = order.special || '';
   document.getElementById('issueModalMeta').textContent = `${order.cust||''}${order.system ? ' · '+order.system : ''}`;
   const view = document.getElementById('issueModalView');
   if(text.trim()){
@@ -1096,12 +1097,11 @@ document.getElementById('issueModalSaveBtn').addEventListener('click', ()=>{
   const order = state.orders.find(o=>o.id===issueModalOrderId);
   if(!order) return;
   const val = document.getElementById('issueModalEdit').value.trim();
-  const oldVal = order.issue || '';
+  const oldVal = order.special || '';
   if(oldVal !== val){
-    order.issue = val;
+    order.special = val;
     logChange(`수주현황 수정 — ${order.cust||'(고객사 미입력)'} · 특이사항: "${oldVal}" → "${val}"`);
     renderChangeLog();
-    renderDashboard();
     renderManageTable();
   }
   closeIssueModal();
@@ -1303,7 +1303,7 @@ function applyFilters(orders, f){
     if(f.cat!=='all' && o.cat!==f.cat) return false;
     if(f.assignee!=='all' && (o.assignee||'')!==f.assignee) return false;
     if(f.search){
-      const hay = [o.cust,o.system,o.issue,o.note].join(' ').toLowerCase();
+      const hay = [o.cust,o.system,o.issue,o.note,o.special].join(' ').toLowerCase();
       if(!hay.includes(f.search)) return false;
     }
     return true;
@@ -1341,7 +1341,7 @@ function renderManageTable(){
   document.getElementById('filterCount').textContent = list.length + '건 · ' + sumQty(list) + '대';
   const tbody = document.getElementById('orderTbody');
   if(list.length===0){
-    tbody.innerHTML = `<tr><td colspan="10" class="empty">조건에 맞는 데이터가 없습니다.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="11" class="empty">조건에 맞는 데이터가 없습니다.</td></tr>`;
     return;
   }
   let lastMonth = null, parity = 0;
@@ -1351,8 +1351,8 @@ function renderManageTable(){
     const rowClass = (o.status==='납품완료' ? 'order-delivered' : (parity ? 'month-mint' : 'month-lav'));
     const statusBadgeCls = o.status==='수주확정' ? 'confirmed' : (o.status==='납품완료' ? 'delivered' : 'pending');
     const dueBadge = o.status==='납품완료' ? '' : dueBadgeHTML(o.due);
-    const hasIssue = !!(o.issue && o.issue.trim());
-    const issueBtnHTML = hasIssue
+    const hasSpecial = !!(o.special && o.special.trim());
+    const issueBtnHTML = hasSpecial
       ? `<button class="issue-btn has-issue" data-issue-open="${o.id}">⚠ 확인</button>`
       : (isAdmin ? `<button class="issue-btn" data-issue-open="${o.id}">+ 등록</button>` : `<span class="issue-none">-</span>`);
     if(!isAdmin){
@@ -1366,6 +1366,7 @@ function renderManageTable(){
         <td><span class="badge ${statusBadgeCls}">${o.status||''}</span></td>
         <td>${issueBtnHTML}</td>
         <td>${o.assignee||''}</td>
+        <td>${o.issue||''}</td>
         <td>${o.note||''}</td>
         <td></td>
       </tr>`;
@@ -1392,6 +1393,7 @@ function renderManageTable(){
       </td>
       <td>${issueBtnHTML}</td>
       <td contenteditable="true" data-field="assignee" style="width:80px;">${o.assignee||''}</td>
+      <td contenteditable="true" data-field="issue">${o.issue||''}</td>
       <td contenteditable="true" data-field="note">${o.note||''}</td>
       <td class="row-actions"><button class="small danger" data-del="${o.id}">삭제</button></td>
     </tr>`;
@@ -1423,7 +1425,7 @@ function renderManageTable(){
     });
   });
 }
-const ORDER_FIELD_LABELS = {cust:'고객사',system:'시스템',qty:'수량',due:'납기(예정)',cat:'구분',status:'상태',assignee:'담당자',issue:'특이사항',note:'비고'};
+const ORDER_FIELD_LABELS = {cust:'고객사',system:'시스템',qty:'수량',due:'납기(예정)',cat:'구분',status:'상태',assignee:'담당자',issue:'Issue/현황',special:'특이사항',note:'비고'};
 function onCellEdit(e){
   const el = e.target;
   const tr = el.closest('tr');
@@ -1899,7 +1901,7 @@ document.getElementById('monthFilterPill').addEventListener('click', ()=>{
 document.getElementById('yearlySelect').addEventListener('change', renderYearly);
 
 document.getElementById('addRowBtn').addEventListener('click', ()=>{
-  state.orders.push({id:uid(),cust:'신규고객社',system:'',qty:1,due:state.baseDate||'',cat:'pLSMB',status:'수주확정',assignee:'',issue:'',note:''});
+  state.orders.push({id:uid(),cust:'신규고객社',system:'',qty:1,due:state.baseDate||'',cat:'pLSMB',status:'수주확정',assignee:'',issue:'',special:'',note:''});
   logChange('수주현황 관리에 신규 항목 추가');
   renderAll();
 });
@@ -1969,6 +1971,7 @@ function normalizeExcelRow(row){
     due: kDue ? excelDateToStr(row[kDue]) : '',
     assignee: kAssignee ? String(row[kAssignee]).trim() : '',
     issue: kIssue ? String(row[kIssue]).trim() : '',
+    special: '',
     note: kNote ? String(row[kNote]).trim() : '',
   };
 }
